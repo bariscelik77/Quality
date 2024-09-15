@@ -1,0 +1,74 @@
+h1 {color:whitesmoke ;
+    background-color: #0802A3;
+    text-transform: uppercase;
+    text-align: center;
+    font-family: "Libre Baskerville", serif;
+    
+}
+h2{ 
+    color: #FAF8F1 ;
+    background-color: #27b16c;
+    font-family: "Libre Baskerville", serif;
+}
+
+h3 { font-size: 2em;}
+
+body {
+    background-color: lightblue;
+    font-family: "Poppins", serif;
+    text-align: justify;}
+
+div {
+    background-color: grey;
+    
+    }     
+  p {
+        margin: 0;
+        
+      }
+  
+#Box4{
+        text-align: center;
+        border: 1px solid black;
+        
+      }
+
+  #img { float:left;}
+
+  .box {
+   
+  }
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 50px 500px 500px 500px;
+    
+    gap: 15px;
+  }
+  .card {
+    background-color: grey;
+    border: solid white;
+    padding: 10px;
+  }
+  .first {
+    grid-column: span 3;
+    color:white;
+    font-size: larger;
+    background-color: #27b16c;
+  }
+
+
+ 
+
+  img{ border-radius: 10px;}
+
+.creative{
+  color:midnightblue;
+}
+
+
+
+
+
+
+
