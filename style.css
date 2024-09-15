@@ -66,6 +66,28 @@ div {
   color:midnightblue;
 }
 
+@media (max-width: 600px) {
+
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr ;
+    grid-template-rows: 50px 500px 500px;
+    
+    gap: 15px;
+  } 
+  .card {
+    background-color: grey;
+    border: solid grey;
+    padding: 10px;
+    color: #27b16c;
+  }
+  body {
+    background-color: lightblue;
+    font-family: "Poppins", serif;
+    text-align: justify;
+    font-size: x-small;}
+}
 
 
 
