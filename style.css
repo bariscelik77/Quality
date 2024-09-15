@@ -19,7 +19,7 @@ body {
     text-align: justify;}
 
 div {
-    background-color: grey;
+    background-color: whitesmoke;
     
     }     
   p {
@@ -46,8 +46,8 @@ div {
     gap: 15px;
   }
   .card {
-    background-color: grey;
-    border: solid white;
+    background-color: whitesmoke;
+    border: solid grey;
     padding: 10px;
   }
   .first {
