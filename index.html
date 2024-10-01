@@ -1,78 +1,91 @@
-<!DOCTYPE html>
-<html lang="en-US">
-<head>
-<meta charset="UTF-8">
-<title>My Webpage</title>
-<link rel="stylesheet" href="./style.css" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
-</head>
-<body>
-    <div class="Main">
-        <div class="three"> <img src="./assets/images/bariscelik.jpeg" width=150px> </div>
-        <h1 class="one">Baris Celik's Portfolio</h1>   
-        <div class="two"><a href="https://www.linkedin.com/in/bariscelik/"> My LinkedIn Page </style> </a></div>
-        
-           
-        
-    </div>
-    <hr/>
-<div>
-    
-    <h2>QA/QC Manager | Completion Manager | Source Inspection Manager | Green Hydrogen | Green Ammonia | Alkaline Electrolyser | "Future" Backend Developer</h2>
- </div>
+body {
+  font-family: brown-font, system-ui, -apple-system, Segoe UI, roboto, Helvetica Neue, Noto Sans, Liberation Sans, arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  min-width: 1000px;
+  margin:50px;
 
-<hr />
-<div class="grid-container"></divclass>
-    <div class="first card2"> My Experience </div>
-    <div class="card2"> Projects: </div>
-    <div class="card2"> My Mission </div>
-    <div class="card">
-    With over 20 years of experience in quality management for the oil/gas, power plant, and infrastructure industry, 
-    I am a Project QAQC Manager at NEOM Green Hydrogen Company, a visionary project that aims to produce the world's 
-    largest green hydrogen facility. 
-    <hr />
-    As a <strong>Project QAQC Manager</strong>, I oversee and coordinate the Employer QA/QC team activities to implement QMS 
-    requirements during the project execution of HIDC and GHE projects. I review contractors' Project Quality Plans and monitor 
-    and report their quality management performance. I also audit and support all Contractor Quality Programmes and ensure continuous 
-    improvement to the plan as appropriate. I have demonstrated experience in establishing project quality systems that meet the 
-    requirements of ISO 9001 and other international and Saudi Aramco standards. I hold CSWIP 3.1 Welding Inspector and CQI-IRCA 
-    ISO 9001:2015 Lead Auditor certifications, as well as NACE Coating Inspector and ISO 14001 Environmental Management Systems 
-    Internal Auditing certificates. 
-</p>
-    </div>
-    <div class="card">         
-        <ul>            
-        <li>     
-        <strong>February 2023 - Ongoing</strong> HIDC (NEOM Hydrogen Innovation and DevelopmentCentre) Project & GHE
-        (NEOM Green Hydrogen Element) Project </li>  
-        <li> 
-        <hr /> <strong>February 2021 - February 2023</strong> EPC Gas Turbine Power Plant Expansion at the West Qurna </li>
-        <li> <hr /><strong>May 2018 - May 2020</strong>
-        Ras Tanura Refinery Clean Fuels Project </li>
-        <li> <hr /><strong>January 2016 - April 2018</strong>
-        SHAH DENIZ PROJECT STAGE 2 Sangachal Onshore Terminal Facility </li>
-        <li> <hr /><strong>November 2010 - December 2012</strong>
-        Phase 1 Development Program Bab Field Habshan 2 Thamama G4 </li>
-        <li> <hr /><strong>July 2006 - March 2009</strong>
-        PetroRabigh UTILITIES & OFFSITES UMBRELLA (UOU) </li>
-        <li> <hr /><strong>August 2002 - March 2007</strong>
-        ACG Ph 1/2/3 and BP Shah Deniz Gas Export Onshore </li>
-    </ul>  </div>
+}
 
-    
-    <div class="card last">
+.Main{
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  gap: 10px ;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: 1fr;
+  background-color: #5bbdb8;
+}
+
+.one{
+  display:flex;
+  background-color: #f2f2f2;
+  border-radius: 250px ;
+  min-width: 500px;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+  grid-column: span 1;
+}
+
+.three{
+  grid-row: span 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+}
+.two{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 15px;
+  font-size: 100%;
+  justify-content: center;
    
-    <p >My mission is to ensure the highest quality standards for the <strong>NEOM Green Hydrogen project</strong>, which is a game-changer for the global energy transition and a catalyst for economic growth and environmental sustainability. I am passionate about leading a diverse team of quality resources, mentoring and supporting them in all aspects of quality management across the scopes. I have the ability to work within a diverse cultural environment, both national and international, and communicate effectively in English, Turkish, and Italian. I am a 
-practitioner of the Chartered Quality Institute, a professional body that promotes excellence in quality management. 
-<hr />
+}
 
-<img id="img" src="./assets/images/NGHC Zero Defect Logo Small.png" width="200">
-    </p>  
-    </div>
-</div>
-<br />
+img{ border-radius: 10px;}
 
-</body>
-</html>
+.card {
+  background-color: #033142;
+  color:#f2f2f2;
+  border: solid grey;
+  padding: 20px;
+  border-radius: 25px 0 25px 0;
+  min-width:250px;
+  
+}
+.card2{
+  background-color: #033142;
+  color:#f2f2f2;
+  padding: 20px;
+  border-radius: 250px ;
+  font-size: 24px;
+  justify-content: center;
+  
+}
+
+h2{
+  background-color: #5bbdb8; 
+  color:white;
+  border-radius: 5px;
+    
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
