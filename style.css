@@ -2,6 +2,7 @@ body {
   font-family: brown-font, system-ui, -apple-system, Segoe UI, roboto, Helvetica Neue, Noto Sans, Liberation Sans, arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   min-width: 1000px;
   margin:50px;
+  font-size: calc(16px * (min(device-width / 375, 1))); 
 
 }
 
