@@ -2,91 +2,12 @@ body {
   font-family: brown-font, system-ui, -apple-system, Segoe UI, roboto, Helvetica Neue, Noto Sans, Liberation Sans, arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   min-width: 1000px;
   margin:50px;
-  font-size: calc(16px * (min(device-width / 375, 1))); 
 
 }
 
-.Main{
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  gap: 10px ;
-  grid-template-columns: 1fr 3fr 1fr;
-  grid-template-rows: 1fr;
-  background-color: #5bbdb8;
+.gradient-background {
+  background: linear-gradient(300deg, #00bfff, #0b42aa, #ef8172);
+  background-size: 180% 180%;
+  animation: gradient-animation 18s ease infinite;
 }
-
-.one{
-  display:flex;
-  background-color: #f2f2f2;
-  border-radius: 250px ;
-  min-width: 500px;
-  height: 100px;
-  align-items: center;
-  justify-content: center;
-  grid-column: span 1;
-}
-
-.three{
-  grid-row: span 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-
-}
-.two{
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 15px;
-  font-size: 100%;
-  justify-content: center;
-   
-}
-
-img{ border-radius: 10px;}
-
-.card {
-  background-color: #033142;
-  color:#f2f2f2;
-  border: solid grey;
-  padding: 20px;
-  border-radius: 25px 0 25px 0;
-  min-width:250px;
-  
-}
-.card2{
-  background-color: #033142;
-  color:#f2f2f2;
-  padding: 20px;
-  border-radius: 250px ;
-  font-size: 24px;
-  justify-content: center;
-  
-}
-
-h2{
-  background-color: #5bbdb8; 
-  color:white;
-  border-radius: 5px;
-    
-} 
-
-
-
-
-
-
-
-
-
-
-
-
 
