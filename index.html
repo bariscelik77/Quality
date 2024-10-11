@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US" data-bs-theme="dark">
+<html lang="en-US" >
 <head>
 <meta charset="UTF-8">
 <title>My Webpage</title>
@@ -15,8 +15,7 @@
 <body>
 
   <Section id="Navbar">
-  
-      <!--navbar*/ -->
+        
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,7 +31,7 @@
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Services
+              What!!
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#">Action</a></li>
@@ -51,20 +50,22 @@
     </div>
   </nav>
 </Section>
-<!--navbar*/ -->
 
 <section id="title"class="gradient-background">
 
-  <div class="container col-xxl-8 px-4 py-5"></div>
-    <div class="row flex-lg-row-reverse align-items-center g-5 pt-1">
-      <div class="col-10 col-sm-8 col-lg-6">
-        <img src="./assets/images/Bariscelik.jpeg" class="d-block mx-lg-auto img-fluid profile-img " alt="Bootstrap Themes" width="200" height="50" loading="lazy">
+  <div class="container col-xxl-8 px-4 py-1"></div>
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-3 ">
+      <div class="col-10 col-sm-8 col-lg-6 pe-5"> 
+        <img src="./assets/images/Bariscelik.jpeg" class="d-block mx-lg-auto img-fluid profile-img rounded float-end shadow-lg" alt="Bootstrap Themes" width="150" height="50" loading="lazy">
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-6 ps-5">
         <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Baris Celik</h1>
-        <p class="lead">QA/QC Manager | Completion Manager | Source Inspection Manager | Green Hydrogen | Green Ammonia | Alkaline Electrolyser | "Future" Backend Developer</p>
+        <p class="lead fst-italic">QA/QC Manager | Completion Manager | Source Inspection Manager | Green Hydrogen | Green Ammonia | Alkaline Electrolyser | "Future" Backend Developer</p>
         <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-          <button type="button" class="btn btn-primary btn-lg px-4 me-md-2"> <a href="https://www.linkedin.com/in/bariscelik/"> My LinkedIn Page </a> </button>
+          
+
+          
+          
           <!-- <button type="button" class="btn btn-outline-secondary btn-lg px-4">Default</button>-->
         </div>
       </div>
@@ -73,15 +74,15 @@
 
 </section>
 
-<Section>
-  <div class="container my-5">
+<Section id="About">
+  <div class="container">
   <div class="my-5">
-    <div class="p-5 text-center bg-body-tertiary">
+    <div class="p-5 text-center  bg-success p-2 text-dark bg-opacity-10">
       <div class="container py-5">
-        <h1 class="text-body-emphasis">My Experience</h1>
+        <h1 class="text-body-emphasis">About Baris Celik</h1>
         <p class="col-lg-8 mx-auto lead">
           With over 20 years of experience in quality management for the oil/gas, power plant, and infrastructure industry, 
-    I am a Project QAQC Manager at NEOM Green Hydrogen Company, a visionary project that aims to produce the world's 
+    I am a Project QAQC Manager at <strong>NEOM Green Hydrogen Company</strong>, a visionary project that aims to produce the world's 
     largest green hydrogen facility. 
     <hr />
     As a <strong>Project QAQC Manager</strong>, I oversee and coordinate the Employer QA/QC team activities to implement QMS 
@@ -92,35 +93,73 @@
     ISO 9001:2015 Lead Auditor certifications, as well as NACE Coating Inspector and ISO 14001 Environmental Management Systems 
     Internal Auditing certificates. 
         </p>
+        <hr />
+        <a href="https://www.linkedin.com/in/bariscelik/" class="btn btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
+            <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
+          </svg> 
+          <hr /> My LinkedIn Page
+        </a>
       </div>
     </div>
   </div>
+  
 </div>
 </Section>
-<br />
-<Section id="Projects">
-  <div class="container my-5">
-    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
-      <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-        <h1 class="display-4 fw-bold lh-1 text-body-emphasis">My Mission</h1>
+<Section id="background">
+  <div class="container px-4 py-5" id="featured-3">
+    <h2 class="pb-2 border-bottom">Education</h2>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+      <div class="feature col">
+        <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+          <img src="./assets/images/METU.jfif" height="150" width="150">
+        </div>
+        <h3 class="fs-2 text-body-emphasis">B.S. in Metallurgical and Material Engineering</h3>
+        <p>Middle East Technical University • Ankara</p>
+      </div>
+      <div class="feature col">
+        <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+          <img src="./assets/images/IRCA.jfif" height="150" width="150">
+        </div>
+        <h3 class="fs-2 text-body-emphasis">IRCA ISO 9001 Lead Auditor</h3>
+        <p>Middle East Technical University • Online</p>
+        
+      </div>
+      <div class="feature col">
+        <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+          <img src="./assets/images/CSWIP.png" height="150" width="150">
+        </div>
+        <h3 class="fs-2 text-body-emphasis">CSWIP 3.1 Welding Inspector & Coating Inspector Programme 1</h3>
+        <p>TWI - NACE</p>
+        
+       
+      </div>
+    </div>
+  </div>
+</Section>
+<Section id="about">
+  
+    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg bg-success p-2 text-dark bg-opacity-25 ">
+      <div class="col-lg-7 p-3 p-lg-5 pt-lg-3 ">
+        <h1 class="display-4 fw-bold lh-1 text-body-emphasis ">My Mission</h1>
         <p class="lead">My mission is to ensure the highest quality standards for the <strong>NEOM Green Hydrogen project</strong>, which is a game-changer for the global energy transition and a catalyst for economic growth and environmental sustainability. I am passionate about leading a diverse team of quality resources, mentoring and supporting them in all aspects of quality management across the scopes. I have the ability to work within a diverse cultural environment, both national and international, and communicate effectively in English, Turkish, and Spanish. I am a 
           practitioner of the Chartered Quality Institute, a professional body that promotes excellence in quality management. </p>
   
       </div>
       <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-          <img class="rounded-lg-3" src="./assets/images/NGHC Zero Defect Logo Small.png" alt="" >
+          <img class="rounded-lg-3 float-end" src="./assets/images/NGHC Zero Defect Logo Small.png" alt="" >
       </div>
     </div>
-  </div>
+  
 </Section>
 
 
-</Section>
 
-<section>
-  <div class="container px-4 py-5" id="featured-3"></div>
-    <h2 class="pb-2 border-bottom">Skills</h2>
-    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+<section id="skills">
+  
+  <div class="container px-4 py-5 " id="featured-3"></div>
+    <h2 class="pb-2 border-bottom ">Skills</h2>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3 ">
 
       <div class="feature col">
         <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
@@ -172,40 +211,203 @@
       </div>
     </div>
   </div>
+
 </section>
 
 <Section id="Projects">
-  <div class="container mt-5">
+  
   <div class="my-5">
-    <div class="p-5 text-center bg-body-tertiary">
-      <div class="container py-5">
+    <div class="p-5 text-center bg-success p-2 text-dark bg-secondary-subtle">
+      <div class="container py-1">
         <h1 class="text-body-emphasis">Projects</h1>
         <p class="col-lg-8 mx-auto lead ">
           <ul class="text-start">            
             <li>     
-            <strong>February 2023 - Ongoing</strong> HIDC (NEOM Hydrogen Innovation and DevelopmentCentre) Project & NGHP
-            (NEOM Green Hydrogen Element) Project </li>  
-            <li> 
-            <hr /> <strong>February 2021 - February 2023</strong> EPC Gas Turbine Power Plant Expansion at the West Qurna </li>
-            <li> <hr /><strong>May 2018 - May 2020</strong>
-            Ras Tanura Refinery Clean Fuels Project </li>
-            <li> <hr /><strong>January 2016 - April 2018</strong>
-            SHAH DENIZ PROJECT STAGE 2 Sangachal Onshore Terminal Facility </li>
-            <li> <hr /><strong>November 2010 - December 2012</strong>
-            Phase 1 Development Program Bab Field Habshan 2 Thamama G4 </li>
-            <li> <hr /><strong>July 2006 - March 2009</strong>
-            PetroRabigh UTILITIES & OFFSITES UMBRELLA (UOU) </li>
+            <strong>February 2023 - Ongoing</strong>
+            <em>NEOM-Saudi Arabia,</em>
+            <p>HIDC (NEOM Hydrogen Innovation and DevelopmentCentre) Project & NGHP (NEOM Green Hydrogen Element) Project 
+              <a href="https://nghc.com/" class="btn btn-warning"> Link</a>
+            </p> 
+            <div class="p1">
+              <figure class="figure">
+                <img src="/01 Mypage/assets/images/main-12.png" class="figure-img img-fluid rounded " alt="..." width="250">
+                <figcaption class="figure-caption"></figcaption>
+              </figure>
+              <p>
+                
+                Located at Oxagon in Saudi Arabia’s region of NEOM, 
+                NGHC is aligned with Saudi Vision 2030 and Saudi Green Initiative.
+                Operating entirely on around 4 GW of renewable electricity, generated from dedicated on-site wind and solar plants.         
+                Covering an area of over 300km2 of land.             
+                Solar farm with 5.6 million solar panels producing up to 2.2GW of solar energy.
+                Wind garden with over 250 wind turbines generating 1.6GW of renewable energy.
+                Up to <span class="text-yellow"> 1.2m tonnes </span> of green ammonia will be exported yearly, a highly dense hydrogen carrier and a cost-effective solution for transportation globally.
+              
+            </p>
+            </div>
+          </li>  
+            <hr /> 
+            <li> <strong>February 2021 - February 2023</strong> 
+            Basra, Iraq
+            <p >West Qurna 2 Power Plant Project
+              
+              <a href="https://calikenerji.com/west-qurna-2-power-plant-project" class="btn btn-warning"> Link</a>
+            </p> 
+            <div class="p1">
+              <figure class="figure">
+                <img src="/01 Mypage/assets/images/WQ2.jpg" class="figure-img img-fluid rounded " alt="..." width="250">
+                <figcaption class="figure-caption"></figcaption>
+              </figure>
+              <p>Çalik Enerji will undertake the engineering, procurement, construction, 
+                assembly, testing and commissioning of the Power Plant Project and all related auxiliary equipment 
+                and structures within the scope of West Qurna 2, one of the largest oil fields in Iraq, developed and 
+                operated by LUKOIL. The contract for the project was signed between LUKOIL and Çalik Enerji on 21 December 2020. 
+                The Project is planned to be completed within 34 months. 
+              </p>
+            </div>
+          </li>
+            <hr /> 
+              <li> <strong> May 2018 - May 2020</strong>
+              Jubail, Saudi Arabia
+              <p>Ras Tanura Refinery Clean Fuels Project <a href="" class="btn btn-warning"> Link</a></p> </li>
+
+              <div class="p1">
+                <figure class="figure">
+                  <img src="/01 Mypage/assets/images/RTR.jpg" class="figure-img img-fluid rounded " alt="..." width="250">
+                  <figcaption class="figure-caption"></figcaption>
+                </figure>
+                <p>The primary objective of the Ras Tanura Refinery Clean Fuels Project is to enable the Ras Tanura refinery—the largest refinery 
+                  in Saudi Arabia—to produce transportation fuels that will be compliant with future specifications. The project targets the ability 
+                  to produce gasoline and diesel products to Euro 5 specifications, as well as to maximize refinery gasoline production, especially 
+                  through the utilization of Khuff gas condensate naphtha. 
+                </p>
+              </div>
+
+              <li> <hr /><strong>January 2016 - April 2018</strong>
+              Baku, Azerbaijan
+              <p>Shah Deniz Project Stage 2 Sangachal Onshore Terminal Facility 
+                <a href="https://www.tekfenmuhendislik.com/shah-deniz-stage-2-onshore-terminal/" class="btn btn-warning"> Link</a>
+                 </p></li>
+              <div class="p1">
+                <figure class="figure">
+                  <img src="/01 Mypage/assets/images/SD2.png" class="figure-img img-fluid rounded " alt="..." width="250">
+                  <figcaption class="figure-caption"></figcaption>
+                </figure>
+                <p>Shah Deniz Stage 2 Onshore Terminal Facility was be constructed at Sangahcal Terminal, 
+                  located 45 km. South of Baku city centre. The scope of work associated with the above facilities 
+                  include civil engineering work, piling, foundations, underground and open drainage systems, 
+                  terminal access and internal roads, process equipment, storage tanks including design, pipe racks, 
+                  piping, electrical and control systems construction and installation activities. 
+                </p>
+              </div>
+             
+              <li> <hr /><strong>January 2013- December 2015 </strong>
+              Baku, Azerbaijan
+              <p>BP Operation - Function Lead </p> </li>
+              <li> <hr /><strong>November 2010 - December 2012</strong>
+              Abu Dhabi, UAE
+              <p>1.8 mbpd Phase 1 Development Project (Bab Field) - Thamama G and Habshan 2 
+                <a href="https://www.nmdc-group.com/en/projects/epc-for-bab-thammama-g-and-habshan-2-development-1-8-mmbopd-project/" class="btn btn-warning"> Link</a>
+              </p>
+              <p>Type: PMT on behalf of ADNOC </p></li>
+              
+                            <div class="p1">
+                <figure class="figure">
+                  <img src="/01 Mypage/assets/images/bab.jpg" class="figure-img img-fluid rounded " alt="..." width="250">
+                  <figcaption class="figure-caption"></figcaption>
+                </figure>
+                <p>Bab Thammama G and Habshan 2 onshore oil fields, consisting of the following facilities:
+
+                  639 Km of Pipelines including transfer lines, flow lines & water Injection lines.
+                  4 new Remote Degassing Stations (RDS)/Transfer Lines with 54 new Prod. Wells and Flow lines.
+                  8 new Water Injection Clusters (WIC) with 52 new WI Wells, Headers and Injection lines.
+                  Modification Works at Bab Central Degassing Stn. (BCDS) and 33kV OH lines to all new facilities (67km).
+                </p>
+              </div>
+            <li> <hr /><strong>January 2010 - August 2010</strong>
+              Jubail, Saudi Arabia
+              <p>Saudi Kayan - Jubail Petrochemicals Complex - Phenolics Complex 
+                <a href="https://www.tekfenmuhendislik.com/shah-deniz-stage-2-onshore-terminal/" class="btn btn-warning"> Link</a>
+              </p></li>
+            <li> <hr /><strong>August 2008 - November 2009 </strong>
+              Jubail, Saudi Arabia
+              <p>Sharq Petrochemical Expansion Ethane/Propane Cracker EPC Contract 
+                <a href="https://www.tekfenmuhendislik.com/shah-deniz-stage-2-onshore-terminal/" class="btn btn-warning"> Link</a>
+              </p></li>
+            <li> <hr /><strong>Apr 2007 - Dec 2007</strong>
+              Rabigh, Saudi Arabia
+              <p>Petro Rabigh UTILITIES & OFFSITES UMBRELLA (UOU) 
+                <a href="https://www.tekfenmuhendislik.com/shah-deniz-stage-2-onshore-terminal/" class="btn btn-warning"> Link</a>
+              </p> </li>
             <li> <hr /><strong>August 2002 - March 2007</strong>
-            ACG Ph 1/2/3 and BP Shah Deniz Gas Export Onshore </li>
+              Baku, Azerbaijan
+              <p>BP ACG Ph 1/2/3 and Shah Deniz Project Stage 1 Sangachal Onshore Terminal Facility 
+                <a href="https://www.tekfenmuhendislik.com/shah-deniz-stage-2-onshore-terminal/" class="btn btn-warning"> Link</a>
+              </p> </li>
         </ul> 
         </p>
       </div>
     </div>
   </div>
+
+</Section>
+<!--
+<Section id="Projects2">
+  <div class="container">
+  <table class="table-info">
+    <thead>
+      <tr>        
+        <th scope="col">Location</th>
+        <th scope="col">Years</th>        
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td scope="row">Azerbaijan</td>
+        <td>10yrs</td>
+        
+        
+      </tr>
+      <tr>
+        <th scope="row">Saudi Arabia</th>
+        <td>Jacob</td>
+        
+        
+      </tr>
+      <tr>
+        <th scope="row">UAE</th>
+        <td colspan="2">Larry the Bird</td>
+        
+      </tr>
+    </tbody>
+  </table>
 </div>
 </Section>
-
+-->
 <br />
+
+<div class="container">
+  <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <div class="col-md-4 d-flex align-items-center">
+      <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+        <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+      </a>
+      <span class="mb-3 mb-md-0 text-body-secondary">© 2024</span>
+    </div>
+
+    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+      <li class="ms-3"><a class="text-body-secondary" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
+        <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
+      </svg></a></li>
+      <li class="ms-3"><a class="text-body-secondary" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+        <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/>
+      </svg></a></li>
+      <li class="ms-3"><a class="text-body-secondary" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
+        <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
+      </svg></a></li>
+    </ul>
+  </footer>
+</div>
 
 </body>
 </html>
