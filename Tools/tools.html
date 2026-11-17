@@ -1,1 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quality Tools | Baris Celik</title>
+  <meta name="description" content="Free quality calculators: ISO 2859-1 sampling plans, weld repair rate and punch-list burn-down forecast. By Baris Celik, Senior Quality Manager.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #101314; --ink-2: #4a5359; --ink-3: #6b757b; --line: #e3e7e6;
+      --bg: #ffffff; --bg-soft: #f5f7f6; --green: #0f5c4d; --green-2: #12735f; --green-soft: #e3f1ec;
+      --good: #0b7a3e; --good-soft: #e3f4ea; --warn: #8a5a00; --warn-soft: #fdf1d8; --bad: #a3272a; --bad-soft: #fbe5e5;
+      --radius: 14px; --max: 1120px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg-soft); color: var(--ink); font-family: "Inter", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: var(--green); }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+    .top { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+    .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+    .brand { font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); text-decoration: none; font-size: 15px; }
+    .brand span { color: var(--green); }
+    .nav { display: flex; gap: 20px; flex-wrap: wrap; }
+    .nav a { color: var(--ink-2); text-decoration: none; font-size: 14.5px; font-weight: 500; }
+    .nav a:hover, .nav a.active { color: var(--green); }
+    @media (max-width: 640px) { .nav a.hide-sm { display: none; } }
 
+    header.page { padding: 48px 0 24px; }
+    .kicker { color: var(--green); font-weight: 600; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { font-size: clamp(32px, 5vw, 44px); line-height: 1.1; margin: 8px 0 10px; font-weight: 800; letter-spacing: -.02em; }
+    .lede { color: var(--ink-2); max-width: 720px; margin: 0; }
+    .jump { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    .jump a { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 7px 14px; font-size: 14px; text-decoration: none; color: var(--ink); font-weight: 500; }
+    .jump a:hover { border-color: var(--green); color: var(--green); }
+
+    .tool { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 28px; margin: 24px 0; scroll-margin-top: 80px; }
+    .tool h2 { margin: 0 0 4px; font-size: 24px; letter-spacing: -.01em; }
+    .tool .what { color: var(--ink-2); margin: 0 0 22px; max-width: 760px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; align-items: start; }
+    @media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+
+    .fields { display: grid; gap: 14px; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    label { display: block; font-size: 13.5px; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
+    input, select { width: 100%; font: inherit; font-size: 15px; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
+    input:focus, select:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px var(--green-soft); }
+    .hint { font-size: 12.5px; color: var(--ink-3); margin-top: 5px; }
+    .seg { display: inline-flex; border: 1.5px solid var(--line); border-radius: 10px; overflow: hidden; }
+    .seg button { font: inherit; font-size: 14px; border: 0; background: #fff; padding: 8px 14px; cursor: pointer; color: var(--ink-2); }
+    .seg button[aria-pressed="true"] { background: var(--green); color: #fff; font-weight: 600; }
+
+    .result { background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+    .result .big { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+    .result .big div { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px; text-align: center; }
+    .result .big b { display: block; font-size: 30px; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .result .big span { font-size: 12.5px; color: var(--ink-3); }
+    .result p { margin: 8px 0 0; color: var(--ink-2); font-size: 14.5px; }
+    .result .verdict { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 6px 12px; font-size: 14px; font-weight: 600; }
+    .verdict.good { background: var(--good-soft); color: var(--good); }
+    .verdict.warn { background: var(--warn-soft); color: var(--warn); }
+    .verdict.bad { background: var(--bad-soft); color: var(--bad); }
+    .note { font-size: 12.5px; color: var(--ink-3); margin-top: 14px; }
+    .chart { margin-top: 16px; }
+    .chart svg { width: 100%; height: auto; display: block; }
+    .chart text { font-family: inherit; font-size: 11px; fill: var(--ink-3); }
+
+    footer { padding: 28px 0 40px; color: var(--ink-3); font-size: 14px; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    footer a { color: var(--ink-3); }
+  </style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Baris <span>Celik</span></a>
+    <nav class="nav">
+      <a href="../../index.html">Home</a>
+      <a href="../Timeline/timeline.html" class="hide-sm">Timeline</a>
+      <a href="../Dashboards/dashboards.html" class="hide-sm">Dashboards</a>
+      <a href="tools.html" class="active">Tools</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <header class="page">
+    <div class="kicker">Free quality tools</div>
+    <h1>Quality calculators</h1>
+    <p class="lede">Small tools I use on site, made public. Everything runs in your browser; nothing you type is sent anywhere.</p>
+    <div class="jump">
+      <a href="#sampling">Sampling plan (ISO 2859-1)</a>
+      <a href="#weld">Weld repair rate</a>
+      <a href="#punch">Punch burn-down forecast</a>
+    </div>
+  </header>
+
+  <!-- 1. Sampling plan -->
+  <section class="tool" id="sampling">
+    <h2>Sampling plan – ISO 2859-1 / ANSI Z1.4</h2>
+    <p class="what">How many items to inspect from a lot, and how many defectives you can accept. Single sampling, normal inspection, nonconforming items (AQL up to 10%).</p>
+    <div class="grid2">
+      <div class="fields">
+        <div>
+          <label for="lot">Lot size (N)</label>
+          <input id="lot" type="number" min="2" step="1" value="1000" inputmode="numeric">
+        </div>
+        <div class="row2">
+          <div>
+            <label for="level">Inspection level</label>
+            <select id="level">
+              <option value="0">General I (reduced discrimination)</option>
+              <option value="1" selected>General II (normal)</option>
+              <option value="2">General III (more discrimination)</option>
+            </select>
+          </div>
+          <div>
+            <label for="aql">AQL (% nonconforming)</label>
+            <select id="aql"></select>
+          </div>
+        </div>
+        <div class="hint">General level II is the default unless the specification says otherwise.</div>
+      </div>
+      <div class="result" id="samplingOut" aria-live="polite"></div>
+    </div>
+    <p class="note">Based on ISO 2859-1 Table 1 (code letters) and Table 2-A (single sampling, normal inspection). For contractual use, confirm against the standard.</p>
+  </section>
+
+  <!-- 2. Weld repair rate -->
+  <section class="tool" id="weld">
+    <h2>Weld repair rate</h2>
+    <p class="what">Repair rate from radiography/UT results, by joints or by length, checked against your project's acceptance target.</p>
+    <div class="grid2">
+      <div class="fields">
+        <div>
+          <label>Basis</label>
+          <div class="seg" role="group" aria-label="Repair rate basis">
+            <button type="button" data-basis="joints" aria-pressed="true">By joints</button>
+            <button type="button" data-basis="length" aria-pressed="false">By length</button>
+          </div>
+        </div>
+        <div class="row2">
+          <div>
+            <label for="wTested" id="wTestedLbl">Joints tested</label>
+            <input id="wTested" type="number" min="0" step="any" value="420">
+          </div>
+          <div>
+            <label for="wRep" id="wRepLbl">Joints rejected</label>
+            <input id="wRep" type="number" min="0" step="any" value="9">
+          </div>
+        </div>
+        <div class="row2">
+          <div>
+            <label for="wTarget">Target repair rate (%)</label>
+            <input id="wTarget" type="number" min="0" step="0.1" value="3">
+          </div>
+          <div>
+            <label for="wWarn">Warning margin (%)</label>
+            <input id="wWarn" type="number" min="0" step="0.1" value="1">
+            <div class="hint">Amber when within this margin below target.</div>
+          </div>
+        </div>
+      </div>
+      <div class="result" id="weldOut" aria-live="polite"></div>
+    </div>
+    <p class="note">Repair rate = rejected ÷ tested × 100. Use the definition in your project quality plan (welder-, process- or line-based) when reporting.</p>
+  </section>
+
+  <!-- 3. Punch burn-down -->
+  <section class="tool" id="punch">
+    <h2>Punch burn-down forecast</h2>
+    <p class="what">When will the open punch list reach zero? Uses your weekly closure and new-item rates.</p>
+    <div class="grid2">
+      <div class="fields">
+        <div class="row2">
+          <div>
+            <label for="pOpen">Open items today</label>
+            <input id="pOpen" type="number" min="0" step="1" value="1450">
+          </div>
+          <div>
+            <label for="pTarget">Target date</label>
+            <input id="pTarget" type="date">
+          </div>
+        </div>
+        <div class="row2">
+          <div>
+            <label for="pClose">Closed per week</label>
+            <input id="pClose" type="number" min="0" step="1" value="180">
+          </div>
+          <div>
+            <label for="pNew">New items per week</label>
+            <input id="pNew" type="number" min="0" step="1" value="45">
+          </div>
+        </div>
+        <div class="hint">Take the average of the last 4 weeks for both rates.</div>
+      </div>
+      <div class="result" id="punchOut" aria-live="polite"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Baris Celik</span>
+    <span><a href="../../index.html">Home</a> · <a href="mailto:bariscelik77@gmail.com">bariscelik77@gmail.com</a></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var nf = new Intl.NumberFormat('en-US');
+  function el(id) { return document.getElementById(id); }
+  function esc(s) { return String(s); }
+
+  /* ---------- 1. ISO 2859-1 sampling ---------- */
+  // Table 1: lot size ranges -> code letters for General I, II, III
+  var LOTS = [
+    [8, 'A', 'A', 'B'], [15, 'A', 'B', 'C'], [25, 'B', 'C', 'D'], [50, 'C', 'D', 'E'],
+    [90, 'C', 'E', 'F'], [150, 'D', 'F', 'G'], [280, 'E', 'G', 'H'], [500, 'F', 'H', 'J'],
+    [1200, 'G', 'J', 'K'], [3200, 'H', 'K', 'L'], [10000, 'J', 'L', 'M'], [35000, 'K', 'M', 'N'],
+    [150000, 'L', 'N', 'P'], [500000, 'M', 'P', 'Q'], [Infinity, 'N', 'Q', 'R']
+  ];
+  var LETTERS = ['A','B','C','D','E','F','G','H','J','K','L','M','N','P','Q','R'];
+  var SIZES =   [2, 3, 5, 8, 13, 20, 32, 50, 80, 125, 200, 315, 500, 800, 1250, 2000];
+  var AQLS = ['0.010','0.015','0.025','0.040','0.065','0.10','0.15','0.25','0.40','0.65','1.0','1.5','2.5','4.0','6.5','10'];
+  var ACC = [0, null, null, 1, 2, 3, 5, 7, 10, 14, 21]; // by diagonal d; null = arrow (1: up, 2: down)
+
+  // Table 2-A follows a diagonal pattern: d = letterIndex + aqlIndex - 14
+  function cell(i, j) {
+    var d = i + j - 14;
+    if (d < 0) return { arrow: 'down' };
+    if (d === 1) return { arrow: 'up' };
+    if (d === 2) return { arrow: 'down' };
+    if (d > 10) return { arrow: 'up' };
+    return { ac: ACC[d] };
+  }
+  function resolve(i, j) {
+    var start = i, guard = 0;
+    while (guard++ < 20) {
+      var c = cell(i, j);
+      if (c.ac !== undefined) return { i: i, ac: c.ac, moved: i !== start };
+      var dir = c.arrow;
+      if (dir === 'down' && i >= LETTERS.length - 1) dir = 'up';   // no row below R
+      if (dir === 'up' && i <= 0) dir = 'down';                    // no row above A
+      i += dir === 'down' ? 1 : -1;
+    }
+    return null;
+  }
+
+  var aqlSel = el('aql');
+  AQLS.forEach(function (a, k) {
+    var o = document.createElement('option'); o.value = k; o.textContent = a + ' %';
+    if (a === '1.0') o.selected = true;
+    aqlSel.appendChild(o);
+  });
+
+  function sampling() {
+    var out = el('samplingOut');
+    var N = Math.floor(Number(el('lot').value));
+    if (!N || N < 2) { out.innerHTML = '<p>Enter a lot size of 2 or more.</p>'; return; }
+    var lvl = Number(el('level').value), j = Number(aqlSel.value);
+    var row = LOTS.find(function (r) { return N <= r[0]; });
+    var letter = row[1 + lvl], i0 = LETTERS.indexOf(letter);
+    var r = resolve(i0, j);
+    if (!r) { out.innerHTML = '<p>No single sampling plan in the table for this combination. Use 100% inspection or check the standard.</p>'; return; }
+    var n = SIZES[r.i], ac = r.ac, re = ac + 1;
+    var hundred = n >= N;
+    if (hundred) n = N;
+    var html = '<div class="big">' +
+      '<div><b>' + nf.format(n) + '</b><span>inspect' + (hundred ? ' (100%)' : '') + '</span></div>' +
+      '<div><b>' + ac + '</b><span>accept if ≤ (Ac)</span></div>' +
+      '<div><b>' + re + '</b><span>reject if ≥ (Re)</span></div></div>';
+    html += '<p>Code letter <b>' + letter + '</b>' + (r.moved ? ' → table arrow to letter <b>' + LETTERS[r.i] + '</b>' : '') +
+      ', sample size ' + nf.format(SIZES[r.i]) + '.</p>';
+    html += '<p>Inspect ' + nf.format(n) + ' items picked at random from the lot of ' + nf.format(N) + '. ' +
+      'If ' + (ac === 0 ? 'none is' : ac + ' or fewer are') + ' nonconforming, accept the lot; if ' + re + ' or more are, reject it.</p>';
+    if (hundred) html += '<p>The sample size is not smaller than the lot, so inspect every item.</p>';
+    out.innerHTML = html;
+  }
+  ['lot', 'level', 'aql'].forEach(function (id) { el(id).addEventListener('input', sampling); });
+  sampling();
+
+  /* ---------- 2. Weld repair rate ---------- */
+  var basis = 'joints';
+  document.querySelectorAll('[data-basis]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      basis = b.dataset.basis;
+      document.querySelectorAll('[data-basis]').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      el('wTestedLbl').textContent = basis === 'joints' ? 'Joints tested' : 'Length tested (mm)';
+      el('wRepLbl').textContent = basis === 'joints' ? 'Joints rejected' : 'Repair length (mm)';
+      if (basis === 'length') { el('wTested').value = 96000; el('wRep').value = 1850; }
+      else { el('wTested').value = 420; el('wRep').value = 9; }
+      weld();
+    });
+  });
+  function weld() {
+    var out = el('weldOut');
+    var t = Number(el('wTested').value), r = Number(el('wRep').value);
+    var target = Number(el('wTarget').value), margin = Number(el('wWarn').value) || 0;
+    if (!(t > 0) || r < 0) { out.innerHTML = '<p>Enter how much was tested (more than 0).</p>'; return; }
+    if (r > t) { out.innerHTML = '<p>Rejected cannot be more than tested.</p>'; return; }
+    var rate = r / t * 100;
+    var cls, msg;
+    if (rate > target) { cls = 'bad'; msg = '✕ Above target'; }
+    else if (rate > target - margin) { cls = 'warn'; msg = '! Close to target'; }
+    else { cls = 'good'; msg = '✓ Within target'; }
+    var room = basis === 'joints' ? Math.floor(target / 100 * t) - r : null;
+    var html = '<div class="big">' +
+      '<div><b>' + rate.toFixed(2) + '%</b><span>repair rate</span></div>' +
+      '<div><b>' + target + '%</b><span>target</span></div>' +
+      '<div><b>' + (rate - target > 0 ? '+' : '') + (rate - target).toFixed(2) + '</b><span>points vs target</span></div></div>' +
+      '<span class="verdict ' + cls + '">' + msg + '</span>';
+    if (room !== null) {
+      html += room >= 0
+        ? '<p>' + room + ' more rejected joint' + (room === 1 ? '' : 's') + ' at the current tested count would still keep you within ' + target + '%.</p>'
+        : '<p>To return within ' + target + '%, about ' + nf.format(Math.ceil(r / (target / 100)) - t) + ' more joints need to pass first time.</p>';
+    }
+    out.innerHTML = html;
+  }
+  ['wTested', 'wRep', 'wTarget', 'wWarn'].forEach(function (id) { el(id).addEventListener('input', weld); });
+  weld();
+
+  /* ---------- 3. Punch burn-down ---------- */
+  var tgt = new Date(); tgt.setDate(tgt.getDate() + 70);
+  el('pTarget').value = tgt.toISOString().slice(0, 10);
+  function fmtDate(d) { return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); }
+  function punch() {
+    var out = el('punchOut');
+    var open = Number(el('pOpen').value), c = Number(el('pClose').value), nw = Number(el('pNew').value);
+    var target = el('pTarget').value ? new Date(el('pTarget').value + 'T00:00:00') : null;
+    if (!(open >= 0)) { out.innerHTML = '<p>Enter the open items.</p>'; return; }
+    var net = c - nw;
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var html;
+    if (open === 0) { out.innerHTML = '<span class="verdict good">✓ Punch list is clear</span>'; return; }
+    if (net <= 0) {
+      html = '<div class="big"><div><b>' + nf.format(open) + '</b><span>open</span></div><div><b>' + net + '</b><span>net / week</span></div><div><b>never</b><span>at this rate</span></div></div>' +
+        '<span class="verdict bad">✕ The list is not shrinking</span><p>New items are arriving as fast as they are closed. Closure must rise above ' + nf.format(nw) + ' a week.</p>';
+      out.innerHTML = html; return;
+    }
+    var weeks = Math.ceil(open / net);
+    var finish = new Date(today); finish.setDate(finish.getDate() + weeks * 7);
+    var cls = 'good', msg = '✓ Meets the target date', extra = '';
+    if (target) {
+      var wk = Math.max(0, (target - today) / (7 * 864e5));
+      if (finish > target) {
+        cls = 'bad'; msg = '✕ Misses the target date';
+        var need = wk > 0 ? Math.ceil(open / wk + nw) : null;
+        extra = need ? '<p>To finish by ' + fmtDate(target) + ', close about <b>' + nf.format(need) + '</b> items a week (now ' + nf.format(c) + ').</p>' : '<p>The target date has already passed.</p>';
+      }
+    }
+    html = '<div class="big"><div><b>' + weeks + '</b><span>weeks to zero</span></div><div><b>' + nf.format(net) + '</b><span>net closed / week</span></div><div><b style="font-size:20px;padding:6px 0">' + fmtDate(finish) + '</b><span>forecast zero</span></div></div>' +
+      '<span class="verdict ' + cls + '">' + msg + '</span>' + extra;
+    // burn-down chart
+    var W = 520, H = 170, m = { l: 40, r: 10, t: 10, b: 24 };
+    var horizon = Math.max(weeks, target ? Math.ceil((target - today) / (7 * 864e5)) : 0, 1);
+    var X = function (w) { return m.l + (W - m.l - m.r) * w / horizon; };
+    var Y = function (v) { return m.t + (H - m.t - m.b) * (1 - v / open); };
+    var pts = [];
+    for (var w = 0; w <= weeks; w++) pts.push(X(w).toFixed(1) + ',' + Y(Math.max(0, open - net * w)).toFixed(1));
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Forecast burn-down of open punch items">';
+    [0, 0.5, 1].forEach(function (f) { var y = Y(open * f); svg += '<line x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + y + '" y2="' + y + '" stroke="#e3e7e6"/><text x="' + (m.l - 6) + '" y="' + (y + 4) + '" text-anchor="end">' + nf.format(Math.round(open * f)) + '</text>'; });
+    if (target) { var tx = X(Math.max(0, (target - today) / (7 * 864e5))); svg += '<line x1="' + tx + '" x2="' + tx + '" y1="' + m.t + '" y2="' + (H - m.b) + '" stroke="#6b757b" stroke-dasharray="4 4"/><text x="' + (tx - 4) + '" y="' + (m.t + 10) + '" text-anchor="end">target</text>'; }
+    svg += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="#0f5c4d" stroke-width="2" stroke-linejoin="round"/>';
+    svg += '<text x="' + m.l + '" y="' + (H - 8) + '">today</text><text x="' + X(weeks) + '" y="' + (H - 8) + '" text-anchor="end">wk ' + weeks + '</text></svg>';
+    out.innerHTML = html + '<div class="chart">' + svg + '</div>';
+  }
+  ['pOpen', 'pClose', 'pNew', 'pTarget'].forEach(function (id) { el(id).addEventListener('input', punch); });
+  punch();
+})();
+</script>
+</body>
+</html>
