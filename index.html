@@ -277,7 +277,7 @@
         </div>
       </div>
       <div class="portrait">
-        <img src="./assets/images/Bariscelik-portrait.jpg" alt="Photo of Baris Celik" width="300" height="375">
+        <img src="./assets/images/Bariscelik.png" alt="Photo of Baris Celik" width="300" height="375">
       </div>
     </div>
   </section>
@@ -641,10 +641,12 @@
     }
     box.innerHTML = '';
     var map = L.map(box, { scrollWheelZoom: false, zoomSnap: 0.5 });
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 12, subdomains: 'abcd',
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    var esri = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/';
+    L.tileLayer(esri + 'World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 16,
+      attribution: 'Tiles &copy; <a href="https://www.esri.com">Esri</a> &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors'
     }).addTo(map);
+    L.tileLayer(esri + 'World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16 }).addTo(map);
     var markers = PLACES.map(function (p) {
       var r = 7 + 2 * (p.items.length - 1);
       return L.circleMarker(p.ll, { radius: r, color: '#ffffff', weight: 2, fillColor: '#0f5c4d', fillOpacity: 0.95 })
