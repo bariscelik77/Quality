@@ -26,26 +26,8 @@
       --tip-bg: #ffffff;
       --accent: #0f5c4d;
     }
-    @media (prefers-color-scheme: dark) {
-      .viz-root {
-        color-scheme: dark;
-        --page: #121211;
-        --surface-1: #1a1a19;
-        --border: #2f2f2c;
-        --grid: #2a2a28;
-        --text-primary: #f0efec;
-        --text-secondary: #c3c2b7;
-        --text-muted: #9a998f;
-        --series-1: #3987e5;
-        --series-2: #d95926;
-        --plan: #8a8983;
-        --ramp-1: #184f95; --ramp-2: #1c5cab; --ramp-3: #2a78d6; --ramp-4: #5598e7;
-        --good-text: #4cc94c;
-        --tip-bg: #252523;
-        --accent: #5fc4ad;
-      }
-    }
     body { margin: 0; }
+    .viz-root h1, .viz-root h2, .viz-root h3 { color: var(--text-primary); }
     .viz-root {
       background: var(--page);
       color: var(--text-primary);
@@ -74,9 +56,9 @@
     .chip:focus-visible { outline: 2px solid var(--series-1); outline-offset: 2px; }
 
     .grid { display: grid; gap: 16px; grid-template-columns: repeat(12, 1fr); transition: opacity .15s; }
-    .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
-    .card h2 { font-size: 15px; font-weight: 600; margin: 0 0 2px; }
-    .card .sub { font-size: 12.5px; color: var(--text-muted); margin: 0 0 10px; }
+    .dcard { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+    .dcard h2 { font-size: 15px; font-weight: 600; margin: 0 0 2px; }
+    .dcard .sub { font-size: 12.5px; color: var(--text-muted); margin: 0 0 10px; }
     .span-12 { grid-column: span 12; } .span-8 { grid-column: span 8; } .span-4 { grid-column: span 4; }
     .span-7 { grid-column: span 7; } .span-5 { grid-column: span 5; }
     @media (max-width: 900px) { .span-8, .span-4, .span-7, .span-5 { grid-column: span 12; } }
@@ -183,7 +165,7 @@
     <div class="grid" id="dash">
       <div class="span-12 kpis" id="kpis"></div>
 
-      <section class="card span-8">
+      <section class="dcard span-8">
         <h2>Cumulative CCC signed vs plan</h2>
         <p class="sub">Construction Completion Certificates, weekly cut-off every Friday</p>
         <div class="legend">
@@ -195,13 +177,13 @@
         <div class="data-view" id="scurve-table"></div>
       </section>
 
-      <section class="card span-4">
+      <section class="dcard span-4">
         <h2>Handover funnel</h2>
         <p class="sub">Subsystems reaching each certificate</p>
         <div id="funnel"></div>
       </section>
 
-      <section class="card span-5">
+      <section class="dcard span-5">
         <h2>Open punch items by discipline</h2>
         <p class="sub">Cat A must be cleared before CCC · Cat B before handover</p>
         <div class="legend">
@@ -213,14 +195,14 @@
         <div class="data-view" id="punch-table"></div>
       </section>
 
-      <section class="card span-7">
+      <section class="dcard span-7">
         <h2>Subsystems closest to the critical path</h2>
         <p class="sub">Not yet STCC, sorted by open Punch A</p>
         <div id="crit"></div>
       </section>
     </div>
 
-    <section class="how card">
+    <section class="how dcard">
       <h2>How it's built</h2>
       <div class="row g-4">
         <div class="col-lg-6">
@@ -390,7 +372,7 @@ CALCULATE (
       { l: 'STSC signed', v: nf.format(s.stsc), f: pct(s.stsc, s.subs) + ' of subsystems' },
       { l: 'Open punch A / B', v: nf.format(s.openA) + ' / ' + nf.format(s.openB), f: 'items outstanding', sm: true }
     ].forEach(function (c) {
-      var card = document.createElement('div'); card.className = 'card kpi';
+      var card = document.createElement('div'); card.className = 'dcard kpi';
       var l = document.createElement('div'); l.className = 'k-label'; l.textContent = c.l;
       var v = document.createElement('div'); v.className = 'k-value' + (c.sm ? ' sm' : ''); v.textContent = c.v;
       var f = document.createElement('div'); f.className = 'k-foot'; f.textContent = c.f;
