@@ -1,1 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Completion Dashboards | Baris Celik</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Demo of a mechanical completion and handover dashboard (CCC / STCC / STSC, ITRs, punch lists) built by Baris Celik. All data is fictional.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <style>
+    .viz-root {
+      color-scheme: light;
+      --page: #f3f2ef;
+      --surface-1: #fcfcfb;
+      --border: #e2e1dc;
+      --grid: #ebeae6;
+      --text-primary: #0b0b0b;
+      --text-secondary: #52514e;
+      --text-muted: #6f6e69;
+      --series-1: #2a78d6;
+      --series-2: #eb6834;
+      --plan: #8a8983;
+      --ramp-1: #86b6ef; --ramp-2: #5598e7; --ramp-3: #2a78d6; --ramp-4: #1c5cab;
+      --good: #0ca30c; --warning: #fab219; --critical: #d03b3b;
+      --good-text: #006300;
+      --tip-bg: #ffffff;
+      --accent: #0f5c4d;
+    }
+    @media (prefers-color-scheme: dark) {
+      .viz-root {
+        color-scheme: dark;
+        --page: #121211;
+        --surface-1: #1a1a19;
+        --border: #2f2f2c;
+        --grid: #2a2a28;
+        --text-primary: #f0efec;
+        --text-secondary: #c3c2b7;
+        --text-muted: #9a998f;
+        --series-1: #3987e5;
+        --series-2: #d95926;
+        --plan: #8a8983;
+        --ramp-1: #184f95; --ramp-2: #1c5cab; --ramp-3: #2a78d6; --ramp-4: #5598e7;
+        --good-text: #4cc94c;
+        --tip-bg: #252523;
+        --accent: #5fc4ad;
+      }
+    }
+    body { margin: 0; }
+    .viz-root {
+      background: var(--page);
+      color: var(--text-primary);
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+      min-height: 100vh;
+      padding: 24px 0 48px;
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+    .hero h1 { font-size: 30px; font-weight: 700; margin: 0 0 6px; }
+    .hero p { color: var(--text-secondary); max-width: 760px; margin: 0 0 14px; font-size: 16px; line-height: 1.5; }
+    .demo-note {
+      display: inline-flex; gap: 8px; align-items: center;
+      border: 1px solid var(--border); background: var(--surface-1);
+      border-radius: 8px; padding: 6px 12px; font-size: 13px; color: var(--text-secondary);
+    }
+    .demo-note b { color: var(--text-primary); }
 
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 22px 0 16px; }
+    .filters .lbl { font-size: 13px; color: var(--text-muted); margin-right: 4px; }
+    .chip {
+      border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary);
+      border-radius: 999px; padding: 6px 14px; font-size: 14px; cursor: pointer;
+    }
+    .chip:hover { border-color: var(--text-muted); }
+    .chip[aria-pressed="true"] { background: var(--text-primary); color: var(--surface-1); border-color: var(--text-primary); font-weight: 600; }
+    .chip:focus-visible { outline: 2px solid var(--series-1); outline-offset: 2px; }
+
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(12, 1fr); transition: opacity .15s; }
+    .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+    .card h2 { font-size: 15px; font-weight: 600; margin: 0 0 2px; }
+    .card .sub { font-size: 12.5px; color: var(--text-muted); margin: 0 0 10px; }
+    .span-12 { grid-column: span 12; } .span-8 { grid-column: span 8; } .span-4 { grid-column: span 4; }
+    .span-7 { grid-column: span 7; } .span-5 { grid-column: span 5; }
+    @media (max-width: 900px) { .span-8, .span-4, .span-7, .span-5 { grid-column: span 12; } }
+
+    .kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+    @media (max-width: 900px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+    .kpi .k-label { font-size: 12.5px; color: var(--text-secondary); margin-bottom: 6px; }
+    .kpi .k-value { white-space: nowrap; font-size: 28px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .kpi .k-foot { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+    .kpi .k-foot .up { color: var(--good-text); font-weight: 600; display: block; }
+    .kpi .k-value.sm { font-size: 22px; padding-top: 4px; padding-bottom: 2px; }
+
+    .legend { display: flex; gap: 16px; font-size: 12.5px; color: var(--text-secondary); margin-bottom: 4px; flex-wrap: wrap; }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .key-line { width: 18px; height: 0; border-top: 2px solid; display: inline-block; }
+    .key-line.dash { border-top-style: dashed; }
+    .key-rect { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+    svg { display: block; width: 100%; height: auto; overflow: visible; }
+    svg text { font-family: inherit; }
+    .axis text { fill: var(--text-muted); font-size: 11px; }
+    .gridline { stroke: var(--grid); stroke-width: 1; }
+    .bar-hit { fill: transparent; cursor: default; }
+    .bar:hover, .bar.on { filter: brightness(1.12); }
+
+    .tip {
+      position: fixed; pointer-events: none; z-index: 50; display: none;
+      background: var(--tip-bg); border: 1px solid var(--border); border-radius: 8px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.14); padding: 8px 10px; font-size: 12.5px; min-width: 140px;
+    }
+    .tip .t-head { color: var(--text-muted); margin-bottom: 4px; }
+    .tip .t-row { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+    .tip .t-row .nm { display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary); }
+    .tip .t-row b { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+
+    table.ds { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    table.ds th { text-align: left; font-weight: 600; color: var(--text-secondary); font-size: 12px; border-bottom: 1px solid var(--border); padding: 8px 6px; }
+    table.ds td { border-bottom: 1px solid var(--grid); padding: 8px 6px; font-variant-numeric: tabular-nums; }
+    table.ds td.num, table.ds th.num { text-align: right; }
+    .pbar { height: 6px; background: var(--grid); border-radius: 3px; width: 90px; display: inline-block; vertical-align: middle; margin-right: 8px; }
+    .pbar i { display: block; height: 100%; border-radius: 3px; background: var(--series-1); }
+    .status { display: inline-flex; align-items: center; gap: 6px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+    .toggle-table { background: none; border: none; color: var(--series-1); font-size: 12.5px; padding: 0; cursor: pointer; text-decoration: underline; }
+    .data-view { display: none; margin-top: 10px; max-height: 260px; overflow: auto; }
+    .data-view.open { display: block; }
+
+    .how { margin-top: 28px; }
+    .how h2 { font-size: 20px; font-weight: 700; margin: 0 0 12px; }
+    .how ul { color: var(--text-secondary); line-height: 1.6; padding-left: 20px; margin: 0; }
+    .how li b { color: var(--text-primary); }
+    pre.dax {
+      background: var(--page); border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px 14px; font-size: 12.5px; color: var(--text-primary); overflow-x: auto; margin: 8px 0 0;
+    }
+    .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 4px; }
+    .flow span.step { border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 13px; background: var(--page); }
+    .flow span.arr { color: var(--text-muted); }
+    footer.pf { margin-top: 30px; font-size: 12.5px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+<section id="Navbar">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="../../index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="../Timeline/timeline.html">Timeline</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="dashboards.html">Dashboards</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Others</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="../Dice%20Game/dicee.html">Dicee Game</a></li>
+              <li><a class="dropdown-item" href="../Simon%20Game%20Challenge/index.html">Simon Game</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</section>
+
+<main class="viz-root">
+  <div class="wrap">
+
+    <header class="hero">
+      <h1>Completion &amp; Handover Dashboard</h1>
+      <p>A replica of the Power BI completion dashboards I build for large EPC projects: tracking subsystems from
+        mechanical completion through commissioning and start-up handover, with ITR progress and punch lists in one view.</p>
+      <div class="demo-note">ⓘ <span><b>Demo data.</b> "Project X" and every figure on this page are fictional. No client or project data is shown.</span></div>
+    </header>
+
+    <div class="filters" role="group" aria-label="Filter by area">
+      <span class="lbl">Area</span>
+      <div id="chips" style="display:contents"></div>
+    </div>
+
+    <div class="grid" id="dash">
+      <div class="span-12 kpis" id="kpis"></div>
+
+      <section class="card span-8">
+        <h2>Cumulative CCC signed vs plan</h2>
+        <p class="sub">Construction Completion Certificates, weekly cut-off every Friday</p>
+        <div class="legend">
+          <span><i class="key-line" style="border-color:var(--series-1)"></i>Actual</span>
+          <span><i class="key-line dash" style="border-color:var(--plan)"></i>Plan</span>
+        </div>
+        <div id="scurve"></div>
+        <button class="toggle-table" data-for="scurve-table">Show data table</button>
+        <div class="data-view" id="scurve-table"></div>
+      </section>
+
+      <section class="card span-4">
+        <h2>Handover funnel</h2>
+        <p class="sub">Subsystems reaching each certificate</p>
+        <div id="funnel"></div>
+      </section>
+
+      <section class="card span-5">
+        <h2>Open punch items by discipline</h2>
+        <p class="sub">Cat A must be cleared before CCC · Cat B before handover</p>
+        <div class="legend">
+          <span><i class="key-rect" style="background:var(--series-1)"></i>Punch A</span>
+          <span><i class="key-rect" style="background:var(--series-2)"></i>Punch B</span>
+        </div>
+        <div id="punch"></div>
+        <button class="toggle-table" data-for="punch-table">Show data table</button>
+        <div class="data-view" id="punch-table"></div>
+      </section>
+
+      <section class="card span-7">
+        <h2>Subsystems closest to the critical path</h2>
+        <p class="sub">Not yet STCC, sorted by open Punch A</p>
+        <div id="crit"></div>
+      </section>
+    </div>
+
+    <section class="how card">
+      <h2>How it's built</h2>
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <ul>
+            <li><b>Sources:</b> completion-system exports (subsystems, ITR-A/B/C, punch, certificates) refreshed weekly.</li>
+            <li><b>Model:</b> star schema with a system → subsystem hierarchy, a shared date table and a Friday week-ending key, so every page cuts off on the same day.</li>
+            <li><b>Status mapping:</b> raw statuses are normalised in Power Query (e.g. “Complete” → “Completed”, not-issued items → “Outstanding”) so totals reconcile across contractors.</li>
+            <li><b>Pages:</b> overall summary for management, one page per package or area, punch origin, equipment outstanding and manpower demobilisation.</li>
+          </ul>
+          <div class="flow" aria-label="Handover sequence">
+            <span class="step">MC / ITR-A</span><span class="arr">→</span>
+            <span class="step">CCC</span><span class="arr">→</span>
+            <span class="step">ITR-B</span><span class="arr">→</span>
+            <span class="step">STCC</span><span class="arr">→</span>
+            <span class="step">STSC</span>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="sub" style="margin:0">Week-ending key (calculated column)</div>
+<pre class="dax">Week Ending =
+'Date'[Date] + MOD ( 6 - WEEKDAY ( 'Date'[Date], 1 ), 7 )</pre>
+          <div class="sub" style="margin:10px 0 0">Cumulative certificates signed</div>
+<pre class="dax">CCC Signed (Cum) =
+CALCULATE (
+    COUNTROWS ( Certificates ),
+    Certificates[Type] = "CCC",
+    Certificates[Status] = "Completed",
+    FILTER ( ALL ( 'Date' ), 'Date'[Date] &lt;= MAX ( 'Date'[Date] ) )
+)</pre>
+        </div>
+      </div>
+    </section>
+
+    <footer class="pf">© 2026 Baris Celik · Demo built in HTML/SVG to mirror the original Power BI report layout.</footer>
+  </div>
+  <div class="tip" id="tip" role="tooltip"></div>
+</main>
+
+<script>
+(function () {
+  // ---------- Fictional data ----------
+  var AREAS = [
+    { id: 'process',   name: 'Process',   subs: 420, progress: 0.78, lag: 0.06 },
+    { id: 'utilities', name: 'Utilities', subs: 260, progress: 0.86, lag: 0.03 },
+    { id: 'wind',      name: 'Wind',      subs: 180, progress: 0.72, lag: 0.09 },
+    { id: 'solar',     name: 'Solar',     subs: 220, progress: 0.91, lag: 0.02 },
+    { id: 'grid',      name: 'Grid',      subs: 120, progress: 0.64, lag: 0.11 }
+  ];
+  var DISCIPLINES = ['Piping', 'Mechanical', 'Electrical', 'Instrumentation', 'Civil', 'HVAC'];
+
+  // Fridays: 15 May 2026 → 13 Nov 2026
+  var WEEKS = [];
+  for (var d = new Date(2026, 4, 15); d <= new Date(2026, 10, 13); d.setDate(d.getDate() + 7)) WEEKS.push(new Date(d));
+  var N = WEEKS.length;
+  var fmt = function (dt) { return dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }); };
+
+  function rng(seed) { return function () { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }; }
+  function sCurve(t) { return 1 / (1 + Math.exp(-9 * (t - 0.5))); }
+
+  function buildArea(a, idx) {
+    var r = rng(17 + idx * 31);
+    var planEnd = Math.min(1, a.progress + a.lag + 0.04);
+    var s0 = sCurve(0), s1 = sCurve(1);
+    var plan = [], actual = [];
+    for (var i = 0; i < N; i++) {
+      var t = i / (N - 1);
+      var base = (sCurve(t) - s0) / (s1 - s0);
+      plan.push(Math.round(a.subs * (0.18 + (planEnd - 0.18) * base)));
+      var lagF = 1 - a.lag * Math.sin(Math.PI * Math.min(1, t * 1.1));
+      var act = a.subs * (0.18 + (a.progress - 0.18) * base * lagF / (1 - a.lag * Math.sin(Math.PI * 1)) );
+      actual.push(act);
+    }
+    // normalise actual so the last week lands exactly on progress, keep monotonic
+    var scale = (a.subs * a.progress) / actual[N - 1];
+    var prev = 0;
+    actual = actual.map(function (v) { var x = Math.max(prev, Math.round(v * scale)); prev = x; return x; });
+
+    var ccc = actual[N - 1];
+    var stcc = Math.round(ccc * (0.42 + 0.25 * r()));
+    var stsc = Math.round(stcc * (0.08 + 0.12 * r()));
+    var punch = DISCIPLINES.map(function (dname, j) {
+      var w = [1.4, 1.0, 1.2, 1.3, 0.5, 0.4][j];
+      return { d: dname, A: Math.round(a.subs * 0.05 * w * (0.6 + r())), B: Math.round(a.subs * 0.22 * w * (0.6 + r())) };
+    });
+    var critical = [];
+    for (var k = 0; k < 6; k++) {
+      var sysNo = String(100 + Math.floor(r() * 800));
+      critical.push({
+        id: a.name.slice(0, 2).toUpperCase() + '-' + sysNo + '-' + String.fromCharCode(65 + k) + String(1 + Math.floor(r() * 9)),
+        area: a.name,
+        itra: Math.round(70 + r() * 29),
+        pa: Math.round(2 + r() * 14),
+        stage: r() > 0.45 ? 'CCC signed' : 'Awaiting CCC'
+      });
+    }
+    var itraDone = Math.round(a.progress * 100 + 4);
+    return { area: a, plan: plan, actual: actual, ccc: ccc, stcc: stcc, stsc: stsc, punch: punch, critical: critical, itra: Math.min(99, itraDone), weekGain: actual[N - 1] - actual[N - 2] };
+  }
+
+  var BY = AREAS.map(buildArea);
+
+  function slice(id) {
+    var parts = id === 'all' ? BY : BY.filter(function (b) { return b.area.id === id; });
+    var sum = function (f) { return parts.reduce(function (s, p) { return s + f(p); }, 0); };
+    var subs = sum(function (p) { return p.area.subs; });
+    var out = {
+      subs: subs,
+      plan: WEEKS.map(function (_, i) { return sum(function (p) { return p.plan[i]; }); }),
+      actual: WEEKS.map(function (_, i) { return sum(function (p) { return p.actual[i]; }); }),
+      ccc: sum(function (p) { return p.ccc; }),
+      stcc: sum(function (p) { return p.stcc; }),
+      stsc: sum(function (p) { return p.stsc; }),
+      weekGain: sum(function (p) { return p.weekGain; }),
+      itra: Math.round(sum(function (p) { return p.itra * p.area.subs; }) / subs),
+      punch: DISCIPLINES.map(function (dn, j) { return { d: dn, A: sum(function (p) { return p.punch[j].A; }), B: sum(function (p) { return p.punch[j].B; }) }; }),
+      critical: [].concat.apply([], parts.map(function (p) { return p.critical; })).sort(function (x, y) { return y.pa - x.pa; }).slice(0, 7)
+    };
+    out.openA = out.punch.reduce(function (s, p) { return s + p.A; }, 0);
+    out.openB = out.punch.reduce(function (s, p) { return s + p.B; }, 0);
+    return out;
+  }
+
+  // ---------- helpers ----------
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function txt(tag, attrs, text, parent) { var e = el(tag, attrs, parent); e.textContent = text; return e; }
+  function nice(max) { var p = Math.pow(10, Math.floor(Math.log10(max))); var m = max / p; var s = m <= 2 ? 2 : m <= 5 ? 5 : 10; return Math.ceil(max / (s * p / 5)) * (s * p / 5); }
+  var nf = new Intl.NumberFormat('en-US');
+
+  var tip = document.getElementById('tip');
+  function showTip(x, y, head, rows) {
+    tip.innerHTML = '';
+    var h = document.createElement('div'); h.className = 't-head'; h.textContent = head; tip.appendChild(h);
+    rows.forEach(function (r) {
+      var row = document.createElement('div'); row.className = 't-row';
+      var nm = document.createElement('span'); nm.className = 'nm';
+      var key = document.createElement('i');
+      key.className = r.rect ? 'key-rect' : 'key-line' + (r.dash ? ' dash' : '');
+      key.style[r.rect ? 'background' : 'borderColor'] = r.color;
+      nm.appendChild(key); nm.appendChild(document.createTextNode(r.name));
+      var b = document.createElement('b'); b.textContent = r.value;
+      row.appendChild(nm); row.appendChild(b); tip.appendChild(row);
+    });
+    tip.style.display = 'block';
+    var w = tip.offsetWidth, hgt = tip.offsetHeight;
+    var left = x + 14, top = y - hgt - 10;
+    if (left + w > window.innerWidth - 8) left = x - w - 14;
+    if (top < 8) top = y + 14;
+    tip.style.left = left + 'px'; tip.style.top = top + 'px';
+  }
+  function hideTip() { tip.style.display = 'none'; }
+
+  // ---------- KPIs ----------
+  function renderKpis(s) {
+    var k = document.getElementById('kpis'); k.innerHTML = '';
+    var pct = function (a, b) { return Math.round(100 * a / b) + '%'; };
+    [
+      { l: 'Subsystems', v: nf.format(s.subs), f: 'in scope' },
+      { l: 'ITR-A complete', v: s.itra + '%', f: 'construction checks' },
+      { l: 'CCC signed', v: nf.format(s.ccc), f: pct(s.ccc, s.subs) + ' of subsystems', up: '+' + s.weekGain + ' this week' },
+      { l: 'STCC signed', v: nf.format(s.stcc), f: pct(s.stcc, s.subs) + ' of subsystems' },
+      { l: 'STSC signed', v: nf.format(s.stsc), f: pct(s.stsc, s.subs) + ' of subsystems' },
+      { l: 'Open punch A / B', v: nf.format(s.openA) + ' / ' + nf.format(s.openB), f: 'items outstanding', sm: true }
+    ].forEach(function (c) {
+      var card = document.createElement('div'); card.className = 'card kpi';
+      var l = document.createElement('div'); l.className = 'k-label'; l.textContent = c.l;
+      var v = document.createElement('div'); v.className = 'k-value' + (c.sm ? ' sm' : ''); v.textContent = c.v;
+      var f = document.createElement('div'); f.className = 'k-foot'; f.textContent = c.f;
+      if (c.up) { var u = document.createElement('span'); u.className = 'up'; u.textContent = c.up; f.appendChild(u); }
+      card.appendChild(l); card.appendChild(v); card.appendChild(f); k.appendChild(card);
+    });
+  }
+
+  // ---------- S-curve ----------
+  function renderScurve(s) {
+    var host = document.getElementById('scurve'); host.innerHTML = '';
+    var W = 720, H = 280, m = { t: 12, r: 64, b: 28, l: 44 };
+    var iw = W - m.l - m.r, ih = H - m.t - m.b;
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Cumulative CCC signed vs plan by week' }, host);
+    var ymax = nice(Math.max(s.plan[N - 1], s.actual[N - 1]) * 1.05);
+    var X = function (i) { return m.l + iw * i / (N - 1); };
+    var Y = function (v) { return m.t + ih * (1 - v / ymax); };
+    var ax = el('g', { class: 'axis' }, svg);
+    for (var t = 0; t <= 5; t++) {
+      var v = ymax * t / 5;
+      el('line', { class: 'gridline', x1: m.l, x2: m.l + iw, y1: Y(v), y2: Y(v) }, ax);
+      txt('text', { x: m.l - 8, y: Y(v) + 4, 'text-anchor': 'end' }, nf.format(v), ax);
+    }
+    for (var i = 0; i < N; i += 4) txt('text', { x: X(i), y: H - 8, 'text-anchor': 'middle' }, fmt(WEEKS[i]), ax);
+    var path = function (arr) { return arr.map(function (v, i) { return (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1); }).join(' '); };
+    el('path', { d: path(s.plan), fill: 'none', stroke: 'var(--plan)', 'stroke-width': 2, 'stroke-dasharray': '5 4', 'stroke-linecap': 'round' }, svg);
+    el('path', { d: path(s.actual), fill: 'none', stroke: 'var(--series-1)', 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+    // end labels
+    var ya = Y(s.actual[N - 1]), yp = Y(s.plan[N - 1]);
+    if (Math.abs(ya - yp) < 14) { if (ya > yp) ya = yp + 14; else yp = ya + 14; }
+    txt('text', { x: X(N - 1) + 8, y: ya + 4, fill: 'var(--text-primary)', 'font-size': 12, 'font-weight': 600 }, nf.format(s.actual[N - 1]), svg);
+    txt('text', { x: X(N - 1) + 8, y: yp + 4, fill: 'var(--text-muted)', 'font-size': 12 }, nf.format(s.plan[N - 1]) + ' plan', svg);
+    el('circle', { cx: X(N - 1), cy: Y(s.actual[N - 1]), r: 4, fill: 'var(--series-1)', stroke: 'var(--surface-1)', 'stroke-width': 2 }, svg);
+    // crosshair
+    var cross = el('line', { y1: m.t, y2: m.t + ih, stroke: 'var(--text-muted)', 'stroke-width': 1, visibility: 'hidden' }, svg);
+    var dotA = el('circle', { r: 4.5, fill: 'var(--series-1)', stroke: 'var(--surface-1)', 'stroke-width': 2, visibility: 'hidden' }, svg);
+    var dotP = el('circle', { r: 4, fill: 'var(--plan)', stroke: 'var(--surface-1)', 'stroke-width': 2, visibility: 'hidden' }, svg);
+    var hit = el('rect', { x: m.l, y: m.t, width: iw, height: ih, fill: 'transparent', tabindex: 0 }, svg);
+    var cur = N - 1;
+    function at(i, cx, cy) {
+      cur = i;
+      [cross, dotA, dotP].forEach(function (n) { n.setAttribute('visibility', 'visible'); });
+      cross.setAttribute('x1', X(i)); cross.setAttribute('x2', X(i));
+      dotA.setAttribute('cx', X(i)); dotA.setAttribute('cy', Y(s.actual[i]));
+      dotP.setAttribute('cx', X(i)); dotP.setAttribute('cy', Y(s.plan[i]));
+      var gap = s.actual[i] - s.plan[i];
+      showTip(cx, cy, 'Week ending ' + fmt(WEEKS[i]) + ' 2026', [
+        { name: 'Actual', value: nf.format(s.actual[i]), color: 'var(--series-1)' },
+        { name: 'Plan', value: nf.format(s.plan[i]), color: 'var(--plan)', dash: true },
+        { name: 'Variance', value: (gap > 0 ? '+' : '') + nf.format(gap), color: 'transparent' }
+      ]);
+    }
+    function off() { [cross, dotA, dotP].forEach(function (n) { n.setAttribute('visibility', 'hidden'); }); hideTip(); }
+    hit.addEventListener('pointermove', function (e) {
+      var r = svg.getBoundingClientRect();
+      var px = (e.clientX - r.left) * W / r.width;
+      var i = Math.max(0, Math.min(N - 1, Math.round((px - m.l) / iw * (N - 1))));
+      at(i, e.clientX, e.clientY);
+    });
+    hit.addEventListener('pointerleave', off);
+    hit.addEventListener('blur', off);
+    hit.addEventListener('focus', function () { var r = svg.getBoundingClientRect(); at(cur, r.left + r.width * X(cur) / W, r.top + r.height * Y(s.actual[cur]) / H); });
+    hit.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault();
+      cur = Math.max(0, Math.min(N - 1, cur + (e.key === 'ArrowRight' ? 1 : -1)));
+      var r = svg.getBoundingClientRect(); at(cur, r.left + r.width * X(cur) / W, r.top + r.height * Y(s.actual[cur]) / H);
+    });
+    // table view
+    table('scurve-table', ['Week ending', 'Plan', 'Actual', 'Variance'], WEEKS.map(function (w, i) {
+      return [fmt(w), nf.format(s.plan[i]), nf.format(s.actual[i]), nf.format(s.actual[i] - s.plan[i])];
+    }));
+  }
+
+  // ---------- Funnel ----------
+  function renderFunnel(s) {
+    var host = document.getElementById('funnel'); host.innerHTML = '';
+    var stages = [
+      { n: 'In scope', v: s.subs, c: 'var(--ramp-1)' },
+      { n: 'CCC', v: s.ccc, c: 'var(--ramp-2)' },
+      { n: 'STCC', v: s.stcc, c: 'var(--ramp-3)' },
+      { n: 'STSC', v: s.stsc, c: 'var(--ramp-4)' }
+    ];
+    var W = 360, rowH = 76, H = stages.length * rowH, lw = 0;
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Handover funnel' }, host);
+    stages.forEach(function (st, i) {
+      var y = i * rowH;
+      var bw = Math.max(4, (W - lw) * st.v / s.subs);
+      txt('text', { x: 0, y: y + 14, fill: 'var(--text-secondary)', 'font-size': 12.5 }, st.n, svg);
+      var pct = Math.round(100 * st.v / s.subs);
+      txt('text', { x: W, y: y + 14, fill: 'var(--text-primary)', 'font-size': 12.5, 'font-weight': 600, 'text-anchor': 'end' }, nf.format(st.v) + '  ·  ' + pct + '%', svg);
+      var bar = el('rect', { class: 'bar', x: lw, y: y + 22, width: bw, height: 22, rx: 4, fill: st.c }, svg);
+      var hit = el('rect', { class: 'bar-hit', x: 0, y: y, width: W, height: rowH - 4, tabindex: 0 }, svg);
+      var on = function (e) {
+        bar.classList.add('on');
+        var r = hit.getBoundingClientRect();
+        var cx = e && e.clientX ? e.clientX : r.left + r.width / 2, cy = e && e.clientY ? e.clientY : r.top;
+        showTip(cx, cy, st.n, [{ name: 'Subsystems', value: nf.format(st.v), color: st.c, rect: true }, { name: 'Share of scope', value: pct + '%', color: 'transparent', rect: true }]);
+      };
+      var offf = function () { bar.classList.remove('on'); hideTip(); };
+      hit.addEventListener('pointermove', on); hit.addEventListener('focus', on);
+      hit.addEventListener('pointerleave', offf); hit.addEventListener('blur', offf);
+    });
+  }
+
+  // ---------- Punch stacked bars ----------
+  function renderPunch(s) {
+    var host = document.getElementById('punch'); host.innerHTML = '';
+    var rows = s.punch.slice().sort(function (a, b) { return (b.A + b.B) - (a.A + a.B); });
+    var W = 460, rowH = 34, m = { l: 104, r: 44, t: 4 }, H = m.t + rows.length * rowH;
+    var iw = W - m.l - m.r;
+    var max = Math.max.apply(null, rows.map(function (r) { return r.A + r.B; }));
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Open punch items by discipline' }, host);
+    rows.forEach(function (r, i) {
+      var y = m.t + i * rowH, bh = 18, by = y + (rowH - bh) / 2;
+      txt('text', { x: m.l - 10, y: by + 13, fill: 'var(--text-secondary)', 'font-size': 12.5, 'text-anchor': 'end' }, r.d, svg);
+      var wa = iw * r.A / max, wb = iw * r.B / max;
+      var segA = el('rect', { class: 'bar', x: m.l, y: by, width: Math.max(1, wa - 1), height: bh, fill: 'var(--series-1)' }, svg);
+      // rounded data-end only on the outer segment
+      var segB = el('path', { class: 'bar', d: roundedRight(m.l + wa + 1, by, Math.max(1, wb - 1), bh, 4), fill: 'var(--series-2)' }, svg);
+      txt('text', { x: m.l + wa + wb + 6, y: by + 13, fill: 'var(--text-primary)', 'font-size': 12 }, nf.format(r.A + r.B), svg);
+      [[segA, 'Punch A', r.A, 'var(--series-1)'], [segB, 'Punch B', r.B, 'var(--series-2)']].forEach(function (s2) {
+        var on = function (e) {
+          s2[0].classList.add('on');
+          showTip(e.clientX, e.clientY, r.d, [
+            { name: 'Punch A', value: nf.format(r.A), color: 'var(--series-1)', rect: true },
+            { name: 'Punch B', value: nf.format(r.B), color: 'var(--series-2)', rect: true }
+          ]);
+        };
+        s2[0].addEventListener('pointermove', on);
+        s2[0].addEventListener('pointerleave', function () { s2[0].classList.remove('on'); hideTip(); });
+      });
+    });
+    table('punch-table', ['Discipline', 'Punch A', 'Punch B', 'Total'], rows.map(function (r) {
+      return [r.d, nf.format(r.A), nf.format(r.B), nf.format(r.A + r.B)];
+    }));
+  }
+  function roundedRight(x, y, w, h, r) {
+    r = Math.min(r, w, h / 2);
+    return 'M' + x + ' ' + y + 'H' + (x + w - r) + 'Q' + (x + w) + ' ' + y + ' ' + (x + w) + ' ' + (y + r) +
+      'V' + (y + h - r) + 'Q' + (x + w) + ' ' + (y + h) + ' ' + (x + w - r) + ' ' + (y + h) + 'H' + x + 'Z';
+  }
+
+  // ---------- Critical table ----------
+  function renderCrit(s) {
+    var host = document.getElementById('crit'); host.innerHTML = '';
+    var t = document.createElement('table'); t.className = 'ds';
+    var th = t.createTHead().insertRow();
+    [['Subsystem', ''], ['Area', ''], ['ITR-A', ''], ['Punch A', 'num'], ['Stage', '']].forEach(function (h) {
+      var c = document.createElement('th'); c.textContent = h[0]; if (h[1]) c.className = h[1]; th.appendChild(c);
+    });
+    var tb = t.createTBody();
+    s.critical.forEach(function (r) {
+      var tr = tb.insertRow();
+      tr.insertCell().textContent = r.id;
+      tr.insertCell().textContent = r.area;
+      var c3 = tr.insertCell();
+      var pb = document.createElement('span'); pb.className = 'pbar'; var fill = document.createElement('i'); fill.style.width = r.itra + '%'; pb.appendChild(fill);
+      c3.appendChild(pb); c3.appendChild(document.createTextNode(r.itra + '%'));
+      var c4 = tr.insertCell(); c4.className = 'num'; c4.textContent = r.pa;
+      var c5 = tr.insertCell();
+      var st = document.createElement('span'); st.className = 'status';
+      var dot = document.createElement('i'); dot.className = 'dot';
+      dot.style.background = r.stage === 'CCC signed' ? 'var(--good)' : 'var(--warning)';
+      st.appendChild(dot); st.appendChild(document.createTextNode((r.stage === 'CCC signed' ? '✓ ' : '◷ ') + r.stage));
+      c5.appendChild(st);
+    });
+    host.appendChild(t);
+  }
+
+  function table(id, heads, rows) {
+    var host = document.getElementById(id); host.innerHTML = '';
+    var t = document.createElement('table'); t.className = 'ds';
+    var hr = t.createTHead().insertRow();
+    heads.forEach(function (h, i) { var c = document.createElement('th'); c.textContent = h; if (i) c.className = 'num'; hr.appendChild(c); });
+    var tb = t.createTBody();
+    rows.forEach(function (r) { var tr = tb.insertRow(); r.forEach(function (v, i) { var c = tr.insertCell(); c.textContent = v; if (i) c.className = 'num'; }); });
+    host.appendChild(t);
+  }
+  document.querySelectorAll('.toggle-table').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var v = document.getElementById(b.dataset.for);
+      var open = v.classList.toggle('open');
+      b.textContent = open ? 'Hide data table' : 'Show data table';
+    });
+  });
+
+  // ---------- Filters ----------
+  var chips = document.getElementById('chips');
+  [{ id: 'all', name: 'All areas' }].concat(AREAS).forEach(function (a, i) {
+    var b = document.createElement('button'); b.className = 'chip'; b.type = 'button';
+    b.textContent = a.name; b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+    b.addEventListener('click', function () {
+      chips.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      render(a.id);
+    });
+    chips.appendChild(b);
+  });
+
+  function render(id) {
+    var s = slice(id);
+    renderKpis(s); renderScurve(s); renderFunnel(s); renderPunch(s); renderCrit(s);
+  }
+  render('all');
+})();
+</script>
+</body>
+</html>
