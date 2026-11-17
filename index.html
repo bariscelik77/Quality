@@ -26,6 +26,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
     :root {
@@ -59,6 +61,7 @@
       backdrop-filter: saturate(160%) blur(8px); border-bottom: 1px solid var(--line);
     }
     .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+    .top .nav { margin-left: auto; }
     .brand { font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); text-decoration: none; font-size: 15px; }
     .brand span { color: var(--green); }
     .nav { display: flex; align-items: center; gap: 22px; }
@@ -66,7 +69,7 @@
     .nav a:hover { color: var(--green); }
     .nav .btn { color: #fff; }
     .menu-btn { display: none; background: none; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: 14px; }
-    @media (max-width: 860px) {
+    @media (max-width: 1020px) {
       .menu-btn { display: block; }
       .nav { display: none; position: absolute; top: 64px; left: 0; right: 0; background: #fff; flex-direction: column; align-items: flex-start; padding: 16px 24px; border-bottom: 1px solid var(--line); }
       .nav.open { display: flex; }
@@ -91,9 +94,9 @@
     .hero .role { font-size: 21px; font-weight: 600; color: var(--ink); margin: 0 0 14px; }
     .hero .lede { color: var(--ink-2); font-size: 17px; max-width: 590px; margin: 0 0 28px; }
     .hero .cta { display: flex; flex-wrap: wrap; gap: 10px; }
-    .portrait { position: relative; justify-self: end; width: 100%; max-width: 340px; }
+    .portrait { position: relative; justify-self: end; width: 100%; max-width: 300px; }
     .portrait::before { content: ""; position: absolute; inset: 18px -18px -18px 18px; border-radius: 22px; background: var(--green-soft); }
-    .portrait img { position: relative; border-radius: 20px; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; background: var(--bg-soft); box-shadow: 0 20px 40px rgba(16,19,20,.12); }
+    .portrait img { position: relative; border-radius: 20px; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; object-position: center top; background: var(--bg-soft); box-shadow: 0 20px 40px rgba(16,19,20,.12); }
     @media (max-width: 860px) {
       .hero { padding: 40px 0; }
       .hero .wrap { grid-template-columns: 1fr; gap: 36px; }
@@ -197,6 +200,39 @@
     .contact .btn-outline:hover { border-color: #fff; }
     @media (max-width: 760px) { .contact { grid-template-columns: 1fr; padding: 32px; } .contact .cta { justify-content: flex-start; } }
 
+    /* map */
+    .map-wrap { display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; margin-top: 40px; }
+    #projmap { height: 440px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--bg-soft); z-index: 1; }
+    .map-fallback { height: 100%; display: grid; place-items: center; color: var(--ink-3); font-size: 14px; padding: 20px; text-align: center; }
+    .places { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; max-height: 440px; overflow: auto; }
+    .places li { border-top: 1px solid var(--line); }
+    .places li:first-child { border-top: 0; }
+    .places button { all: unset; box-sizing: border-box; display: block; width: 100%; padding: 12px 16px; cursor: pointer; }
+    .places button:hover, .places button.on { background: var(--green-soft); }
+    .places button:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
+    .places b { display: block; font-size: 14.5px; }
+    .places span { font-size: 13px; color: var(--ink-3); }
+    .leaflet-popup-content { font-family: inherit; font-size: 13.5px; line-height: 1.45; margin: 12px 14px; }
+    .leaflet-popup-content b { color: var(--ink); }
+    .pop-item { margin-top: 6px; }
+    .pop-item small { color: var(--ink-3); }
+    @media (max-width: 860px) { .map-wrap { grid-template-columns: 1fr; } #projmap { height: 340px; } .places { max-height: none; } }
+
+    /* tools teaser */
+    .tools3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .tool-card { display: block; text-decoration: none; color: inherit; border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; background: #fff; transition: border-color .15s, transform .15s; }
+    .tool-card:hover { border-color: var(--green); transform: translateY(-2px); }
+    .tool-card .ic { width: 40px; height: 40px; border-radius: 10px; background: var(--green-soft); color: var(--green); display: grid; place-items: center; margin-bottom: 12px; }
+    .tool-card h3 { margin: 0 0 4px; font-size: 16.5px; }
+    .tool-card p { margin: 0; font-size: 14px; color: var(--ink-3); }
+    @media (max-width: 760px) { .tools3 { grid-template-columns: 1fr; } }
+
+    /* language switch */
+    .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+    .lang button { font: inherit; font-size: 13px; font-weight: 600; border: 0; background: #fff; color: var(--ink-3); padding: 5px 9px; cursor: pointer; }
+    .lang button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+    .top-right { display: flex; align-items: center; gap: 12px; }
+
     footer { padding: 32px 0 40px; color: var(--ink-3); font-size: 14px; }
     footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
     footer a { color: var(--ink-3); }
@@ -206,16 +242,23 @@
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#">Baris <span>Celik</span></a>
-    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+    <a class="brand" href="#" lang="en">Baris <span>Celik</span></a>
     <nav class="nav" id="nav">
-      <a href="#about">About</a>
-      <a href="#experience">Experience</a>
-      <a href="#projects">Projects</a>
-      <a href="#certifications">Certifications</a>
-      <a href="./views/Dashboards/dashboards.html">Dashboards</a>
-      <a class="btn btn-primary btn-sm" href="./assets/Baris_Celik_CV.pdf" download>Download CV</a>
+      <a href="#about" data-i18n="nav_about">About</a>
+      <a href="#experience" data-i18n="nav_exp">Experience</a>
+      <a href="#projects" data-i18n="nav_proj">Projects</a>
+      <a href="#certifications" data-i18n="nav_cert">Certifications</a>
+      <a href="./views/Tools/tools.html" data-i18n="nav_tools">Tools</a>
+      <a href="./views/Dashboards/dashboards.html" data-i18n="nav_dash">Dashboards</a>
+      <a class="btn btn-primary btn-sm" href="./assets/Baris_Celik_CV.pdf" download data-i18n="cv">Download CV</a>
     </nav>
+    <div class="top-right">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="tr" aria-pressed="false">TR</button>
+      </div>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+    </div>
   </div>
 </header>
 
@@ -223,64 +266,64 @@
   <section class="hero">
     <div class="wrap">
       <div>
-        <div class="eyebrow">Quality · Completions · Commissioning</div>
+        <div data-i18n="eyebrow" class="eyebrow">Quality · Completions · Commissioning</div>
         <h1>Baris Celik</h1>
-        <p class="role">Senior Quality Manager · NEOM Green Hydrogen Company</p>
-        <p class="lede">20+ years leading QA/QC, completions and operational readiness on multi-billion-dollar EPC projects across the Middle East and Central Asia. Now leading quality for the world's largest green hydrogen and ammonia facility.</p>
+        <p data-i18n="role" class="role">Senior Quality Manager · NEOM Green Hydrogen Company</p>
+        <p data-i18n="lede" class="lede">20+ years leading QA/QC, completions and operational readiness on multi-billion-dollar EPC projects across the Middle East and Central Asia. Now leading quality for the world's largest green hydrogen and ammonia facility.</p>
         <div class="cta">
-          <a class="btn btn-primary" href="mailto:bariscelik77@gmail.com">Contact me</a>
-          <a class="btn btn-ghost" href="./assets/Baris_Celik_CV.pdf" download>Download CV</a>
+          <a data-i18n="contact" class="btn btn-primary" href="mailto:bariscelik77@gmail.com">Contact me</a>
+          <a data-i18n="cv" class="btn btn-ghost" href="./assets/Baris_Celik_CV.pdf" download>Download CV</a>
           <a class="btn btn-ghost" href="https://www.linkedin.com/in/bariscelik/">LinkedIn</a>
         </div>
       </div>
       <div class="portrait">
-        <img src="./assets/images/Bariscelik.png" alt="Photo of Baris Celik" width="340" height="425">
+        <img src="./assets/images/Bariscelik-portrait.jpg" alt="Photo of Baris Celik" width="300" height="375">
       </div>
     </div>
   </section>
 
   <div class="stats">
     <div class="wrap">
-      <div class="stat"><b>20+</b><span>years in quality</span></div>
-      <div class="stat"><b>11</b><span>EPC megaprojects</span></div>
-      <div class="stat"><b>5</b><span>countries</span></div>
-      <div class="stat"><b>Owner &amp; EPC</b><span>for BP, Aramco, ADNOC, LUKOIL</span></div>
+      <div class="stat"><b>20+</b><span data-i18n="st1">years in quality</span></div>
+      <div class="stat"><b>11</b><span data-i18n="st2">EPC megaprojects</span></div>
+      <div class="stat"><b>5</b><span data-i18n="st3">countries</span></div>
+      <div class="stat"><b data-i18n="st4b">Owner &amp; EPC</b><span data-i18n="st4">for BP, Aramco, ADNOC, LUKOIL</span></div>
     </div>
   </div>
 
   <section class="block" id="about">
     <div class="wrap about">
       <div>
-        <div class="kicker">About</div>
-        <div class="sec-head" style="margin-bottom:18px"><h2>Quality from first weld to start-up</h2></div>
-        <p>I lead the Employer QA/QC team at NEOM Green Hydrogen Company across the HIDC, GHE and PWE (Grid, Wind, Solar) packages: reviewing contractors' quality plans, auditing their quality programmes and reporting performance through to handover.</p>
-        <p>Before NEOM I ran quality and completions for owners and EPC contractors on refineries, LNG, petrochemical, upstream and power projects for BP, Saudi Aramco, ADNOC and LUKOIL. I build project quality systems to ISO 9001 and client standards, and I like turning completion data into dashboards people actually use.</p>
-        <p>I work in English and Turkish.</p>
+        <div data-i18n="about_k" class="kicker">About</div>
+        <div class="sec-head" style="margin-bottom:18px"><h2 data-i18n="about_h">Quality from first weld to start-up</h2></div>
+        <p data-i18n="about_p1">I lead the Employer QA/QC team at NEOM Green Hydrogen Company across the HIDC, GHE and PWE (Grid, Wind, Solar) packages: reviewing contractors' quality plans, auditing their quality programmes and reporting performance through to handover.</p>
+        <p data-i18n="about_p2">Before NEOM I ran quality and completions for owners and EPC contractors on refineries, LNG, petrochemical, upstream and power projects for BP, Saudi Aramco, ADNOC and LUKOIL. I build project quality systems to ISO 9001 and client standards, and I like turning completion data into dashboards people actually use.</p>
+        <p data-i18n="about_p3">I work in English and Turkish.</p>
       </div>
       <div class="skills">
         <div class="skill">
           <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 3l7 4v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V7z"/></svg></div>
-          <h3>Quality systems</h3><p>Implementing QMS to ISO 9001 and client standards on large projects.</p>
+          <h3 data-i18n="sk1h">Quality systems</h3><p data-i18n="sk1p">Implementing QMS to ISO 9001 and client standards on large projects.</p>
         </div>
         <div class="skill">
           <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div>
-          <h3>Statistical analysis</h3><p>Trends, process capability and data-driven quality decisions.</p>
+          <h3 data-i18n="sk2h">Statistical analysis</h3><p data-i18n="sk2p">Trends, process capability and data-driven quality decisions.</p>
         </div>
         <div class="skill">
           <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
-          <h3>Inspection techniques</h3><p>Welding, coating and NDT methods and when to apply them.</p>
+          <h3 data-i18n="sk3h">Inspection techniques</h3><p data-i18n="sk3p">Welding, coating and NDT methods and when to apply them.</p>
         </div>
         <div class="skill">
           <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 15c2.8 0 5 1.6 5 4"/></svg></div>
-          <h3>Leadership</h3><p>Leading and mentoring multinational QA/QC teams.</p>
+          <h3 data-i18n="sk4h">Leadership</h3><p data-i18n="sk4p">Leading and mentoring multinational QA/QC teams.</p>
         </div>
         <div class="skill">
           <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></div>
-          <h3>Communication</h3><p>Clear reporting to management, clients, contractors and suppliers.</p>
+          <h3 data-i18n="sk5h">Communication</h3><p data-i18n="sk5p">Clear reporting to management, clients, contractors and suppliers.</p>
         </div>
         <div class="skill">
           <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></div>
-          <h3>Continuous improvement</h3><p>Finding and fixing the process behind repeat problems.</p>
+          <h3 data-i18n="sk6h">Continuous improvement</h3><p data-i18n="sk6p">Finding and fixing the process behind repeat problems.</p>
         </div>
       </div>
     </div>
@@ -289,8 +332,8 @@
   <section class="block soft" id="experience">
     <div class="wrap">
       <div class="sec-head">
-        <div><div class="kicker">Experience</div><h2>Career</h2></div>
-        <a class="btn btn-ghost btn-sm" href="./views/Timeline/timeline.html">Visual timeline →</a>
+        <div><div data-i18n="exp_k" class="kicker">Experience</div><h2 data-i18n="exp_h">Career</h2></div>
+        <a data-i18n="exp_tl" class="btn btn-ghost btn-sm" href="./views/Timeline/timeline.html">Visual timeline →</a>
       </div>
       <ul class="xp">
         <li class="now"><div class="when">Jun 2026 – present</div><div><h3>Senior Quality Manager</h3><div class="org">NEOM Green Hydrogen Company · NEOM, Saudi Arabia</div><div class="proj">GHE, HIDC and PWE (Grid, Wind, Solar)</div></div></li>
@@ -312,63 +355,63 @@
   <section class="block" id="projects">
     <div class="wrap">
       <div class="sec-head">
-        <div><div class="kicker">Projects</div><h2>Selected projects</h2>
-        <p>Owner and EPC-contractor roles on hydrogen, power, refining, petrochemical and upstream facilities.</p></div>
+        <div><div data-i18n="proj_k" class="kicker">Projects</div><h2 data-i18n="proj_h">Selected projects</h2>
+        <p data-i18n="proj_p">Owner and EPC-contractor roles on hydrogen, power, refining, petrochemical and upstream facilities.</p></div>
       </div>
       <div class="proj-grid">
         <article class="proj-card feature">
           <img src="./assets/images/main-12.png" alt="NEOM Green Hydrogen project" loading="lazy">
           <div class="body">
-            <span class="tag">Green hydrogen · 2023 – present</span>
+            <span data-i18n="tag1" class="tag">Green hydrogen · 2023 – present</span>
             <h3>NEOM Green Hydrogen Project</h3>
             <div class="meta">NEOM Green Hydrogen Company (Owner) · Oxagon, NEOM, Saudi Arabia</div>
-            <p>A first-of-its-kind plant powered entirely by about 4 GW of dedicated wind and solar, producing up to 1.2 million tonnes of green ammonia a year for export. I lead Employer quality across the hydrogen plant (GHE), the innovation centre (HIDC) and the power, wind and solar packages (PWE).</p>
+            <p data-i18n="pd1">A first-of-its-kind plant powered entirely by about 4 GW of dedicated wind and solar, producing up to 1.2 million tonnes of green ammonia a year for export. I lead Employer quality across the hydrogen plant (GHE), the innovation centre (HIDC) and the power, wind and solar packages (PWE).</p>
             <a class="more" href="https://nghc.com/">nghc.com →</a>
           </div>
         </article>
         <article class="proj-card">
           <img src="./assets/images/WQ2.jpg" alt="West Qurna 2 power plant" loading="lazy">
           <div class="body">
-            <span class="tag">Power · 2021 – 2023</span>
+            <span data-i18n="tag2" class="tag">Power · 2021 – 2023</span>
             <h3>West Qurna 2 Power Plant</h3>
             <div class="meta">Çalık Enerji for LUKOIL · Basra, Iraq</div>
-            <p>EPC of the power plant and auxiliaries serving one of Iraq's largest oil fields. Project Quality Manager.</p>
-            <a class="more" href="https://calikenerji.com/west-qurna-2-power-plant-project">Project page →</a>
+            <p data-i18n="pd2">EPC of the power plant and auxiliaries serving one of Iraq's largest oil fields. Project Quality Manager.</p>
+            <a data-i18n="more" class="more" href="https://calikenerji.com/west-qurna-2-power-plant-project">Project page →</a>
           </div>
         </article>
         <article class="proj-card">
           <img src="./assets/images/RTR.jpg" alt="Ras Tanura refinery" loading="lazy">
           <div class="body">
-            <span class="tag">Refining · 2018 – 2020</span>
+            <span data-i18n="tag3" class="tag">Refining · 2018 – 2020</span>
             <h3>Ras Tanura Clean Fuels</h3>
             <div class="meta">Técnicas Reunidas for Saudi Aramco · Ras Tanura</div>
-            <p>Upgrading Saudi Arabia's largest refinery to produce Euro 5 gasoline and diesel. Site QA Manager.</p>
+            <p data-i18n="pd3">Upgrading Saudi Arabia's largest refinery to produce Euro 5 gasoline and diesel. Site QA Manager.</p>
           </div>
         </article>
         <article class="proj-card">
           <img src="./assets/images/SD2.png" alt="Shah Deniz Stage 2 terminal" loading="lazy">
           <div class="body">
-            <span class="tag">Gas · 2016 – 2018</span>
+            <span data-i18n="tag4" class="tag">Gas · 2016 – 2018</span>
             <h3>Shah Deniz Stage 2 Onshore Terminal</h3>
             <div class="meta">Tekfen for BP · Sangachal, Azerbaijan</div>
-            <p>New process trains, tanks, pipe racks and utilities at the Sangachal Terminal. QA/QC &amp; Completion Manager.</p>
-            <a class="more" href="https://www.tekfenmuhendislik.com/shah-deniz-stage-2-onshore-terminal/">Project page →</a>
+            <p data-i18n="pd4">New process trains, tanks, pipe racks and utilities at the Sangachal Terminal. QA/QC &amp; Completion Manager.</p>
+            <a data-i18n="more" class="more" href="https://www.tekfenmuhendislik.com/shah-deniz-stage-2-onshore-terminal/">Project page →</a>
           </div>
         </article>
         <article class="proj-card">
           <img src="./assets/images/bab.jpg" alt="Bab field facilities" loading="lazy">
           <div class="body">
-            <span class="tag">Upstream · 2010 – 2012</span>
+            <span data-i18n="tag5" class="tag">Upstream · 2010 – 2012</span>
             <h3>Bab Field Development</h3>
             <div class="meta">Foster Wheeler PMT for ADNOC · Abu Dhabi</div>
-            <p>639 km of pipelines, 4 degassing stations and 8 water-injection clusters (Thamama G &amp; Habshan 2). QA/QC Manager.</p>
-            <a class="more" href="https://www.nmdc-group.com/en/projects/epc-for-bab-thammama-g-and-habshan-2-development-1-8-mmbopd-project/">Project page →</a>
+            <p data-i18n="pd5">639 km of pipelines, 4 degassing stations and 8 water-injection clusters (Thamama G &amp; Habshan 2). QA/QC Manager.</p>
+            <a data-i18n="more" class="more" href="https://www.nmdc-group.com/en/projects/epc-for-bab-thammama-g-and-habshan-2-development-1-8-mmbopd-project/">Project page →</a>
           </div>
         </article>
       </div>
 
       <div class="earlier">
-        <h3>Earlier projects</h3>
+        <h3 data-i18n="earlier">Earlier projects</h3>
         <ul>
           <li>Saudi Kayan Phenolics Complex · Técnicas Reunidas, Al Jubail <span>2010</span></li>
           <li>Sharq Ethane/Propane Cracker Expansion · Foster Wheeler, Al Jubail <span>2008 – 2009</span></li>
@@ -377,38 +420,71 @@
           <li>BP ACG Phase 1/2/3 &amp; Shah Deniz Stage 1 · Tekfen, Baku <span>2002 – 2007</span></li>
         </ul>
       </div>
+
+      <div class="sec-head" style="margin:56px 0 0" id="map">
+        <div><div class="kicker" data-i18n="map_k">Map</div><h2 data-i18n="map_h">Where I've worked</h2>
+        <p data-i18n="map_p">11 projects in 5 countries. Click a place to see the projects there.</p></div>
+      </div>
+      <div class="map-wrap">
+        <div id="projmap" role="region" aria-label="Map of project locations"><div class="map-fallback">The map is loading…</div></div>
+        <ul class="places" id="places"></ul>
+      </div>
     </div>
   </section>
 
   <section class="block soft" id="certifications">
     <div class="wrap">
-      <div class="sec-head"><div><div class="kicker">Credentials</div><h2>Certifications &amp; education</h2></div></div>
+      <div class="sec-head"><div><div data-i18n="cert_k" class="kicker">Credentials</div><h2 data-i18n="cert_h">Certifications &amp; education</h2></div></div>
       <div class="certs">
-        <div class="cert"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></div><div><b>ISO 9001 Lead Auditor</b><span>BSI · 2020 – present</span></div></div>
-        <div class="cert"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></div><div><b>ISO 9001:2015 Internal Auditor</b><span>Bureau Veritas · 2018 – present</span></div></div>
-        <div class="cert past"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></div><div><b>CSWIP 3.1 Welding Inspector</b><span>TWI Certification · 2007 – 2015</span></div></div>
-        <div class="cert past"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></div><div><b>Coating Inspector Programme 1</b><span>NACE International · 2003 – 2016</span></div></div>
-        <div class="cert"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div><div><b>KPI Management</b><span>The KPI Institute · training</span></div></div>
-        <div class="cert"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l-4 3 4 3"/><path d="M16 9l4 3-4 3"/><path d="M13 6l-2 12"/></svg></div><div><b>Full-Stack Web Development</b><span>Bootcamp · training</span></div></div>
+        <div class="cert"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></div><div><b data-i18n="c1h">ISO 9001 Lead Auditor</b><span data-i18n="c1">BSI · 2020 – present</span></div></div>
+        <div class="cert"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></div><div><b data-i18n="c2h">ISO 9001:2015 Internal Auditor</b><span data-i18n="c2">Bureau Veritas · 2018 – present</span></div></div>
+        <div class="cert past"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></div><div><b data-i18n="c3h">CSWIP 3.1 Welding Inspector</b><span>TWI Certification · 2007 – 2015</span></div></div>
+        <div class="cert past"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></div><div><b data-i18n="c4h">Coating Inspector Programme 1</b><span>NACE International · 2003 – 2016</span></div></div>
+        <div class="cert"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div><div><b data-i18n="c5h">KPI Management</b><span data-i18n="c5">The KPI Institute · training</span></div></div>
+        <div class="cert"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l-4 3 4 3"/><path d="M16 9l4 3-4 3"/><path d="M13 6l-2 12"/></svg></div><div><b data-i18n="c6h">Full-Stack Web Development</b><span data-i18n="c6">Bootcamp · training</span></div></div>
       </div>
       <div class="edu">
         <img src="./assets/images/METU.jfif" alt="METU logo" width="56" height="56">
-        <div><b>B.S. Metallurgical and Materials Engineering</b><br><span style="color:var(--ink-3)">Middle East Technical University · Ankara</span></div>
+        <div><b data-i18n="edu_h">B.S. Metallurgical and Materials Engineering</b><br><span style="color:var(--ink-3)" data-i18n="edu_p">Middle East Technical University · Ankara</span></div>
       </div>
     </div>
   </section>
 
-  <section class="block" id="dashboards">
+  <section class="block" id="tools">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="kicker" data-i18n="tools_k">Free tools</div><h2 data-i18n="tools_h">Quality calculators</h2>
+        <p data-i18n="tools_p">Small tools I use on site, free to use in your browser.</p></div>
+        <a class="btn btn-ghost btn-sm" href="./views/Tools/tools.html" data-i18n="tools_all">All tools →</a>
+      </div>
+      <div class="tools3">
+        <a class="tool-card" href="./views/Tools/tools.html#sampling">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M15 17.5l2 2 4-4"/></svg></div>
+          <h3 data-i18n="t1_h">Sampling plan (ISO 2859-1)</h3><p data-i18n="t1_p">Sample size and accept/reject numbers for any lot and AQL.</p>
+        </a>
+        <a class="tool-card" href="./views/Tools/tools.html#weld">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><path d="M8 8h8l-2 6h-4z"/><path d="M12 14v4"/><path d="M7 21h10"/></svg></div>
+          <h3 data-i18n="t2_h">Weld repair rate</h3><p data-i18n="t2_p">Repair rate by joints or length, checked against your target.</p>
+        </a>
+        <a class="tool-card" href="./views/Tools/tools.html#punch">
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 7l4 5 4 2 4 4"/></svg></div>
+          <h3 data-i18n="t3_h">Punch burn-down forecast</h3><p data-i18n="t3_p">When the punch list reaches zero, and the closure rate needed to hit your date.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block soft" id="dashboards">
     <div class="wrap dash">
       <div>
-        <div class="kicker">Digital quality</div>
-        <div class="sec-head" style="margin-bottom:0"><h2>Completion dashboards</h2></div>
+        <div data-i18n="dash_k" class="kicker">Digital quality</div>
+        <div class="sec-head" style="margin-bottom:0"><h2 data-i18n="dash_h">Completion dashboards</h2></div>
         <ul>
-          <li>Subsystem tracking from mechanical completion to start-up (CCC → STCC → STSC)</li>
-          <li>ITR progress, punch A/B by discipline and the critical-path list in one view</li>
-          <li>Weekly Friday cut-off so every report agrees</li>
+          <li data-i18n="dash_l1">Subsystem tracking from mechanical completion to start-up (CCC → STCC → STSC)</li>
+          <li data-i18n="dash_l2">ITR progress, punch A/B by discipline and the critical-path list in one view</li>
+          <li data-i18n="dash_l3">Weekly Friday cut-off so every report agrees</li>
         </ul>
-        <a class="btn btn-primary" href="./views/Dashboards/dashboards.html">Open the interactive demo</a>
+        <a data-i18n="dash_btn" class="btn btn-primary" href="./views/Dashboards/dashboards.html">Open the interactive demo</a>
       </div>
       <a class="shot" href="./views/Dashboards/dashboards.html" aria-label="Open the dashboard demo">
         <img src="./assets/images/dashboard-preview.jpg" alt="Preview of the completion dashboard demo" loading="lazy" width="960" height="679">
@@ -416,12 +492,12 @@
     </div>
   </section>
 
-  <section class="block" style="padding-top:0">
+  <section class="block">
     <div class="wrap">
       <div class="contact">
         <div>
-          <h2>Let's talk</h2>
-          <p>Quality leadership, completions and start-up readiness for energy and infrastructure projects.</p>
+          <h2 data-i18n="ct_h">Let's talk</h2>
+          <p data-i18n="ct_p">Quality leadership, completions and start-up readiness for energy and infrastructure projects.</p>
         </div>
         <div class="cta">
           <a class="btn btn-light" href="mailto:bariscelik77@gmail.com">bariscelik77@gmail.com</a>
@@ -435,21 +511,156 @@
 <footer>
   <div class="wrap">
     <span>© 2026 Baris Celik</span>
-    <span><a href="./views/Timeline/timeline.html">Timeline</a> · <a href="./views/Dashboards/dashboards.html">Dashboards</a> · <a href="./assets/Baris_Celik_CV.pdf" download>CV</a></span>
+    <span><a href="./views/Timeline/timeline.html" data-i18n="f_tl">Timeline</a> · <a href="./views/Tools/tools.html" data-i18n="nav_tools">Tools</a> · <a href="./views/Dashboards/dashboards.html" data-i18n="nav_dash">Dashboards</a> · <a href="./assets/Baris_Celik_CV.pdf" download>CV</a></span>
   </div>
 </footer>
 
 <script>
-  (function () {
-    var btn = document.querySelector('.menu-btn'), nav = document.getElementById('nav');
-    btn.addEventListener('click', function () {
-      var open = nav.classList.toggle('open');
-      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+(function () {
+  /* ---------- mobile menu ---------- */
+  var btn = document.querySelector('.menu-btn'), nav = document.getElementById('nav');
+  btn.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  nav.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') { nav.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+  });
+
+  /* ---------- EN / TR ---------- */
+  var TR = {
+    nav_about: 'Hakkımda', nav_exp: 'Deneyim', nav_proj: 'Projeler', nav_cert: 'Sertifikalar', nav_tools: 'Araçlar', nav_dash: 'Gösterge Panelleri',
+    cv: 'CV İndir', contact: 'Bana ulaşın',
+    eyebrow: 'Kalite · Tamamlama · Devreye Alma',
+    role: 'Kıdemli Kalite Müdürü · NEOM Green Hydrogen Company',
+    lede: 'Orta Doğu ve Orta Asya’daki milyar dolarlık EPC projelerinde QA/QC, tamamlama ve operasyonel hazırlık alanında 20 yılı aşkın liderlik deneyimi. Şu anda dünyanın en büyük yeşil hidrojen ve amonyak tesisinin kalite yönetimini yürütüyorum.',
+    st1: 'yıl kalite deneyimi', st2: 'EPC megaprojesi', st3: 'ülke', st4b: 'İşveren &amp; EPC', st4: 'BP, Aramco, ADNOC, LUKOIL için',
+    about_k: 'Hakkımda', about_h: 'İlk kaynaktan devreye almaya kalite',
+    about_p1: 'NEOM Green Hydrogen Company’de HIDC, GHE ve PWE (Şebeke, Rüzgâr, Güneş) paketlerinde İşveren QA/QC ekibini yönetiyorum: yüklenicilerin kalite planlarını inceliyor, kalite programlarını denetliyor ve teslime kadar performansı raporluyorum.',
+    about_p2: 'NEOM’dan önce BP, Saudi Aramco, ADNOC ve LUKOIL için rafineri, LNG, petrokimya, upstream ve enerji projelerinde işveren ve EPC yüklenicileri adına kalite ve tamamlama faaliyetlerini yönettim. ISO 9001 ve müşteri standartlarına uygun proje kalite sistemleri kuruyor, tamamlama verilerini gerçekten kullanılan gösterge panellerine dönüştürmeyi seviyorum.',
+    about_p3: 'Türkçe ve İngilizce çalışıyorum.',
+    sk1h: 'Kalite sistemleri', sk1p: 'Büyük projelerde ISO 9001 ve müşteri standartlarına uygun KYS uygulaması.',
+    sk2h: 'İstatistiksel analiz', sk2p: 'Eğilimler, proses yeterliliği ve veriye dayalı kalite kararları.',
+    sk3h: 'Muayene teknikleri', sk3p: 'Kaynak, kaplama ve NDT yöntemleri ve ne zaman uygulanacakları.',
+    sk4h: 'Liderlik', sk4p: 'Çok uluslu QA/QC ekiplerine liderlik ve mentorluk.',
+    sk5h: 'İletişim', sk5p: 'Yönetime, müşterilere, yüklenicilere ve tedarikçilere net raporlama.',
+    sk6h: 'Sürekli iyileştirme', sk6p: 'Tekrarlayan sorunların arkasındaki prosesi bulup düzeltmek.',
+    exp_k: 'Deneyim', exp_h: 'Kariyer', exp_tl: 'Görsel zaman çizelgesi →',
+    proj_k: 'Projeler', proj_h: 'Öne çıkan projeler',
+    proj_p: 'Hidrojen, enerji, rafineri, petrokimya ve upstream tesislerinde işveren ve EPC yüklenici rolleri.',
+    tag1: 'Yeşil hidrojen · 2023 – günümüz', tag2: 'Enerji · 2021 – 2023', tag3: 'Rafineri · 2018 – 2020', tag4: 'Gaz · 2016 – 2018', tag5: 'Upstream · 2010 – 2012',
+    pd1: 'Tamamen yaklaşık 4 GW’lık özel rüzgâr ve güneş enerjisiyle çalışan, yılda 1,2 milyon tona kadar yeşil amonyak üretip ihraç edecek türünün ilk örneği bir tesis. Hidrojen tesisi (GHE), inovasyon merkezi (HIDC) ve enerji, rüzgâr ve güneş paketlerinde (PWE) İşveren kalite yönetimini yürütüyorum.',
+    pd2: 'Irak’ın en büyük petrol sahalarından birine hizmet eden santral ve yardımcı tesislerin EPC’si. Proje Kalite Müdürü.',
+    pd3: 'Suudi Arabistan’ın en büyük rafinerisinin Euro 5 benzin ve dizel üretecek şekilde yenilenmesi. Saha QA Müdürü.',
+    pd4: 'Sangachal Terminali’nde yeni proses hatları, tanklar, boru köprüleri ve yardımcı tesisler. QA/QC ve Tamamlama Müdürü.',
+    pd5: '639 km boru hattı, 4 degazlama istasyonu ve 8 su enjeksiyon kümesi (Thamama G ve Habshan 2). QA/QC Müdürü.',
+    more: 'Proje sayfası →', earlier: 'Önceki projeler',
+    map_k: 'Harita', map_h: 'Çalıştığım yerler', map_p: '5 ülkede 11 proje. Oradaki projeleri görmek için bir yere tıklayın.',
+    cert_k: 'Yetkinlikler', cert_h: 'Sertifikalar ve eğitim',
+    c1h: 'ISO 9001 Baş Denetçi', c1: 'BSI · 2020 – günümüz',
+    c2h: 'ISO 9001:2015 İç Denetçi', c2: 'Bureau Veritas · 2018 – günümüz',
+    c3h: 'CSWIP 3.1 Kaynak Muayene Uzmanı', c4h: 'Kaplama Muayene Programı 1',
+    c5h: 'KPI Yönetimi', c5: 'The KPI Institute · eğitim',
+    c6h: 'Full-Stack Web Geliştirme', c6: 'Bootcamp · eğitim',
+    edu_h: 'Metalurji ve Malzeme Mühendisliği Lisansı', edu_p: 'Orta Doğu Teknik Üniversitesi · Ankara',
+    tools_k: 'Ücretsiz araçlar', tools_h: 'Kalite hesaplayıcıları', tools_p: 'Sahada kullandığım küçük araçlar, tarayıcınızda ücretsiz kullanabilirsiniz.', tools_all: 'Tüm araçlar →',
+    t1_h: 'Numune alma planı (ISO 2859-1)', t1_p: 'Her parti ve AQL için numune büyüklüğü ve kabul/ret sayıları.',
+    t2_h: 'Kaynak tamir oranı', t2_p: 'Ek yeri veya uzunluk bazında tamir oranı, hedefinizle karşılaştırmalı.',
+    t3_h: 'Punch azalma tahmini', t3_p: 'Punch listesinin ne zaman sıfırlanacağı ve hedef tarih için gereken kapatma hızı.',
+    dash_k: 'Dijital kalite', dash_h: 'Tamamlama gösterge panelleri',
+    dash_l1: 'Mekanik tamamlamadan devreye almaya alt sistem takibi (CCC → STCC → STSC)',
+    dash_l2: 'ITR ilerlemesi, disipline göre A/B punch ve kritik yol listesi tek ekranda',
+    dash_l3: 'Her raporun aynı sonucu vermesi için haftalık Cuma kesim tarihi',
+    dash_btn: 'İnteraktif demoyu açın',
+    ct_h: 'Görüşelim', ct_p: 'Enerji ve altyapı projeleri için kalite liderliği, tamamlama ve devreye alma hazırlığı.',
+    f_tl: 'Zaman çizelgesi'
+  };
+  var MONTHS_TR = { Jan: 'Oca', Feb: 'Şub', Mar: 'Mar', Apr: 'Nis', May: 'May', Jun: 'Haz', Jul: 'Tem', Aug: 'Ağu', Sep: 'Eyl', Oct: 'Eki', Nov: 'Kas', Dec: 'Ara', present: 'günümüz' };
+  var nodes = Array.prototype.slice.call(document.querySelectorAll('[data-i18n]'));
+  var whens = Array.prototype.slice.call(document.querySelectorAll('.xp .when, .earlier li span'));
+  var EN = nodes.map(function (n) { return n.innerHTML; });
+  var WHEN_EN = whens.map(function (n) { return n.textContent; });
+  var TITLE_EN = document.title;
+
+  function setLang(lang) {
+    nodes.forEach(function (n, i) {
+      var k = n.getAttribute('data-i18n');
+      n.innerHTML = lang === 'tr' && TR[k] ? TR[k] : EN[i];
     });
-    nav.addEventListener('click', function (e) {
-      if (e.target.tagName === 'A') { nav.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+    whens.forEach(function (n, i) {
+      n.textContent = lang === 'tr' ? WHEN_EN[i].replace(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|present)\b/g, function (m) { return MONTHS_TR[m]; }) : WHEN_EN[i];
     });
-  })();
+    document.documentElement.lang = lang;
+    document.title = lang === 'tr' ? 'Baris Celik | Kıdemli Kalite Müdürü · Yeşil Hidrojen ve Amonyak' : TITLE_EN;
+    document.querySelectorAll('[data-lang]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.lang === lang ? 'true' : 'false'); });
+    try { localStorage.setItem('lang', lang); } catch (e) {}
+  }
+  document.querySelectorAll('[data-lang]').forEach(function (b) {
+    b.addEventListener('click', function () { setLang(b.dataset.lang); });
+  });
+  var saved = null;
+  try { saved = localStorage.getItem('lang'); } catch (e) {}
+  if (saved === 'tr' || (!saved && /^tr\b/i.test(navigator.language || ''))) setLang('tr');
+
+  /* ---------- project map ---------- */
+  var PLACES = [
+    { name: 'NEOM, Saudi Arabia', ll: [27.75, 35.45], items: [['2023 – present', 'NEOM Green Hydrogen Project', 'NEOM Green Hydrogen Company (Owner)']] },
+    { name: 'Basra, Iraq', ll: [30.95, 47.30], items: [['2021 – 2023', 'West Qurna 2 Power Plant', 'Çalık Enerji for LUKOIL']] },
+    { name: 'Ras Tanura, Saudi Arabia', ll: [26.64, 50.16], items: [['2018 – 2020', 'Ras Tanura Clean Fuels', 'Técnicas Reunidas for Saudi Aramco']] },
+    { name: 'Al Jubail, Saudi Arabia', ll: [27.01, 49.60], items: [['2010', 'Saudi Kayan Phenolics Complex', 'Técnicas Reunidas'], ['2008 – 2009', 'Sharq Ethane/Propane Cracker', 'Foster Wheeler']] },
+    { name: 'Ras Laffan, Qatar', ll: [25.91, 51.54], items: [['2008', 'Qatargas 3 & 4 LNG Onshore Facilities', 'GAMA']] },
+    { name: 'Bab field, Abu Dhabi, UAE', ll: [23.75, 53.65], items: [['2010 – 2012', 'Bab Field Development', 'Foster Wheeler for ADNOC']] },
+    { name: 'Rabigh, Saudi Arabia', ll: [22.80, 39.03], items: [['2007', 'Petro Rabigh Utilities & Offsites', 'Tekfen Construction']] },
+    { name: 'Sangachal, Azerbaijan', ll: [40.19, 49.47], items: [['2016 – 2018', 'Shah Deniz Stage 2 Onshore Terminal', 'Tekfen for BP'], ['2002 – 2007', 'BP ACG Phase 1/2/3 & Shah Deniz Stage 1', 'Tekfen for BP']] },
+    { name: 'Baku, Azerbaijan', ll: [40.41, 49.87], items: [['2013 – 2015', 'BP Operations', 'BP']] }
+  ];
+  function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+  function popupHtml(p) {
+    return '<b>' + esc(p.name) + '</b>' + p.items.map(function (it) {
+      return '<div class="pop-item">' + esc(it[1]) + '<br><small>' + esc(it[2]) + ' · ' + esc(it[0]) + '</small></div>';
+    }).join('');
+  }
+  var list = document.getElementById('places');
+  var buttons = [];
+  PLACES.forEach(function (p, i) {
+    var li = document.createElement('li');
+    var b = document.createElement('button'); b.type = 'button';
+    var count = p.items.length > 1 ? ' · ' + p.items.length + ' projects' : '';
+    b.innerHTML = '<b>' + esc(p.name) + '</b><span>' + esc(p.items.map(function (it) { return it[1]; }).join(' · ')) + '</span>';
+    b.title = p.name + count;
+    li.appendChild(b); list.appendChild(li); buttons.push(b);
+  });
+
+  var tries = 0;
+  function initMap() {
+    var box = document.getElementById('projmap');
+    if (!window.L) {
+      if (tries++ < 40) return setTimeout(initMap, 150);
+      box.innerHTML = '<div class="map-fallback">The map could not load. The list shows all project locations.</div>';
+      return;
+    }
+    box.innerHTML = '';
+    var map = L.map(box, { scrollWheelZoom: false, zoomSnap: 0.5 });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 12, subdomains: 'abcd',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    }).addTo(map);
+    var markers = PLACES.map(function (p) {
+      var r = 7 + 2 * (p.items.length - 1);
+      return L.circleMarker(p.ll, { radius: r, color: '#ffffff', weight: 2, fillColor: '#0f5c4d', fillOpacity: 0.95 })
+        .addTo(map).bindPopup(popupHtml(p));
+    });
+    map.fitBounds(L.featureGroup(markers).getBounds(), { padding: [30, 30] });
+    function select(i) {
+      buttons.forEach(function (b, k) { b.classList.toggle('on', k === i); });
+      map.flyTo(PLACES[i].ll, 7, { duration: 0.8 });
+      markers[i].openPopup();
+    }
+    buttons.forEach(function (b, i) { b.addEventListener('click', function () { select(i); }); });
+    markers.forEach(function (m, i) { m.on('click', function () { buttons.forEach(function (b, k) { b.classList.toggle('on', k === i); }); }); });
+  }
+  if (document.readyState === 'complete') initMap(); else window.addEventListener('load', initMap);
+})();
 </script>
 </body>
 </html>
