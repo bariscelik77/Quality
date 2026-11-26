@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RideVideo | Baris Celik</title>
+<meta name="description" content="Turn action-camera ride footage and a Strava GPX file into a video with a live data overlay: heart rate, speed, elevation, route map. Runs in your browser; videos never leave your device.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Barlow:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="site-top">
+  <div class="wrap">
+    <a class="site-brand" href="../../../index.html">Baris <span>Celik</span></a>
+    <nav class="site-nav">
+      <a href="../../../index.html">Home</a>
+      <a href="../../Knowledge/knowledge.html" class="hide-sm">Knowledge</a>
+      <a href="../cycling.html">Cycling</a>
+      <a href="./" class="active" aria-current="page">RideVideo</a>
+    </nav>
+  </div>
+</header>
+
+<div class="notice" id="deviceNote" hidden data-i18n="note">Rendering needs a laptop or desktop with <b>Chrome</b> or <b>Edge</b>. On this device you can look around, but not make videos.</div>
+
+<main class="studio">
+  <section class="stage">
+    <div class="drop" id="drop">
+      <div class="drop-inner">
+        <div class="kicker" lang="en">RideVideo</div>
+        <h1 data-i18n="h1">Put your ride data <em>on the video</em></h1>
+        <p data-i18n="lede">Add your action-camera clips and the Strava GPX of the same ride. The app syncs them, draws heart rate, speed, elevation and the route on top, and makes a highlight reel or the full ride.</p>
+        <div class="btns">
+          <button class="btn btn-ride" id="dropVid" type="button" data-i18n="pickV">Choose videos</button>
+          <button class="btn btn-line" id="dropGpx" type="button" data-i18n="pickG">Choose GPX</button>
+        </div>
+        <p class="fine" data-i18n="drop">Or drop the files here. Everything stays on this device; nothing is uploaded.</p>
+        <ul class="tips">
+          <li data-i18n="t1">Strava: open the activity → ⋯ → <b>Export GPX</b></li>
+          <li data-i18n="t2">Keep the camera's date/time stamp on: the app reads it to sync</li>
+          <li data-i18n="t3">Several clips from one ride are fine; select them all</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="viewer" id="viewer" hidden>
+      <div class="canvas-wrap"><canvas id="preview" width="1280" height="720"></canvas></div>
+      <div class="transport">
+        <button class="icon" id="playBtn" type="button" aria-label="Play">▶</button>
+        <span class="time" id="timeLbl">0:00 / 0:00</span>
+        <input type="range" id="scrub" min="0" max="1000" value="0" step="1" aria-label="Seek">
+      </div>
+      <div class="row wrap-row">
+        <div class="seg" role="group" aria-label="Shape">
+          <button type="button" data-kind="landscape">YouTube 16:9</button>
+          <button type="button" data-kind="vertical-fit" data-i18n="kFit">Reel 9:16 · full picture</button>
+          <button type="button" data-kind="vertical-crop" data-i18n="kCrop">Reel 9:16 · fill</button>
+        </div>
+        <select id="clipSel" aria-label="Clip" hidden></select>
+      </div>
+      <div class="now" id="nowLbl"></div>
+    </div>
+  </section>
+
+  <aside class="panel">
+    <div class="card">
+      <h3><span class="n">1</span><span data-i18n="s1">Files</span></h3>
+      <div class="row">
+        <button class="btn small" id="vidBtn" type="button" data-i18n="pickV">Choose videos</button>
+        <button class="btn small" id="gpxBtn" type="button" data-i18n="pickG">Choose GPX</button>
+      </div>
+      <input type="file" id="vidIn" accept="video/*" multiple hidden>
+      <input type="file" id="gpxIn" accept=".gpx,application/gpx+xml,application/xml,text/xml" hidden>
+      <ul class="files" id="fileList"></ul>
+      <div class="progress" id="syncProg" hidden><div class="bar"></div><span class="lbl"></span></div>
+      <div class="stats" id="stats" hidden></div>
+    </div>
+
+    <div class="card" id="syncCard" hidden>
+      <h3><span class="n">2</span><span data-i18n="s2">Sync</span></h3>
+      <table class="clips" id="clipTable"></table>
+      <div class="row">
+        <label><span data-i18n="tz">Camera time zone (UTC ±h)</span> <input type="number" id="tzIn" step="0.5" min="-12" max="14" style="width:80px"></label>
+      </div>
+      <label class="full"><span data-i18n="fine">Fine-tune: move until the numbers match the picture</span> <b id="offLbl">0.0 s</b>
+        <input type="range" id="offIn" min="-30" max="30" step="0.5" value="0"></label>
+    </div>
+
+    <div class="card" id="outCard" hidden>
+      <h3><span class="n">3</span><span data-i18n="s3">Make the video</span></h3>
+      <div class="seg wide" role="group">
+        <button type="button" data-mode="highlights" data-i18n="mH">Highlights</button>
+        <button type="button" data-mode="full" data-i18n="mF">Full ride</button>
+      </div>
+      <div id="hlOpts">
+        <div class="row">
+          <label><span data-i18n="len">Length</span>
+            <select id="hlLen"><option>15</option><option>30</option><option selected>60</option><option>90</option><option>120</option><option>180</option></select> s</label>
+          <label><span data-i18n="each">Each clip</span>
+            <select id="hlClip"><option>3</option><option>4</option><option selected>5</option><option>6</option><option>8</option><option>10</option></select> s</label>
+        </div>
+        <ol class="hl" id="hlList"></ol>
+      </div>
+      <div id="fullOpts" hidden>
+        <div class="row">
+          <label><span data-i18n="from">From</span> <input type="text" id="trimA" value="0:00" size="7"></label>
+          <button class="link" type="button" id="trimANow" data-i18n="ph">use playhead</button>
+          <label><span data-i18n="to">to</span> <input type="text" id="trimB" size="7"></label>
+          <button class="link" type="button" id="trimBNow" data-i18n="ph">use playhead</button>
+        </div>
+        <p class="fine" data-i18n="fullNote">Rendering runs in real time, so a 50-minute ride takes about 50 minutes.</p>
+      </div>
+      <label class="full"><span data-i18n="title">Title</span> <input type="text" id="titleIn"></label>
+      <div class="checks">
+        <label class="chk"><input type="checkbox" id="showTitle" checked> <span data-i18n="showT">Title card at the start</span></label>
+      </div>
+      <div class="row">
+        <label><span data-i18n="maxhr">Max heart rate</span> <input type="number" id="maxHr" min="120" max="230" style="width:80px"></label>
+        <label><span data-i18n="stamp">Camera date stamp</span>
+          <select id="stampSel">
+            <option value="zoom" data-i18n="stZ">Zoom to hide it</option>
+            <option value="off" data-i18n="stO">Leave it</option>
+          </select></label>
+      </div>
+      <h4 data-i18n="sound">Sound</h4>
+      <div class="row">
+        <button class="btn small" id="musicBtn" type="button" data-i18n="music">Background music…</button>
+        <span class="fine" id="musicName"></span>
+        <button class="link" id="musicClear" type="button" hidden data-i18n="remove">remove</button>
+      </div>
+      <input type="file" id="musicIn" accept="audio/*" hidden>
+      <label class="full"><span data-i18n="mvol">Music volume</span> <input type="range" id="musicVol" min="0" max="1.2" step="0.05" value="0.7"></label>
+      <label class="full"><span data-i18n="cvol">Camera sound (wind, road)</span> <input type="range" id="camVol" min="0" max="1.2" step="0.05" value="0.4"></label>
+
+      <button class="btn btn-ride big" id="renderBtn" type="button" data-i18n="render">Render video</button>
+      <div class="progress" id="renProg" hidden><div class="bar"></div><span class="lbl"></span><button class="link" id="renCancel" type="button" data-i18n="cancel">Cancel</button></div>
+      <p class="fine" data-i18n="rt">Rendering plays the video in real time. Keep this tab open and in front.</p>
+      <div id="result" hidden>
+        <video id="resultVideo" controls playsinline></video>
+        <a class="btn btn-ride" id="downloadLink" download>Download</a>
+      </div>
+    </div>
+    <p class="fine about"><span data-i18n="about">Built with Claude. The desktop version and how it was made:</span> <a href="../cycling.html#build" data-i18n="aboutL">How I built RideVideo</a></p>
+  </aside>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+<video id="srcVideo" playsinline preload="auto" hidden></video>
+
+<script>
+window.I18N_TR = {
+  __title: 'RideVideo | Baris Celik',
+  note: 'Video oluşturmak için <b>Chrome</b> veya <b>Edge</b> yüklü bir dizüstü ya da masaüstü bilgisayar gerekir. Bu cihazda göz atabilirsiniz ama video yapamazsınız.',
+  h1: 'Sürüş verilerinizi <em>videoya ekleyin</em>',
+  lede: 'Aksiyon kamerası kayıtlarınızı ve aynı sürüşün Strava GPX dosyasını ekleyin. Uygulama ikisini senkronize eder; nabız, hız, rakım ve rotayı görüntünün üzerine çizer, öne çıkanlar videosu ya da sürüşün tamamını hazırlar.',
+  pickV: 'Videoları seç', pickG: 'GPX seç',
+  drop: 'Ya da dosyaları buraya bırakın. Her şey bu cihazda kalır; hiçbir şey yüklenmez.',
+  t1: 'Strava: etkinliği açın → ⋯ → <b>Export GPX</b>',
+  t2: 'Kameranın tarih/saat damgasını açık tutun: uygulama senkronizasyon için onu okur',
+  t3: 'Bir sürüşe ait birden fazla klip olabilir; hepsini seçin',
+  kFit: 'Reel 9:16 · tam görüntü', kCrop: 'Reel 9:16 · doldur',
+  s1: 'Dosyalar', s2: 'Senkronizasyon', s3: 'Videoyu oluştur',
+  tz: 'Kamera saat dilimi (UTC ±s)', fine: 'İnce ayar: rakamlar görüntüyle eşleşene kadar kaydırın',
+  mH: 'Öne çıkanlar', mF: 'Tüm sürüş', len: 'Uzunluk', each: 'Her klip', from: 'Başlangıç', to: 'bitiş', ph: 'oynatma noktası',
+  fullNote: 'Oluşturma gerçek zamanlı çalışır; 50 dakikalık bir sürüş yaklaşık 50 dakika sürer.',
+  title: 'Başlık', showT: 'Başta başlık kartı', maxhr: 'Maksimum nabız', stamp: 'Kamera tarih damgası',
+  stZ: 'Yakınlaştırıp gizle', stO: 'Olduğu gibi bırak', sound: 'Ses', music: 'Arka plan müziği…', remove: 'kaldır',
+  mvol: 'Müzik sesi', cvol: 'Kamera sesi (rüzgâr, yol)', render: 'Videoyu oluştur', cancel: 'İptal',
+  rt: 'Oluşturma videoyu gerçek zamanlı oynatır. Bu sekmeyi açık ve önde tutun.',
+  about: 'Claude ile yapıldı. Masaüstü sürümü ve nasıl yapıldığı:', aboutL: 'RideVideo’yu nasıl yaptım'
+};
+</script>
+<script src="../../../assets/js/lang.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
