@@ -62,14 +62,14 @@
     }
     .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
     .top .nav { margin-left: auto; }
-    .brand { font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); text-decoration: none; font-size: 15px; }
+    .brand { white-space: nowrap; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); text-decoration: none; font-size: 15px; }
     .brand span { color: var(--green); }
     .nav { display: flex; align-items: center; gap: 22px; }
     .nav a { color: var(--ink-2); text-decoration: none; font-size: 14.5px; font-weight: 500; }
     .nav a:hover { color: var(--green); }
     .nav .btn { color: #fff; }
     .menu-btn { display: none; background: none; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: 14px; }
-    @media (max-width: 1020px) {
+    @media (max-width: 1180px) {
       .menu-btn { display: block; }
       .nav { display: none; position: absolute; top: 64px; left: 0; right: 0; background: #fff; flex-direction: column; align-items: flex-start; padding: 16px 24px; border-bottom: 1px solid var(--line); }
       .nav.open { display: flex; }
@@ -251,6 +251,7 @@
       <a href="./views/Tools/tools.html" data-i18n="nav_tools">Tools</a>
       <a href="./views/Dashboards/dashboards.html" data-i18n="nav_dash">Dashboards</a>
       <a href="./views/Knowledge/knowledge.html" data-i18n="nav_know">Knowledge</a>
+      <a href="./views/Cycling/cycling.html" data-i18n="nav_cycle">Cycling</a>
       <a class="btn btn-primary btn-sm" href="./assets/Baris_Celik_CV.pdf" download data-i18n="cv">Download CV</a>
     </nav>
     <div class="top-right">
@@ -516,7 +517,7 @@
 <footer>
   <div class="wrap">
     <span>© 2026 Baris Celik</span>
-    <span><a href="./views/Timeline/timeline.html" data-i18n="f_tl">Timeline</a> · <a href="./views/Tools/tools.html" data-i18n="nav_tools">Tools</a> · <a href="./views/Dashboards/dashboards.html" data-i18n="nav_dash">Dashboards</a> · <a href="./views/Knowledge/knowledge.html" data-i18n="nav_know">Knowledge</a> · <a href="./assets/Baris_Celik_CV.pdf" download>CV</a></span>
+    <span><a href="./views/Timeline/timeline.html" data-i18n="f_tl">Timeline</a> · <a href="./views/Tools/tools.html" data-i18n="nav_tools">Tools</a> · <a href="./views/Dashboards/dashboards.html" data-i18n="nav_dash">Dashboards</a> · <a href="./views/Knowledge/knowledge.html" data-i18n="nav_know">Knowledge</a> · <a href="./views/Cycling/cycling.html" data-i18n="nav_cycle">Cycling</a> · <a href="./assets/Baris_Celik_CV.pdf" download>CV</a></span>
   </div>
 </footer>
 
@@ -534,7 +535,7 @@
 
   /* ---------- EN / TR ---------- */
   var TR = {
-    nav_about: 'Hakkımda', nav_exp: 'Deneyim', nav_proj: 'Projeler', nav_cert: 'Sertifikalar', nav_tools: 'Araçlar', nav_dash: 'Gösterge Panelleri', nav_know: 'Bilgi Bankası',
+    nav_about: 'Hakkımda', nav_exp: 'Deneyim', nav_proj: 'Projeler', nav_cert: 'Sertifikalar', nav_tools: 'Araçlar', nav_dash: 'Gösterge Panelleri', nav_know: 'Bilgi Bankası', nav_cycle: 'Bisiklet',
     cv: 'CV İndir', contact: 'Bana ulaşın',
     eyebrow: 'Kalite · Tamamlama · Devreye Alma',
     role: 'Kıdemli Kalite Müdürü · NEOM Green Hydrogen Company',
