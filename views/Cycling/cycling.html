@@ -19,7 +19,7 @@
       --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 124px; }
+    html { scroll-behavior: smooth; scroll-padding-top: calc(var(--hdr, 64px) + 60px); }
     body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Inter", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
     a { color: var(--green); }
     .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
@@ -133,7 +133,7 @@
     .stat span { font-size: 13.5px; color: var(--ink-2); }
     @media (max-width: 860px) { .guide-head { grid-template-columns: minmax(0, 1fr); gap: 22px; } }
 
-    .jump { position: sticky; top: 64px; z-index: 10; background: rgba(255,255,255,.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+    .jump { position: sticky; top: var(--hdr, 64px); z-index: 10; background: rgba(255,255,255,.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
     .jump a.on { background: var(--ink); border-color: var(--ink); color: #fff; }
     .jump .wrap { display: flex; gap: 6px; overflow-x: auto; padding-top: 10px; padding-bottom: 10px; scrollbar-width: none; }
     .jump a { white-space: nowrap; font-size: 13.5px; font-weight: 600; color: var(--ink-2); text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; background: #fff; }
@@ -295,20 +295,20 @@
   <section class="hero">
     <div class="wrap">
       <div>
-        <div class="kicker">Cycling</div>
-        <h1>My rides, with the <em>numbers on screen</em></h1>
-        <p class="lede">I film my rides with an action camera and record them on Strava. RideVideo, an app I built with Claude in an afternoon,
+        <div class="kicker" data-i18n="kicker">Cycling</div>
+        <h1 data-i18n="h1">My rides, with the <em>numbers on screen</em></h1>
+        <p class="lede" data-i18n="lede">I film my rides with an action camera and record them on Strava. RideVideo, an app I built with Claude in an afternoon,
           puts the two together: heart rate, speed, climbs and the route, synced to the video automatically.</p>
         <div class="btns">
-          <a class="btn btn-ride" href="#rides"><svg class="ic" style="width:18px;height:18px"><use href="#i-video"/></svg>Watch the rides</a>
-          <a class="btn btn-line" href="#build">How I built the app</a>
+          <a class="btn btn-ride" href="#rides"><svg class="ic" style="width:18px;height:18px"><use href="#i-video"/></svg><span data-i18n="b1">Watch the rides</span></a>
+          <a class="btn btn-line" href="#build" data-i18n="b2">How I built the app</a>
         </div>
       </div>
 
       <div class="stage">
-        <div class="shape-toggle" role="group" aria-label="Video shape">
-          <button type="button" data-shape="wide" aria-pressed="true">YouTube 16:9</button>
-          <button type="button" data-shape="reel" aria-pressed="false">Instagram Reel 9:16</button>
+        <div class="shape-toggle" role="group" aria-label="Video shape" data-i18n-attr="aria-label:shape">
+          <button type="button" data-shape="wide" aria-pressed="true" data-i18n="sh1">YouTube 16:9</button>
+          <button type="button" data-shape="reel" aria-pressed="false" data-i18n="sh2">Instagram Reel 9:16</button>
         </div>
         <div class="frame" id="frame" role="img" aria-label="Animated preview of the RideVideo overlay: heart rate with zone, speed, distance, elevation, gradient, elapsed time, elevation profile and route map over a road scene">
           <svg class="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -328,7 +328,7 @@
             <path class="road-dash" d="M800 560 L800 900" stroke="#f3d27a" stroke-width="10"/>
             <path d="M560 900 C600 820 660 760 700 740 L760 900Z" fill="#111" opacity=".18"/>
           </svg>
-          <div class="hud" aria-hidden="true">
+          <div class="hud" aria-hidden="true" lang="en">
             <div class="stamp" id="stamp">2026/11/22 07:14:32</div>
             <div class="rec"><i></i>REC</div>
             <svg class="map" viewBox="0 0 100 100" id="map"></svg>
@@ -350,7 +350,7 @@
             <svg class="prof" viewBox="0 0 400 60" preserveAspectRatio="none" id="prof"></svg>
           </div>
         </div>
-        <div class="shape-note">A live mock-up of the overlay with made-up ride data. The real app draws it onto the camera footage.</div>
+        <div class="shape-note" data-i18n="note">A live mock-up of the overlay with made-up ride data. The real app draws it onto the camera footage.</div>
       </div>
     </div>
   </section>
@@ -359,8 +359,8 @@
   <section class="block" id="rides">
     <div class="wrap">
       <div class="sec-head">
-        <div><div class="sec-kick">Ride videos</div><h2>Out on the bike</h2>
-        <p>Full rides and highlight reels, made with RideVideo. Click a video to play it here.</p></div>
+        <div><div class="sec-kick" data-i18n="r_kick">Ride videos</div><h2 data-i18n="r_h">Out on the bike</h2>
+        <p data-i18n="r_p">Full rides and highlight reels, made with RideVideo. Click a video to play it here.</p></div>
       </div>
       <div class="vgrid" id="videos"></div>
       <h3 class="reels-h" id="reels-h" hidden>Reels</h3>
@@ -369,10 +369,12 @@
     </div>
   </section>
 
-  <!-- ================= GUIDE ================= -->
+  <!-- ================= GUIDE =================
+       Each guide section has an English block (data-lang="en") and a Turkish block (data-lang="tr").
+       Edit both when you change the text. -->
   <div class="guide-all">
   <section class="block soft" id="build" style="padding-bottom:28px">
-    <div class="wrap">
+    <div class="wrap" data-lang="en">
       <div class="guide-head">
         <div>
           <div class="sec-kick">How I built it</div>
@@ -389,16 +391,33 @@
         </div>
       </div>
     </div>
+    <div class="wrap" data-lang="tr" hidden lang="tr">
+      <div class="guide-head">
+        <div>
+          <div class="sec-kick">Nasıl yaptım</div>
+          <h2>Claude ile RideVideo nasıl yapılır</h2>
+          <p>RideVideo’yu Claude ile tek bir sohbette, bir öğleden sonrada, tek satır kod yazmadan yapabilirsiniz.
+            Aksiyon kamerası sürüş görüntülerini ve Strava GPX dosyasını, üzerinde canlı veri katmanı olan bitmiş bir videoya dönüştüren kişisel bir Windows uygulaması.</p>
+          <div class="byline">26 Kasım 2026 · Baris Celik</div>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>5</b><span>Claude’a kısa mesaj</span></div>
+          <div class="stat"><b>1</b><span>öğleden sonra, baştan sona</span></div>
+          <div class="stat"><b>~1.600</b><span>satır Python, hiçbirini ben yazmadım</span></div>
+          <div class="stat"><b>8</b><span>dosya, artı bir başlatıcı</span></div>
+        </div>
+      </div>
+    </div>
   </section>
-    <nav class="jump" aria-label="Guide sections">
+    <nav class="jump" aria-label="Guide sections" data-i18n-attr="aria-label:j_aria">
       <div class="wrap">
-        <a href="#what">What it does</a><a href="#how">How it works</a><a href="#need">What you need</a><a href="#steps">The conversation</a>
-        <a href="#perms">Permissions</a><a href="#tips">Tips</a><a href="#change">Changing it later</a><a href="#trouble">Troubleshooting</a><a href="#files">Reference</a>
+        <a href="#what" data-i18n="j1">What it does</a><a href="#how" data-i18n="j2">How it works</a><a href="#need" data-i18n="j3">What you need</a><a href="#steps" data-i18n="j4">The conversation</a>
+        <a href="#perms" data-i18n="j5">Permissions</a><a href="#tips" data-i18n="j6">Tips</a><a href="#change" data-i18n="j7">Changing it later</a><a href="#trouble" data-i18n="j8">Troubleshooting</a><a href="#files" data-i18n="j9">Reference</a>
       </div>
     </nav>
 
   <section class="block soft" id="what" style="padding-top:56px">
-    <div class="wrap">
+    <div class="wrap" data-lang="en">
       <div class="sec-head"><div><h2>What the finished app does</h2></div></div>
       <div class="features">
         <div class="feat"><div class="ib"><svg class="ic"><use href="#i-pulse"/></svg></div><h3>Reads your ride data</h3><p>A GPX or FIT file from Strava, including heart rate, speed, distance, elevation and gradient.</p></div>
@@ -410,10 +429,22 @@
         <div class="feat"><div class="ib"><svg class="ic"><use href="#i-desktop"/></svg></div><h3>Opens from the desktop</h3><p>A shortcut starts it in your browser, ready for every new ride.</p></div>
       </div>
     </div>
+    <div class="wrap" data-lang="tr" hidden lang="tr">
+      <div class="sec-head"><div><h2>Bitmiş uygulama ne yapıyor</h2></div></div>
+      <div class="features">
+        <div class="feat"><div class="ib"><svg class="ic"><use href="#i-pulse"/></svg></div><h3>Sürüş verilerinizi okur</h3><p>Strava’dan GPX veya FIT dosyası; nabız, hız, mesafe, yükseklik ve eğim dahil.</p></div>
+        <div class="feat"><div class="ib"><svg class="ic"><use href="#i-clock"/></svg></div><h3>Otomatik senkronize eder</h3><p>SJCAM kameranın görüntü köşesine yazdığı tarih ve saati okur; video ile veri elle uğraşmadan eşleşir.</p></div>
+        <div class="feat"><div class="ib"><svg class="ic"><use href="#i-layers"/></svg></div><h3>Veri katmanını çizer</h3><p>Renk kodlu bölgesiyle nabız, hız, mesafe, yükseklik, eğim, geçen süre, yükseklik profili ve rota haritası.</p></div>
+        <div class="feat"><div class="ib"><svg class="ic"><use href="#i-star"/></svg></div><h3>İki uzunluk</h3><p>Tüm sürüş ya da otomatik özet video: en yüksek hız, maksimum nabız, tırmanışlar, sprintler.</p></div>
+        <div class="feat"><div class="ib"><svg class="ic"><use href="#i-shape"/></svg></div><h3>İki format</h3><p>16:9 YouTube/MP4 veya 9:16 Instagram Reel.</p></div>
+        <div class="feat"><div class="ib"><svg class="ic"><use href="#i-music"/></svg></div><h3>Müzik ekler</h3><p>İsteğe bağlı fon müziği; müzik ve kamera sesi için ayrı ses seviyesi.</p></div>
+        <div class="feat"><div class="ib"><svg class="ic"><use href="#i-desktop"/></svg></div><h3>Masaüstünden açılır</h3><p>Bir kısayol onu tarayıcınızda başlatır; her yeni sürüş için hazır.</p></div>
+      </div>
+    </div>
   </section>
 
   <section class="block" id="how">
-    <div class="wrap">
+    <div class="wrap" data-lang="en">
       <div class="sec-head"><div><h2>How it works</h2><p>Two files go in, a finished video comes out. Each box is one of the Python files Claude wrote.</p></div></div>
       <div class="pipe" aria-label="RideVideo processing pipeline">
         <div class="pcol">
@@ -439,10 +470,36 @@
       <div class="pipe-ui"><svg class="ic" style="color:var(--ride-ink)"><use href="#i-desktop"/></svg>
         <span>Around it all: <code>app.py</code>, a browser interface built with Streamlit where you pick a folder, preview, choose options and render. <code>RideVideo.bat</code> starts it.</span></div>
     </div>
+    <div class="wrap" data-lang="tr" hidden lang="tr">
+      <div class="sec-head"><div><h2>Nasıl çalışıyor</h2><p>İki dosya girer, bitmiş bir video çıkar. Her kutu, Claude’un yazdığı Python dosyalarından biri.</p></div></div>
+      <div class="pipe" aria-label="RideVideo işleme akışı">
+        <div class="pcol">
+          <div class="pbox in"><b>Sürüş videosu</b><span>Doğrudan SJCAM hafıza kartından MP4</span></div>
+          <div class="pbox in"><b>Strava dosyası</b><span>GPX veya Export Original ile .fit</span></div>
+        </div>
+        <div class="parrow"><svg class="ic"><use href="#i-arrow"/></svg></div>
+        <div class="pcol">
+          <div class="pbox"><b>Senkronizasyon</b><code>sync.py</code><span>Ekrandaki saati OCR ile okur ve saat dilimini bulur</span></div>
+          <div class="pbox"><b>Telemetri</b><code>telemetry.py</code><span>Saniyede bir satır: hız, eğim, nabız, mesafe</span></div>
+        </div>
+        <div class="parrow"><svg class="ic"><use href="#i-arrow"/></svg></div>
+        <div class="pcol">
+          <div class="pbox"><b>Öne çıkanlar</b><code>highlights.py</code><span>Her saniyeyi puanlar ve klipleri seçer</span></div>
+          <div class="pbox"><b>Veri katmanı</b><code>overlay.py</code><span>Veri paneli, yükseklik profili, rota haritası, başlık kartı</span></div>
+        </div>
+        <div class="parrow"><svg class="ic"><use href="#i-arrow"/></svg></div>
+        <div class="pcol">
+          <div class="pbox"><b>Render</b><code>render.py</code><span>FFmpeg kırpar, katmanı ekler, kodlar, klipleri birleştirir, müziği miksler</span></div>
+          <div class="pbox out"><b>Bitmiş video</b><span>Tüm sürüş veya özet · 16:9 veya 9:16</span></div>
+        </div>
+      </div>
+      <div class="pipe-ui"><svg class="ic" style="color:var(--ride-ink)"><use href="#i-desktop"/></svg>
+        <span>Hepsinin etrafında: <code>app.py</code>, Streamlit ile yapılmış bir tarayıcı arayüzü; klasör seçer, ön izler, seçenekleri belirler ve render alırsınız. <code>RideVideo.bat</code> onu başlatır.</span></div>
+    </div>
   </section>
 
   <section class="block soft" id="need">
-    <div class="wrap">
+    <div class="wrap" data-lang="en">
       <div class="sec-head"><div><h2>What you need before starting</h2>
         <p>The Claude desktop app, a Windows PC and one sample ride (a video plus its GPX file). Claude installs everything else.</p></div></div>
       <div class="need">
@@ -459,10 +516,27 @@
         <span>You may see a Windows permission pop-up once.</span>
       </div>
     </div>
+    <div class="wrap" data-lang="tr" hidden lang="tr">
+      <div class="sec-head"><div><h2>Başlamadan önce gerekenler</h2>
+        <p>Claude masaüstü uygulaması, bir Windows bilgisayar ve bir örnek sürüş (bir video ve GPX dosyası). Geri kalan her şeyi Claude kurar.</p></div></div>
+      <div class="need">
+        <div class="ncard"><div class="ib"><svg class="ic"><use href="#i-chat"/></svg></div><h3>Claude masaüstü uygulaması, Code sekmesi</h3><p>Claude Code dosya yazar, komut çalıştırır ve uygulamayı bilgisayarınızda test eder.</p><span class="note">Claude Code’u içeren ücretli bir Claude planı.</span></div>
+        <div class="ncard"><div class="ib"><svg class="ic"><use href="#i-folder"/></svg></div><h3>Bir proje klasörü</h3><p>Claude’un uygulamayı oluşturacağı yer.</p><span class="note">Örnek: Documents\Apps. Oturumun çalışma klasörü olarak açın.</span></div>
+        <div class="ncard"><div class="ib"><svg class="ic"><use href="#i-video"/></svg></div><h3>Bir örnek sürüş videosu</h3><p>Claude her adımı gerçek görüntü üzerinde test eder.</p><span class="note">Mümkünse doğrudan kameranın hafıza kartından kopyalayın; düzenleme uygulamaları zaman damgasını siler.</span></div>
+        <div class="ncard"><div class="ib"><svg class="ic"><use href="#i-route"/></svg></div><h3>Eşleşen Strava dosyası</h3><p>Nabız, hız ve GPS verisini sağlar.</p><span class="note">Strava aktivitesi → ⋯ → Export GPX ya da .fit dosyası için Export Original.</span></div>
+        <div class="ncard"><div class="ib"><svg class="ic"><use href="#i-image"/></svg></div><h3>Kameranın tarih/saat ekran görüntüsü<span class="opt">isteğe bağlı</span></h3><p>Claude’a kameranın zamanı nasıl yazdığını gösterir.</p><span class="note">İsteğe bağlı, ama burada çok iş kazandırdı.</span></div>
+        <div class="ncard"><div class="ib"><svg class="ic"><use href="#i-disk"/></svg></div><h3>Yaklaşık 60 GB boş disk alanı</h3><p>Sürüş videoları 2–10 GB arası.</p><span class="note">Videoları OneDrive dışında tutun.</span></div>
+      </div>
+      <div class="tools-row">
+        <span>Claude, uygulamanın ihtiyaç duyduğu araçları Windows’un kendi yükleyicisi winget ile kontrol eder ve kurar:</span>
+        <span class="chip">Python 3</span><span class="chip">FFmpeg</span><span class="chip">Git</span><span class="chip">Tesseract OCR</span>
+        <span>Bir kez Windows izin penceresi görebilirsiniz.</span>
+      </div>
+    </div>
   </section>
 
   <section class="block" id="steps">
-    <div class="wrap">
+    <div class="wrap" data-lang="en">
       <div class="sec-head"><div><div class="sec-kick">Step by step</div><h2>The conversation</h2>
         <p>The whole app came from five short messages. Claude did the planning, installing, coding and testing in between.
           Send them in this order and answer Claude's questions as they come.</p></div></div>
@@ -503,10 +577,51 @@
       <div class="callout after"><svg class="ic"><use href="#i-star"/></svg>
         <div>When it finishes, Claude tells you how to use the app, what it tested and <b>what it did not test</b>. Read that last part; those are the first things to try yourself.</div></div>
     </div>
+    <div class="wrap" data-lang="tr" hidden lang="tr">
+      <div class="sec-head"><div><div class="sec-kick">Adım adım</div><h2>Sohbet</h2>
+        <p>Uygulamanın tamamı beş kısa mesajdan çıktı. Aradaki planlamayı, kurulumu, kodlamayı ve testi Claude yaptı.
+          Mesajları bu sırayla gönderin ve Claude’un sorularını geldikçe yanıtlayın. Claude Türkçe de anlar; mesajları Türkçe yazabilirsiniz.</p></div></div>
+      <ol class="convo">
+        <li class="turn">
+          <span class="n">1</span>
+          <h3>Fikri anlatın ve neler gerektiğini sorun</h3>
+          <div class="bubble you"><div class="who">Siz</div>Kendim için bir uygulama yapmak istiyorum. Bisiklet sürüşlerimin videolarını ve Strava’dan GPX dosyalarını yükleyeceğim. Ya kısa bir özet video ya da tüm videoyu oluşturacak. Neye ihtiyacımız var?</div>
+          <div class="bubble claude"><div class="who"><i></i>Claude</div>Bir plan (girdiler, zaman senkronizasyonu, öne çıkan anların tespiti, veri katmanları, render), önerilen bir teknoloji yığını ve birkaç soruyla yanıt verir.</div>
+        </li>
+        <li class="turn">
+          <span class="n">2</span>
+          <h3>Soruları yanıtlayın ve bilgisayarınızı hazırlamasını isteyin</h3>
+          <div class="bubble you"><div class="who">Siz</div>SJCAM kullanıyorum. Veri katmanları ve nabız lazım. Çıktı seçenekli olmalı: mp4 veya Instagram. Fon müziği gerekebilir, isteğe bağlı. Bu tek seferlik değil, defalarca yapacağım. Gerekli uygulamaları kontrol et; kurulu değilse kur.</div>
+          <div class="bubble claude"><div class="who"><i></i>Claude</div>Python, FFmpeg, Git ve ekran kartınızı kontrol eder, donanımsal video kodlamayı test eder ve eksikleri ayrı bir Python ortamına kurar.</div>
+        </li>
+        <li class="turn">
+          <span class="n">3</span>
+          <h3>Gerçek bir örnek sürüş verin</h3>
+          <p class="pre">Bir videoyu ve GPX dosyasını proje klasörüne kopyalayın, sonra şunu yazın:</p>
+          <div class="bubble you"><div class="who">Siz</div>Örnek olarak klasöre bir video ve GPX dosyası yükledim.</div>
+          <div class="bubble claude"><div class="who"><i></i>Claude</div>Dosyaların ayrıntılarını (süre, çözünürlük, zaman damgaları, nabız) okur ve tuhaf bir şey varsa bildirir. Burada, klip bir düzenleme uygulamasından geçtiği için video dosyasının tarihinin yanlış olduğunu buldu.</div>
+        </li>
+        <li class="turn">
+          <span class="n">4</span>
+          <h3>Kameranın zaman damgasını gösterin</h3>
+          <p class="pre">Videoya basılan tarih/saatin ekran görüntüsünü yapıştırın ve şunu yazın:</p>
+          <div class="bubble you"><div class="who">Siz</div>Videoda bir zaman damgası var.</div>
+          <div class="bubble claude"><div class="who"><i></i>Claude</div>Başından, ortasından ve sonundan kareler alır, Tesseract OCR’ı kurar ve damgayı okuyabildiğini doğrular. Buradan kameranın saat dilimini ve GPX ile arasındaki tam farkı bulur.</div>
+        </li>
+        <li class="turn">
+          <span class="n">5</span>
+          <h3>Yapmasını isteyin</h3>
+          <div class="bubble you"><div class="who">Siz</div>Evet, yap.</div>
+          <div class="bubble claude"><div class="who"><i></i>Claude</div>Uygulamayı modül modül yazar ve her parçayı ilerledikçe örneğiniz üzerinde test eder: sürüş verisi, senkronizasyon, her formatta katman ön izlemeleri, öne çıkan seçimleri, test renderları, tarayıcı uygulamasının kendisi ve masaüstü kısayolu. Yol boyunca ön izleme görselleri gösterir ve fark ettiği düzen sorunlarını düzeltir.</div>
+        </li>
+      </ol>
+      <div class="callout after"><svg class="ic"><use href="#i-star"/></svg>
+        <div>Bittiğinde Claude uygulamanın nasıl kullanılacağını, neyi test ettiğini ve <b>neyi test etmediğini</b> söyler. Bu son kısmı okuyun; ilk denemeniz gerekenler onlardır.</div></div>
+    </div>
   </section>
 
   <section class="block soft" id="perms">
-    <div class="wrap">
+    <div class="wrap" data-lang="en">
       <div class="sec-head"><div><h2>Permissions and approvals</h2>
         <p>Claude asks before it does anything outside reading and writing files in your project folder, unless your permission mode already allows it. Expect these prompts:</p></div></div>
       <div class="tbl">
@@ -524,10 +639,28 @@
       <div class="callout"><svg class="ic"><use href="#i-shield"/></svg>
         <div>A Windows pop-up (User Account Control) may appear when an installer needs admin rights. That one is yours to approve; Claude can't click it for you.</div></div>
     </div>
+    <div class="wrap" data-lang="tr" hidden lang="tr">
+      <div class="sec-head"><div><h2>İzinler ve onaylar</h2>
+        <p>İzin modunuz zaten izin vermiyorsa Claude, proje klasörünüzde dosya okuma ve yazma dışında bir şey yapmadan önce sorar. Şu soruları bekleyin:</p></div></div>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Claude’un yapmak istediği</th><th>Örnek</th><th>İzin vermeden önce kontrol edin</th></tr></thead>
+          <tbody>
+            <tr><td>Komut çalıştırmak</td><td>Videonuzda <code>ffprobe</code>, <code>winget install</code>, <code>pip install</code></td><td>Kullanacağını söylediği araç olduğunu</td></tr>
+            <tr><td>Yazılım kurmak</td><td>winget ile Tesseract OCR</td><td>Rastgele bir indirme bağlantısından değil, winget veya PyPI’dan geldiğini</td></tr>
+            <tr><td>Tarayıcı panelinde bir site açmak</td><td><code>localhost:8517</code>, kendi bilgisayarınızdaki uygulama</td><td>localhost olduğunu; hiçbir şey bilgisayarınızdan çıkmaz</td></tr>
+            <tr><td>Masaüstü kısayolu oluşturmak</td><td>Masaüstünüzde <code>RideVideo.lnk</code></td><td>İsteğe bağlı; klasörden başlatmayı tercih ederseniz hayır deyin</td></tr>
+            <tr><td>Bir anı (memory) kaydetmek</td><td>Kameranız ve klasörlerinizle ilgili notlar</td><td>Claude’un kurulumu bir dahaki sefere böyle hatırladığını</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout"><svg class="ic"><use href="#i-shield"/></svg>
+        <div>Bir yükleyici yönetici yetkisi istediğinde Windows açılır penceresi (Kullanıcı Hesabı Denetimi) çıkabilir. Onu siz onaylarsınız; Claude sizin yerinize tıklayamaz.</div></div>
+    </div>
   </section>
 
   <section class="block" id="tips">
-    <div class="wrap">
+    <div class="wrap" data-lang="en">
       <div class="sec-head"><div><h2>Tips for good results</h2></div></div>
       <div class="tips">
         <div class="tip hero-tip"><div class="ib"><svg class="ic"><use href="#i-bolt"/></svg></div>
@@ -542,19 +675,37 @@
         <div class="tip"><h3>Interrupt if it's going wrong</h3><p>Type a correction while Claude is working; it adjusts without starting over.</p></div>
       </div>
     </div>
+    <div class="wrap" data-lang="tr" hidden lang="tr">
+      <div class="sec-head"><div><h2>İyi sonuç için ipuçları</h2></div></div>
+      <div class="tips">
+        <div class="tip hero-tip"><div class="ib"><svg class="ic"><use href="#i-bolt"/></svg></div>
+          <p><b>En büyük kazanç, Claude’a gerçek dosyaları erkenden vermek.</b> Onlar üzerinde test eder ve bir açıklamanın asla ortaya çıkarmayacağı sorunları yakalar.</p></div>
+        <div class="tip"><h3>Koddan değil, hedeften başlayın</h3><p>“Neye ihtiyacımız var?” sorusu, daha hiçbir şey yapılmadan bir plan ve doğru sorular getirir.</p></div>
+        <div class="tip"><h3>Ne sıklıkla kullanacağınızı söyleyin</h3><p>“Tek seferlik değil” demek, tek kullanımlık bir betik yerine kayıtlı ayarları ve masaüstü kısayolu olan, tekrar kullanılabilir bir uygulama getirdi.</p></div>
+        <div class="tip"><h3>Bir örnek verin</h3><p>Tek bir gerçek video ve GPX, Claude’un daha kod yazmadan yanlış dosya tarihini, 1–2 saniyelik GPS boşluklarını ve 720p çözünürlüğü bulmasını sağladı.</p></div>
+        <div class="tip"><h3>Ekran görüntüsü paylaşın</h3><p>Ekrandaki zaman damgasının tek bir görüntüsü, elle senkronizasyon adımını otomatik senkronizasyona çevirdi.</p></div>
+        <div class="tip"><h3>Ön izleme isteyin</h3><p>Claude katmanın durağan karelerini üretebilir; uzun bir render öncesinde görmek isteyin.</p></div>
+        <div class="tip"><h3>Neyin test edilmediğini sorun</h3><p>Claude sonunda listeler; önce onları kendiniz kontrol edin.</p></div>
+        <div class="tip"><h3>Her istekte tek değişiklik</h3><p>“Hız rakamını büyüt” demek, tek mesajda beş değişiklikten daha iyi çalışır.</p></div>
+        <div class="tip"><h3>Yanlış gidiyorsa araya girin</h3><p>Claude çalışırken bir düzeltme yazın; baştan başlamadan uyum sağlar.</p></div>
+      </div>
+    </div>
   </section>
 
   <section class="block soft" id="change">
     <div class="wrap">
-      <div class="sec-head"><div><h2>Changing the app later</h2>
+      <div class="sec-head" data-lang="en"><div><h2>Changing the app later</h2>
         <p>Open a new Code session in the same project folder and describe the change in plain words. Claude reads the existing code and its saved notes about your setup first.
           For anything bigger than a tweak, ask for a preview frame or a short test render before it changes the full app.</p></div></div>
+      <div class="sec-head" data-lang="tr" hidden lang="tr"><div><h2>Uygulamayı sonradan değiştirmek</h2>
+        <p>Aynı proje klasöründe yeni bir Code oturumu açın ve değişikliği sade bir dille anlatın. Claude önce mevcut kodu ve kurulumunuzla ilgili kayıtlı notlarını okur.
+          Küçük bir ayardan büyük her şey için, tüm uygulamayı değiştirmeden önce bir ön izleme karesi veya kısa bir test render’ı isteyin.</p></div></div>
       <div class="asks" id="asks"></div>
     </div>
   </section>
 
   <section class="block" id="trouble">
-    <div class="wrap">
+    <div class="wrap" data-lang="en">
       <div class="sec-head"><div><h2>Troubleshooting</h2>
         <p>Most problems come from the camera clock, the source file or a missing tool. Tell Claude the symptom and paste any error, and it can fix the code.</p></div></div>
       <div class="faq">
@@ -568,10 +719,24 @@
         <details><summary>Anything else</summary><div class="ans"><b>Fix</b><span>Send Claude the file <code class="mono">last_render.log</code> from the output folder</span></div></details>
       </div>
     </div>
+    <div class="wrap" data-lang="tr" hidden lang="tr">
+      <div class="sec-head"><div><h2>Sorun giderme</h2>
+        <p>Sorunların çoğu kamera saatinden, kaynak dosyadan veya eksik bir araçtan kaynaklanır. Claude’a belirtiyi anlatın ve varsa hatayı yapıştırın; kodu düzeltebilir.</p></div></div>
+      <div class="faq">
+        <details><summary>Rakamlar görüntünün gerisinde veya önünde</summary><div class="ans"><b>Neden</b><span>Kamera saati birkaç saniye kaymış</span><b>Çözüm</b><span>Uygulamadaki Fine-tune sync kaydırıcısını oynatın</span></div></details>
+        <details><summary>“Couldn't read the clock stamp” (saat damgası okunamadı)</summary><div class="ans"><b>Neden</b><span>Tarih damgası kapalı veya arkasında çok parlak bir sahne var</span><b>Çözüm</b><span>Kamera ayarlarından damgayı açın; uygulamanın gösterdiği kutuya başlangıç saatini yazın</span></div></details>
+        <details><summary>Video bir gün veya birkaç saat kaymış</summary><div class="ans"><b>Neden</b><span>Saat dilimi yanlış tahmin edilmiş</span><b>Çözüm</b><span>Camera time zone’u elle ayarlayın (ör. UTC+3 için 3)</span></div></details>
+        <details><summary>Nabız görünmüyor</summary><div class="ans"><b>Neden</b><span>GPX nabız verisi olmadan dışa aktarılmış</span><b>Çözüm</b><span>Strava’da Export Original (.fit) kullanın</span></div></details>
+        <details><summary>Instagram sürümü bulanık görünüyor</summary><div class="ans"><b>Neden</b><span>720p kaynak kırpılıp büyütülmüş</span><b>Çözüm</b><span>“Tam görüntü + veri paneli” formatını kullanın veya 1080p ya da üzerinde kaydedin</span></div></details>
+        <details><summary>Render hemen başarısız oluyor</summary><div class="ans"><b>Neden</b><span>Donanımsal kodlayıcı kullanılamıyor</span><b>Çözüm</b><span>Kenar çubuğunda Encoder’ı Software yapın</span></div></details>
+        <details><summary>Tarayıcı sayfası boş</summary><div class="ans"><b>Neden</b><span>Uygulama hâlâ açılıyor</span><b>Çözüm</b><span>10 saniye bekleyip sayfayı yenileyin</span></div></details>
+        <details><summary>Başka bir şey</summary><div class="ans"><b>Çözüm</b><span>Çıktı klasöründeki <code class="mono">last_render.log</code> dosyasını Claude’a gönderin</span></div></details>
+      </div>
+    </div>
   </section>
 
   <section class="block soft" id="files">
-    <div class="wrap">
+    <div class="wrap" data-lang="en">
       <div class="sec-head"><div><h2>Reference: what Claude built</h2>
         <p>About 1,600 lines of Python across eight files, plus a launcher. You never need to open them, but it helps to know the names when asking Claude for changes.</p></div></div>
       <div class="ref">
@@ -603,6 +768,38 @@
         </div>
       </div>
     </div>
+    <div class="wrap" data-lang="tr" hidden lang="tr">
+      <div class="sec-head"><div><h2>Başvuru: Claude ne yaptı</h2>
+        <p>Sekiz dosyaya yayılmış yaklaşık 1.600 satır Python, artı bir başlatıcı. Hiçbirini açmanız gerekmez, ama Claude’dan değişiklik isterken adlarını bilmek işe yarar.</p></div></div>
+      <div class="ref">
+        <div class="tbl">
+          <table>
+            <thead><tr><th>Dosya</th><th>Ne yapar</th></tr></thead>
+            <tbody>
+              <tr><td><code>app.py</code></td><td>Tarayıcı arayüzü (Streamlit): klasör seçme, ön izleme, seçenekler, render</td></tr>
+              <tr><td><code>ridevideo/telemetry.py</code></td><td>GPX/FIT’i saniyede bir satıra çevirir: hız, eğim, nabız, mesafe</td></tr>
+              <tr><td><code>ridevideo/sync.py</code></td><td>Kameranın ekrandaki saatini OCR ile okur ve saat dilimini bulur</td></tr>
+              <tr><td><code>ridevideo/overlay.py</code></td><td>Veri panelini, yükseklik profilini, rota haritasını ve başlık kartını çizer</td></tr>
+              <tr><td><code>ridevideo/highlights.py</code></td><td>Sürüşün her saniyesini puanlar ve öne çıkan klipleri seçer</td></tr>
+              <tr><td><code>ridevideo/render.py</code></td><td>FFmpeg’i yönetir: kırpma, katman, kodlama, klip birleştirme, müzik miksajı</td></tr>
+              <tr><td><code>RideVideo.bat</code></td><td>Uygulamayı başlatır; gerekirse ilk çalıştırmada kurar</td></tr>
+              <tr><td><code>README.md</code></td><td>Kısa kullanım kılavuzu ve kod haritası</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <ul class="lives">
+            <li><b>Render edilen videolar</b>Kullanıcı klasörünüzde <code>Videos\RideVideo</code>, hatalar için <code>last_render.log</code></li>
+            <li><b>Ayarlar</b><code>%APPDATA%\RideVideo\settings.json</code> (maks. nabız, çıktı klasörü, kodlayıcı)</li>
+            <li><b>Python ortamı</b><code>%LOCALAPPDATA%\RideVideo\venv</code>; binlerce dosya senkronize edilmesin diye OneDrive dışında tutulur</li>
+          </ul>
+          <div class="built">
+            <span class="chip">Python 3.13</span><span class="chip">FFmpeg</span><span class="chip">Pillow</span><span class="chip">Streamlit</span>
+            <span class="chip">Tesseract OCR</span><span class="chip">gpxpy</span><span class="chip">fitdecode</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
   </div><!-- /guide-all -->
 </main>
@@ -615,100 +812,154 @@
 </footer>
 
 <script>
+window.I18N_TR = {
+  __title: 'Bisiklet ve RideVideo | Baris Celik',
+  kicker: 'Bisiklet',
+  h1: 'Sürüşlerim, <em>ekranda rakamlarla</em>',
+  lede: 'Sürüşlerimi aksiyon kamerasıyla çekiyor ve Strava’ya kaydediyorum. Claude ile bir öğleden sonrada yaptığım RideVideo uygulaması ikisini birleştiriyor: nabız, hız, tırmanışlar ve rota, videoyla otomatik olarak senkronize.',
+  b1: 'Sürüşleri izle', b2: 'Uygulamayı nasıl yaptım',
+  shape: 'Video formatı', sh1: 'YouTube 16:9', sh2: 'Instagram Reel 9:16',
+  note: 'Uydurma sürüş verisiyle katmanın canlı bir taslağı. Gerçek uygulama bunu kamera görüntüsünün üzerine çizer.',
+  r_kick: 'Sürüş videoları', r_h: 'Bisikletin üstünde',
+  r_p: 'RideVideo ile hazırlanmış tüm sürüşler ve özet videolar. Burada oynatmak için bir videoya tıklayın.',
+  j_aria: 'Rehber bölümleri',
+  j1: 'Ne yapıyor', j2: 'Nasıl çalışıyor', j3: 'Gerekenler', j4: 'Sohbet', j5: 'İzinler', j6: 'İpuçları',
+  j7: 'Sonradan değiştirmek', j8: 'Sorun giderme', j9: 'Başvuru'
+};
+</script>
+<script src="../../assets/js/lang.js"></script>
+<script>
 /* =====================================================================
    YOUR VIDEOS: paste YouTube links here, newest first.
    - Normal videos (16:9) show in the main grid.
    - YouTube Shorts links (youtube.com/shorts/...) show in the "Reels" row.
-   - title is required; date, km and type are optional.
+   - title is required. Optional: title_tr (Turkish title), date as 'YYYY-MM-DD'
+     (shown in the visitor's language), km, and type: 'Full ride' or 'Highlights'.
    Example:
-   { url: 'https://www.youtube.com/watch?v=XXXXXXXXXXX', title: 'Sunday loop', date: 'Nov 2026', km: 64, type: 'Full ride' },
-   { url: 'https://youtu.be/XXXXXXXXXXX', title: 'Coast road highlights', date: 'Nov 2026', km: 48, type: 'Highlights' },
+   { url: 'https://www.youtube.com/watch?v=XXXXXXXXXXX', title: 'Sunday loop', title_tr: 'Pazar turu', date: '2026-11-29', km: 64, type: 'Full ride' },
+   { url: 'https://youtu.be/XXXXXXXXXXX', title: 'Coast road highlights', date: '2026-12-06', km: 48, type: 'Highlights' },
    ===================================================================== */
 var VIDEOS = [
-  { url: 'https://www.youtube.com/watch?v=v8rbtYfkefw', title: 'Evening Spin: Saving the Legs', date: '26 Nov 2026', km: 15.5, type: 'Highlights' },
+  { url: 'https://www.youtube.com/watch?v=v8rbtYfkefw', title: 'Evening Spin: Saving the Legs', title_tr: 'Akşam Turu: Bacakları Dinlendirmek', date: '2026-11-26', km: 15.5, type: 'Highlights' },
 ];
 /* Optional: your YouTube channel link, shown as a button under the videos. */
 var CHANNEL_URL = 'https://www.youtube.com/@bariscelik77';
 
 (function () {
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var L = I18N.L;
+  var TYPE_TR = { 'Full ride': 'Tüm sürüş', 'Highlights': 'Özet' };
 
   /* ---------- video grid ---------- */
   function ytId(u) {
     var m = String(u).match(/(?:youtu\.be\/|v=|\/shorts\/|\/embed\/|\/live\/)([A-Za-z0-9_-]{11})/);
     return m ? m[1] : (/^[A-Za-z0-9_-]{11}$/.test(u) ? u : null);
   }
+  function vTitle(v) { return L(v.title, v.title_tr || v.title); }
+  function vDate(v) {
+    if (!v.date) return '';
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v.date);
+    return m ? new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString(I18N.locale, { day: 'numeric', month: 'short', year: 'numeric' }) : v.date;
+  }
+  function vKm(v) { return v.km ? new Intl.NumberFormat(I18N.lang === 'tr' ? 'tr-TR' : 'en-GB').format(v.km) + ' km' : ''; }
   function card(v, isReel) {
     var id = ytId(v.url), el = document.createElement('article');
     el.className = 'vcard';
     var btn = document.createElement('button');
     btn.type = 'button'; btn.className = 'vthumb';
-    btn.setAttribute('aria-label', 'Play video: ' + v.title);
     btn.style.backgroundImage = 'url(https://i.ytimg.com/vi/' + id + '/' + (isReel ? 'oardefault' : 'hqdefault') + '.jpg), url(https://i.ytimg.com/vi/' + id + '/hqdefault.jpg)';
     btn.innerHTML = '<span class="play"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></span>';
     btn.addEventListener('click', function () {
       var f = document.createElement('iframe');
       f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
-      f.title = v.title;
+      f.title = vTitle(v);
       f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
       f.allowFullscreen = true;
       btn.replaceWith(f);
     });
     el.appendChild(btn);
     var body = document.createElement('div'); body.className = 'vbody';
-    var h = document.createElement('h3'); h.textContent = v.title; body.appendChild(h);
+    var h = document.createElement('h3'); body.appendChild(h);
     var meta = document.createElement('div'); meta.className = 'vmeta';
-    if (v.type) { var t = document.createElement('span'); t.className = 'vtag'; t.textContent = v.type; meta.appendChild(t); }
-    [v.date, v.km ? v.km + ' km' : ''].forEach(function (x) { if (x) { var s = document.createElement('span'); s.textContent = x; meta.appendChild(s); } });
     body.appendChild(meta); el.appendChild(body);
+    el._label = function () {
+      btn.setAttribute('aria-label', L('Play video: ', 'Videoyu oynat: ') + vTitle(v));
+      h.textContent = vTitle(v);
+      meta.innerHTML = '';
+      if (v.type) { var t = document.createElement('span'); t.className = 'vtag'; t.textContent = L(v.type, TYPE_TR[v.type] || v.type); meta.appendChild(t); }
+      [vDate(v), vKm(v)].forEach(function (x) { if (x) { var s = document.createElement('span'); s.textContent = x; meta.appendChild(s); } });
+    };
+    el._label();
     return el;
   }
+  var cards = [];
   var grid = document.getElementById('videos'), reels = document.getElementById('reels');
   var valid = VIDEOS.filter(function (v) { return v && v.url && ytId(v.url); });
   var wide = valid.filter(function (v) { return !/\/shorts\//.test(v.url); });
   var shorts = valid.filter(function (v) { return /\/shorts\//.test(v.url); });
-  wide.forEach(function (v) { grid.appendChild(card(v, false)); });
-  shorts.forEach(function (v) { reels.appendChild(card(v, true)); });
+  wide.forEach(function (v) { var c = card(v, false); cards.push(c); grid.appendChild(c); });
+  shorts.forEach(function (v) { var c = card(v, true); cards.push(c); reels.appendChild(c); });
   if (shorts.length) { reels.hidden = false; document.getElementById('reels-h').hidden = false; }
   if (!valid.length) {
-    ['First ride video', 'Highlight reel', 'Climb of the month'].forEach(function (t) {
+    [['First ride video', 'İlk sürüş videosu'], ['Highlight reel', 'Özet video'], ['Climb of the month', 'Ayın tırmanışı']].forEach(function (t) {
       var el = document.createElement('article'); el.className = 'vcard soon';
       el.innerHTML = '<div class="vthumb" aria-hidden="true"><span class="play"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></span></div>' +
-        '<div class="vbody"><h3></h3><div class="vmeta"><span>Coming soon</span></div></div>';
-      el.querySelector('h3').textContent = t;
+        '<div class="vbody"><h3></h3><div class="vmeta"><span></span></div></div>';
+      el._label = function () { el.querySelector('h3').textContent = L(t[0], t[1]); el.querySelector('.vmeta span').textContent = L('Coming soon', 'Yakında'); };
+      el._label(); cards.push(el);
       grid.appendChild(el);
     });
   }
+  var chanLink = null;
   if (CHANNEL_URL) {
     var c = document.getElementById('channel'); c.hidden = false;
-    var a = document.createElement('a'); a.className = 'btn btn-ride'; a.href = CHANNEL_URL; a.target = '_blank'; a.rel = 'noopener';
-    a.textContent = 'More rides on YouTube'; c.appendChild(a);
+    chanLink = document.createElement('a'); chanLink.className = 'btn btn-ride'; chanLink.href = CHANNEL_URL; chanLink.target = '_blank'; chanLink.rel = 'noopener';
+    c.appendChild(chanLink);
   }
 
   /* ---------- change requests with copy buttons ---------- */
   var ASKS = [
-    ['A new output shape', 'Add an Instagram feed format, 4:5.'],
-    ['Different colours', 'Change the orange accent to blue and make the heart-rate number bigger.'],
-    ['Power or cadence', 'I now have a power meter. Show power and cadence when the FIT file has them.'],
-    ['A different camera', "I bought a new camera; here's a sample clip. Make sync work with it."],
-    ['Better highlights', 'The highlight reel picks too many cruising clips. Favour climbs and descents.'],
-    ['Faster full-ride renders', 'Full rides take 20 minutes. Can you make rendering faster?'],
-    ['A bug fix', 'Rendering failed with this error: <paste it>. Please fix.'],
-    ['Batch processing', 'Process every ride folder in C:\\Rides overnight.']
+    ['A new output shape', 'Add an Instagram feed format, 4:5.',
+     'Yeni bir çıktı formatı', 'Instagram akışı için 4:5 formatı ekle.'],
+    ['Different colours', 'Change the orange accent to blue and make the heart-rate number bigger.',
+     'Farklı renkler', 'Turuncu vurgu rengini maviye çevir ve nabız rakamını büyüt.'],
+    ['Power or cadence', 'I now have a power meter. Show power and cadence when the FIT file has them.',
+     'Güç veya kadans', 'Artık güç ölçerim var. FIT dosyasında varsa gücü ve kadansı göster.'],
+    ['A different camera', "I bought a new camera; here's a sample clip. Make sync work with it.",
+     'Farklı bir kamera', 'Yeni bir kamera aldım; işte örnek bir klip. Senkronizasyonu bununla çalışır hale getir.'],
+    ['Better highlights', 'The highlight reel picks too many cruising clips. Favour climbs and descents.',
+     'Daha iyi özetler', 'Özet video çok fazla düz seyir klibi seçiyor. Tırmanış ve inişlere öncelik ver.'],
+    ['Faster full-ride renders', 'Full rides take 20 minutes. Can you make rendering faster?',
+     'Daha hızlı tam sürüş render’ı', 'Tam sürüşler 20 dakika sürüyor. Render’ı hızlandırabilir misin?'],
+    ['A bug fix', 'Rendering failed with this error: <paste it>. Please fix.',
+     'Hata düzeltme', 'Render şu hatayla başarısız oldu: <buraya yapıştırın>. Lütfen düzelt.'],
+    ['Batch processing', 'Process every ride folder in C:\\Rides overnight.',
+     'Toplu işleme', 'C:\\Rides içindeki her sürüş klasörünü gece boyunca işle.']
   ];
-  var asks = document.getElementById('asks');
+  var asks = document.getElementById('asks'), askEls = [];
   ASKS.forEach(function (a) {
     var el = document.createElement('div'); el.className = 'ask';
-    var w = document.createElement('span'); w.className = 'want'; w.textContent = a[0];
-    var q = document.createElement('q'); q.textContent = a[1];
+    var w = document.createElement('span'); w.className = 'want';
+    var q = document.createElement('q');
     var b = document.createElement('button'); b.type = 'button'; b.className = 'copy';
-    b.innerHTML = '<svg class="ic"><use href="#i-copy"/></svg><span>Copy</span>';
+    b.innerHTML = '<svg class="ic"><use href="#i-copy"/></svg><span></span>';
+    var label = function () { w.textContent = L(a[0], a[2]); q.textContent = L(a[1], a[3]); b.lastChild.textContent = L('Copy', 'Kopyala'); };
     b.addEventListener('click', function () {
-      var done = function () { b.classList.add('done'); b.lastChild.textContent = 'Copied'; setTimeout(function () { b.classList.remove('done'); b.lastChild.textContent = 'Copy'; }, 1600); };
-      if (navigator.clipboard) navigator.clipboard.writeText(a[1]).then(done, function () {});
+      var done = function () { b.classList.add('done'); b.lastChild.textContent = L('Copied', 'Kopyalandı'); setTimeout(function () { b.classList.remove('done'); b.lastChild.textContent = L('Copy', 'Kopyala'); }, 1600); };
+      if (navigator.clipboard) navigator.clipboard.writeText(L(a[1], a[3])).then(done, function () {});
     });
+    label(); askEls.push(label);
     el.appendChild(w); el.appendChild(q); el.appendChild(b); asks.appendChild(el);
   });
+
+  function relabel() {
+    cards.forEach(function (c) { c._label(); });
+    if (chanLink) chanLink.textContent = L('More rides on YouTube', 'YouTube’da daha fazla sürüş');
+    document.getElementById('reels-h').textContent = 'Reels';
+    askEls.forEach(function (fn) { fn(); });
+  }
+  relabel();
+  I18N.on(relabel);
 
   /* ---------- highlight the guide section being read ---------- */
   var jumps = Array.prototype.slice.call(document.querySelectorAll('.jump a'));

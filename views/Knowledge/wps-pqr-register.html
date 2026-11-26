@@ -28,37 +28,37 @@
 
 <main class="wrap">
   <header class="page-head">
-    <div class="crumbs"><a href="knowledge.html">Knowledge</a> › Welding</div>
-    <div class="kicker">Welding</div>
-    <h1>Building an efficient WPS/PQR register</h1>
-    <p class="lede">Start from the joints the project actually has. Work out every welding combination the drawings and specs
+    <div class="crumbs"><a href="knowledge.html" data-i18n="crumb">Knowledge</a> › <span data-i18n="kicker">Welding</span></div>
+    <div class="kicker" data-i18n="kicker">Welding</div>
+    <h1 data-i18n="h1">Building an efficient WPS/PQR register</h1>
+    <p class="lede" data-i18n="lede">Start from the joints the project actually has. Work out every welding combination the drawings and specs
       require, then cover them with as few PQRs as the code allows. Starting from the contractor's existing PQR library and
       hoping it covers everything is the usual source of gaps.</p>
     <div class="facts">
-      <span><b>Output:</b> approved WPS/PQR register + piping class cross-reference</span>
-      <span><b>Prepared by:</b> EPC contractor</span>
-      <span><b>Reviewed by:</b> Owner / PMC</span>
-      <span><b>Qualification standard:</b> ASME IX or EN ISO 15614-1</span>
+      <span data-i18n="fact1"><b>Output:</b> approved WPS/PQR register + piping class cross-reference</span>
+      <span data-i18n="fact2"><b>Prepared by:</b> EPC contractor</span>
+      <span data-i18n="fact3"><b>Reviewed by:</b> Owner / PMC</span>
+      <span data-i18n="fact4"><b>Qualification standard:</b> ASME IX or EN ISO 15614-1</span>
     </div>
   </header>
 
   <div class="guide">
-    <nav class="toc" aria-label="On this page">
-      <b>On this page</b>
+    <nav class="toc" aria-label="On this page" data-i18n-attr="aria-label:toc">
+      <b data-i18n="toc">On this page</b>
       <ol>
-        <li><a href="#flow">Process at a glance</a></li>
-        <li><a href="#inputs">1. Collect the inputs</a></li>
-        <li><a href="#matrix">2. Build the welding matrix</a></li>
-        <li><a href="#rationalise">3. Minimum PQR set</a></li>
-        <li><a href="#gaps">4. Gap analysis</a></li>
-        <li><a href="#register">5. The register</a></li>
-        <li><a href="#approval">6. Approval workflow</a></li>
-        <li><a href="#service">7. Ammonia &amp; hydrogen</a></li>
-        <li><a href="#pitfalls">Review pitfalls</a></li>
+        <li><a href="#flow" data-i18n="t0">Process at a glance</a></li>
+        <li><a href="#inputs" data-i18n="t1">1. Collect the inputs</a></li>
+        <li><a href="#matrix" data-i18n="t2">2. Build the welding matrix</a></li>
+        <li><a href="#rationalise" data-i18n="t3">3. Minimum PQR set</a></li>
+        <li><a href="#gaps" data-i18n="t4">4. Gap analysis</a></li>
+        <li><a href="#register" data-i18n="t5">5. The register</a></li>
+        <li><a href="#approval" data-i18n="t6">6. Approval workflow</a></li>
+        <li><a href="#service" data-i18n="t7">7. Ammonia &amp; hydrogen</a></li>
+        <li><a href="#pitfalls" data-i18n="t8">Review pitfalls</a></li>
       </ol>
     </nav>
 
-    <article>
+    <article data-lang="en">
       <!-- ================= FLOWCHART ================= -->
       <section class="flow-card" id="flow" aria-labelledby="flow-h">
         <h2 id="flow-h">Process at a glance</h2>
@@ -284,6 +284,233 @@
       <p class="disclaimer">General guidance based on project experience. Always check the current code edition and the project
         specifications; they take precedence over anything on this page.</p>
     </article>
+
+    <article data-lang="tr" hidden lang="tr">
+      <!-- ================= AKIŞ ŞEMASI ================= -->
+      <section class="flow-card" id="flow" aria-labelledby="flow-h">
+        <h2 id="flow-h">Bir bakışta süreç</h2>
+        <div class="flow-legend">
+          <span><i class="who c">Yüklenici</i></span>
+          <span><i class="who o">İşveren / PMC</i></span>
+          <span><i class="who l">TPI / laboratuvar</i></span>
+          <span><i class="hold">H</i> Bekleme noktası</span>
+          <span>Ayrıntısına gitmek için bir adıma tıklayın.</span>
+        </div>
+
+        <div class="flow">
+          <a class="node" href="#inputs">
+            <span class="who c">Yüklenici</span>
+            <span class="num">1</span><span class="t">Girdileri toplayın</span>
+            <span class="d">Paket bazında kodlar, proje kaynak şartnamesi, MSD’ler, boru sınıfları, hat listesi, tedarikçi kaynak haritaları</span>
+          </a>
+          <div class="arrow"></div>
+          <a class="node" href="#matrix">
+            <span class="who c">Yüklenici</span>
+            <span class="num">2</span><span class="t">Kaynak matrisini oluşturun</span>
+            <span class="d">P-No, kalınlık, proses, dolgu metali, darbe testi, PWHT ve ek testlerin her benzersiz kombinasyonu için bir satır</span>
+          </a>
+          <div class="arrow"></div>
+          <a class="node" href="#rationalise">
+            <span class="who c">Yüklenici</span>
+            <span class="num">3</span><span class="t">En az sayıda PQR’a indirin</span>
+            <span class="d">Kalın kuponlar, en düşük darbe sıcaklığı, ek testler kupon üzerinde</span>
+          </a>
+          <div class="arrow"></div>
+          <a class="node" href="#gaps">
+            <span class="who c">Yüklenici</span>
+            <span class="num">4</span><span class="t">Mevcut PQR’lara karşı boşluk analizi</span>
+            <span class="d">Yüklenici ve imalatçıların PQR kütüphanelerini matrisle eşleştirin</span>
+          </a>
+          <div class="arrow"></div>
+          <a class="node" href="#approval">
+            <span class="who c">Yüklenici</span>
+            <span class="num">5</span><span class="t">Matrisi, listeyi ve pWPS’leri sunun</span>
+            <span class="d">Geçerli PQR’ı olmayan satırlar yeni PQR test programı olarak listelenir</span>
+          </a>
+          <div class="arrow"></div>
+          <a class="node" href="#approval">
+            <span class="who o">İşveren / PMC</span>
+            <span class="num">6</span><span class="t">İnceleme ve yorum</span>
+            <span class="d">Kapsam, kod uygunluğu, proje şartnamesi gereklilikleri</span>
+          </a>
+          <div class="loop-note">↺ Yorum var mı? Yüklenici revize edip yeniden sunar.</div>
+          <div class="arrow"></div>
+
+          <div class="decision">
+            <div class="diamond"><span>Bu satır için geçerli PQR var mı?</span></div>
+          </div>
+          <div class="split" style="width:calc(50% + 8px)"></div>
+          <div class="branches">
+            <div class="branch">
+              <div class="arrow"></div>
+              <span class="lbl yes">✓ Evet</span>
+              <div class="arrow"></div>
+              <div class="node">
+                <span class="t">Mevcut PQR’ı WPS’te referans verin</span>
+                <span class="d">Kod baskısı, ısı girdisi, PWHT ve ek testlerin tümü WPS’i karşılıyor</span>
+              </div>
+              <div class="grow"></div>
+            </div>
+            <div class="branch">
+              <div class="arrow"></div>
+              <span class="lbl no">✕ Hayır</span>
+              <div class="arrow"></div>
+              <div class="node">
+                <span class="who l">TPI + İşveren tanıklığı</span>
+                <span class="t">PQR kuponunu kaynatın <i class="hold">H</i></span>
+                <span class="d">Isı girdisi dahil tüm değişkenleri kaydedin</span>
+              </div>
+              <div class="arrow"></div>
+              <div class="node">
+                <span class="who l">Akredite laboratuvar</span>
+                <span class="t">Mekanik testler</span>
+                <span class="d">Eğme, çekme, darbe, makro, sertlik ve ek testler</span>
+              </div>
+              <div class="arrow"></div>
+              <div class="node">
+                <span class="t">PQR onaylandı</span>
+              </div>
+              <div class="grow"></div>
+            </div>
+          </div>
+          <div class="merge" style="width:calc(50% + 8px)"></div>
+          <div class="arrow"></div>
+
+          <a class="node" href="#approval">
+            <span class="who o">İşveren / PMC</span>
+            <span class="num">7</span><span class="t">WPS Rev 0 olarak yayımlanır ve onaylanır</span>
+            <span class="d">Destekleyen PQR numaraları her WPS’te listelenir</span>
+          </a>
+          <div class="arrow"></div>
+          <a class="node" href="#approval">
+            <span class="who l">TPI tanıklığı</span>
+            <span class="num">8</span><span class="t">Kaynakçı yeterlilik testleri</span>
+            <span class="d">Onaylı WPS’lere göre WQT’ler; kaynakçı süreklilik kaydı başlar</span>
+          </a>
+          <div class="arrow"></div>
+          <a class="node out" href="#register">
+            <span class="num">✓</span><span class="t">Çıktı: güncel WPS/PQR listesi</span>
+            <span class="d">Boru sınıfı → WPS çapraz referansı, revizyon kontrolü ve ITP bağlantılarıyla</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ================= AYRINTI ================= -->
+      <h2 id="inputs"><span class="n">1.</span>Girdileri toplayın</h2>
+      <p>Herhangi bir PQR’ı açmadan önce kaynak gerekliliklerini belirleyen dokümanları toplayın:</p>
+      <ul>
+        <li><b>Paket bazında geçerli kodlar.</b> Örneğin ASME B31.3 / B31.12 (hidrojen boruları), ASME VIII Div. 1/2,
+          API 650/620 (amonyak depolama), AWS D1.1 (çelik yapı) ve EN ISO 15614 (Avrupalı tedarikçi paketleri).
+          Yeterlilik standardı ASME IX veya EN ISO 15614-1’dir.</li>
+        <li><b>Proje kaynak şartnamesi ve müşteri/EPC şartnameleri.</b> Bunlar genellikle kodların üzerine ek kurallar getirir:
+          darbe testi, sertlik sınırları, PWHT, PMI, ferrit ve yasaklı prosesler (örneğin basınçlı parçalarda kısa devre GMAW yok).</li>
+        <li><b>Malzeme seçim diyagramları (MSD), boru sınıfı şartnameleri ve hat listesi.</b> Bunlar ana malzemeleri,
+          kalınlıkları, tasarım ve minimum tasarım metal sıcaklıklarını (MDMT) ve servis koşullarını verir.</li>
+        <li><b>Ekipman veri sayfaları ve tedarikçi kaynak haritaları.</b> Atölyede imal edilen kalemleri kapsar.</li>
+      </ul>
+
+      <h2 id="matrix"><span class="n">2.</span>Kaynak matrisini oluşturun</h2>
+      <p>Her farklı kaynak durumunu çıkarın. Her satır aşağıdakilerin benzersiz bir kombinasyonudur:</p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Değişken</th><th>Neden önemli (ASME IX)</th></tr></thead>
+          <tbody>
+            <tr><td>Ana malzeme P-No / Grup No</td><td>Yeterlilik gruplaması (QW-420)</td></tr>
+            <tr><td>Kalınlık aralığı</td><td>Test kuponunun kapsadığı aralık (QW-451)</td></tr>
+            <tr><td>Proses(ler)</td><td>GTAW, SMAW, SAW, GMAW/FCAW veya GTAW kök + SMAW dolgu gibi kombinasyonlar</td></tr>
+            <tr><td>Dolgu metali F-No / A-No</td><td>Esas değişkenler</td></tr>
+            <tr><td>Darbe gerekliliği ve test sıcaklığı</td><td>Isı girdisi ve Grup No dahil ek esas değişkenler devreye girer</td></tr>
+            <tr><td>PWHT (var/yok ve aralığı)</td><td>Esas değişken; kaynak hali ve PWHT’li durumlar ayrı PQR gerektirir</td></tr>
+            <tr><td>Servise özel testler</td><td>Sertlik, ferrit, korozyon testi (ASTM G48), PMI</td></tr>
+            <tr><td>Bağlantı tipi</td><td>Alın, branşman, köşe, kaplama, boru-ayna (QW-193)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Önce P-No kombinasyonuna, sonra servise, sonra kalınlığa göre sıralayın. Bir yeşil amonyak tesisinde tipik aileler:</p>
+      <ul>
+        <li>Karbon çeliği P1, düşük sıcaklık, darbe testli</li>
+        <li>Amonyak servisinde karbon çeliği (PWHT ve sertlik)</li>
+        <li>Elektrolizör tarafında KOH/kostik servisinde karbon çeliği (kostik SCC nedeniyle belirli bir sıcaklığın üzerinde çoğu zaman PWHT gerekir)</li>
+        <li>Östenitik paslanmaz P8 (hidrojen, su, kriyojenik)</li>
+        <li>Dubleks P10H</li>
+        <li>Farklı malzeme kaynakları (P1 – P8)</li>
+        <li>Yapı çeliği</li>
+      </ul>
+
+      <h2 id="rationalise"><span class="n">3.</span>En az sayıda PQR’a indirin</h2>
+      <p>Maliyet tasarrufu buradan gelir.</p>
+      <ul>
+        <li><b>Bir PQR birçok WPS’i destekleyebilir.</b> Bir WPS de birden fazla PQR’a dayanabilir; örneğin her proses veya kalınlık aralığı için bir tane.</li>
+        <li><b>Kalın kupon kullanın.</b> 1,5 inç (38 mm) veya daha kalın bir kupon, çoğu proses için 8 inç’e (203 mm) kadar yeterlilik sağlar (QW-451.1).
+          Az sayıda kalın PQR, kalınlık aralığının büyük bölümünü kapsar.</li>
+        <li><b>Darbe testini gereken en düşük sıcaklıkta yapın.</b> Örneğin −46 °C’de test edilmiş bir PQR, −29 °C’deki servisleri de kapsar.
+          Isı girdisini kaydedin; darbe testi gerektiğinde WPS, PQR’daki ısı girdisini aşamaz.</li>
+        <li><b>PWHT’li ve kaynak hali kuponları ayrı kaynatın</b>; proje ikisine de ihtiyaç duyuyorsa.</li>
+        <li><b>Sertlik, ferrit ve korozyon testlerini PQR kuponuna ekleyin</b>; o ailedeki herhangi bir WPS bunlara ihtiyaç duyuyorsa. Sonradan yeniden test daha pahalıdır.</li>
+        <li><b>Kombine prosesler.</b> Prosesleri ayrı ayrı nitelendirmek (bir GTAW kök PQR’ı ve bir SMAW dolgu PQR’ı) genellikle tek bir kombine kupondan daha fazla esneklik sağlar.</li>
+      </ul>
+
+      <h2 id="gaps"><span class="n">4.</span>Mevcut PQR’lara karşı boşluk analizi</h2>
+      <p>EPC yüklenicisinden ve her imalatçıdan PQR kütüphanelerini isteyin ve matrisle eşleştirin. Mevcut her PQR için kontrol edin:</p>
+      <ul>
+        <li>Kod baskısı ve projenin bunu kabul edip etmediği</li>
+        <li>Darbe testi gerekiyorsa ek esas değişkenlerin (ısı girdisi) kaydedilip kaydedilmediği</li>
+        <li>PWHT sıcaklık ve süresinin proje aralığını kapsayıp kapsamadığı</li>
+        <li>Sertlik ve diğer testler: yapıldı mı ve proje sınırları içinde mi?</li>
+        <li>PQR’ın aynı şirkete ait olup olmadığı. ASME IX, SWPS veya QW-201 sahiplik kuralları dışında şirketler arası devre izin vermez.</li>
+      </ul>
+      <div class="callout"><span class="ct">Sonuç</span><p>Geçerli PQR’ı olmayan satırlar <b>yeni PQR test programı</b> olur.</p></div>
+
+      <h2 id="register"><span class="n">5.</span>Listenin kendisi</h2>
+      <p>Önerilen sütunlar:</p>
+      <div class="cols">
+        <span>WPS No</span><span>Rev</span><span>Destekleyen PQR No(ları)</span><span>Kod</span><span>Proses</span>
+        <span>P-No/Gr (A × B)</span><span>Ana malzeme şartname/sınıf</span><span>Dolgu (SFA/AWS sınıfı, F-No, A-No)</span>
+        <span>Nitelendirilen kalınlık aralığı</span><span>Çap aralığı</span><span>Pozisyon</span><span>Ön ısıtma / pasolar arası</span>
+        <span>PWHT</span><span>Darbe test sıcaklığı</span><span>Maks. ısı girdisi</span><span>Sertlik sınırı</span>
+        <span>Ek testler (ferrit, G48, PMI)</span><span>Geçerli boru sınıfları / ekipman</span><span>Servis</span>
+        <span>İmalatçı / yüklenici</span><span>Onay durumu</span><span>Onay tarihi</span><span>Açıklamalar</span>
+      </div>
+      <div class="callout">
+        <span class="ct">Bir boru sınıfı → WPS çapraz referansı ekleyin</span>
+        <p>İnşaat ve gözetim sırasında en çok kullanılan sekmedir; çünkü muayene personeli kontrole WPS’ten değil boru sınıfından başlar.</p>
+      </div>
+
+      <h2 id="approval"><span class="n">6.</span>Onay iş akışı</h2>
+      <ol>
+        <li>Yüklenici matrisi ve listeyi, her pWPS ile birlikte sunar.</li>
+        <li>İşveren/PMC bunları inceler.</li>
+        <li>PQR kuponu kaynağı; üçüncü taraf muayene ve müşteri için bekleme/tanıklık noktalarıyla.</li>
+        <li>Akredite laboratuvarda mekanik testler: eğme, çekme, darbe, makro, sertlik ve ek testler.</li>
+        <li>PQR onaylanır; WPS Rev 0 olarak yayımlanır ve onaylanır.</li>
+        <li>Onaylı WPS’lere göre kaynakçı yeterlilik testleri (WQT); kaynakçı süreklilik kaydı başlar.</li>
+        <li>Liste güncel tutulur; her WPS değişikliğinde revizyon kontrolü yapılır ve ITP ile ilişkilendirilir.</li>
+      </ol>
+
+      <h2 id="service"><span class="n">7.</span>Amonyak ve hidrojen servisine özel noktalar</h2>
+      <ul>
+        <li><b>Susuz amonyak (karbon çeliği):</b> gerilmeli korozyon çatlağı riski. Şartnamede PWHT, sertlik üst sınırı ve kaynak metali
+          dayanım sınırlarını kontrol edin. Soğutmalı NH₃ tanklarında, ana malzemeden daha yüksek dayanımlı (overmatching) kaynaklar çoğu zaman sınırlandırılır.</li>
+        <li><b>Soğutmalı amonyak depolama (yaklaşık −33 °C):</b> kaynak metali ve ITAB için MDMT’de veya altında darbe testi.</li>
+        <li><b>Hidrojen boruları (ASME B31.12):</b> sertlik sınırları, düşük hidrojenli sarf malzemeler ve bazı malzeme kategorileri için daha sıkı PQR test gereklilikleri.</li>
+        <li><b>KOH/kostik sistemler:</b> kostik SCC sıcaklık eşiğinin üzerindeki karbon çeliği için PWHT. NACE SP0403’ü veya projenin kostik eğrisini kullanın.</li>
+        <li><b>Paslanmaz ve dubleks:</b> PQR’da ferrit aralığı ve şartnamede belirtilmişse dubleks için G48 korozyon testi.</li>
+      </ul>
+
+      <h2 id="pitfalls">İncelemede sık görülen hatalar</h2>
+      <div class="callout warn">
+        <ul>
+          <li>Darbe testi geçerliyken WPS, izin verdiğinden daha düşük ısı girdili bir PQR’a dayanıyor.</li>
+          <li>PQR kalınlığı WPS aralığının tamamını desteklemiyor; özellikle PQR kuponu kalınsa alt sınırda.</li>
+          <li>PQR’daki PWHT, WPS’teki süre ve sıcaklık aralığının dışında.</li>
+          <li>Dolgu metali markası veya sınıfı, bir ek esas değişkeni etkileyip etkilemediği kontrol edilmeden değiştiriliyor.</li>
+          <li>Tedarikçi atölye WPS’leri hiçbir zaman proje listesine girmiyor ve sahada boşluk bırakıyor.</li>
+        </ul>
+      </div>
+
+      <p class="disclaimer">Proje deneyimine dayalı genel rehberdir. Her zaman güncel kod baskısını ve proje şartnamelerini kontrol edin;
+        bu sayfadaki her şeye göre onlar önceliklidir.</p>
+    </article>
   </div>
 </main>
 
@@ -294,5 +521,21 @@
   </div>
 </footer>
 
+<script>
+window.I18N_TR = {
+  __title: 'WPS/PQR Listesi Rehberi | Baris Celik',
+  crumb: 'Bilgi Bankası', kicker: 'Kaynak',
+  h1: 'Verimli bir WPS/PQR listesi hazırlamak',
+  lede: 'Projede gerçekten bulunan kaynak bağlantılarından başlayın. Çizimlerin ve şartnamelerin gerektirdiği her kaynak kombinasyonunu çıkarın, sonra bunları kodun izin verdiği en az sayıda PQR ile karşılayın. Yüklenicinin mevcut PQR kütüphanesinden başlayıp her şeyi kapsadığını ummak, boşlukların en yaygın nedenidir.',
+  fact1: '<b>Çıktı:</b> onaylı WPS/PQR listesi + boru sınıfı çapraz referansı',
+  fact2: '<b>Hazırlayan:</b> EPC yüklenicisi',
+  fact3: '<b>İnceleyen:</b> İşveren / PMC',
+  fact4: '<b>Yeterlilik standardı:</b> ASME IX veya EN ISO 15614-1',
+  toc: 'Bu sayfada',
+  t0: 'Bir bakışta süreç', t1: '1. Girdileri toplayın', t2: '2. Kaynak matrisi', t3: '3. En az PQR seti', t4: '4. Boşluk analizi',
+  t5: '5. Liste', t6: '6. Onay iş akışı', t7: '7. Amonyak ve hidrojen', t8: 'İncelemedeki hatalar'
+};
+</script>
+<script src="../../assets/js/lang.js"></script>
 </body>
 </html>

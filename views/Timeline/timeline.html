@@ -31,7 +31,7 @@
 </header>
 
 <main class="tl-page">
-<h1>Work Experience</h1>
+<h1 data-i18n="h1">Work Experience</h1>
 <ul class="timeline">
   <li style="--accent-color:#41516C">
     <div class="date">June 2026 - Ongoing</div>
@@ -106,5 +106,23 @@
 </ul>
 </main>
 
+<script>
+window.I18N_TR = { __title: 'İş Deneyimi | Baris Celik', h1: 'İş Deneyimi' };
+</script>
+<script src="../../assets/js/lang.js"></script>
+<script>
+(function () {
+  var MONTHS = { January: 'Ocak', February: 'Şubat', March: 'Mart', April: 'Nisan', May: 'Mayıs', June: 'Haziran', July: 'Temmuz',
+    August: 'Ağustos', September: 'Eylül', October: 'Ekim', November: 'Kasım', December: 'Aralık', Ongoing: 'Devam ediyor' };
+  var dates = [].slice.call(document.querySelectorAll('.timeline .date'));
+  var EN = dates.map(function (d) { return d.textContent; });
+  function render(l) {
+    dates.forEach(function (d, i) {
+      d.textContent = l === 'tr' ? EN[i].replace(/\b(January|February|March|April|May|June|July|August|September|October|November|December|Ongoing)\b/g, function (m) { return MONTHS[m]; }) : EN[i];
+    });
+  }
+  I18N.on(render); render(I18N.lang);
+})();
+</script>
 </body>
 </html>

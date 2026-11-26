@@ -28,27 +28,28 @@
 
 <main class="wrap">
   <header class="page-head">
-    <div class="kicker">Knowledge</div>
-    <h1>How to get it done</h1>
-    <p class="lede">Practical guides for quality work on EPC projects. Each one starts with a process flowchart showing who does what,
+    <div class="kicker" data-i18n="kicker">Knowledge</div>
+    <h1 data-i18n="h1">How to get it done</h1>
+    <p class="lede" data-i18n="lede">Practical guides for quality work on EPC projects. Each one starts with a process flowchart showing who does what,
       in which order, to produce a required document or result. The detail for each step follows below the chart.</p>
   </header>
 
   <div class="guides">
-    <!-- To add a guide: copy one card below, change the link, tag, title, summary and output. -->
+    <!-- To add a guide: copy one card below, change the link, tag, title, summary and output.
+         For Turkish, give each text a data-i18n key and add the Turkish text to window.I18N_TR at the bottom. -->
     <a class="guide-card" href="wps-pqr-register.html">
-      <span class="tag">Welding</span>
-      <h2>Building an efficient WPS/PQR register</h2>
-      <p>Start from the joints the project actually has, then cover them with as few PQRs as the code allows.</p>
-      <div class="out"><b>Output:</b> approved WPS/PQR register with a piping class cross-reference</div>
-      <div class="out"><b>Codes:</b> ASME IX, B31.3, B31.12, ASME VIII, API 620/650</div>
-      <span class="go">Read the guide →</span>
+      <span class="tag" data-i18n="g1_tag">Welding</span>
+      <h2 data-i18n="g1_h">Building an efficient WPS/PQR register</h2>
+      <p data-i18n="g1_p">Start from the joints the project actually has, then cover them with as few PQRs as the code allows.</p>
+      <div class="out" data-i18n="g1_out"><b>Output:</b> approved WPS/PQR register with a piping class cross-reference</div>
+      <div class="out" data-i18n="g1_codes"><b>Codes:</b> ASME IX, B31.3, B31.12, ASME VIII, API 620/650</div>
+      <span class="go" data-i18n="read">Read the guide →</span>
     </a>
 
     <div class="guide-card soon">
-      <span class="tag" style="color:var(--ink-3);background:#fff">Coming next</span>
-      <h2>More guides on the way</h2>
-      <p>Process flowcharts for other common quality deliverables.</p>
+      <span class="tag" style="color:var(--ink-3);background:#fff" data-i18n="soon_tag">Coming next</span>
+      <h2 data-i18n="soon_h">More guides on the way</h2>
+      <p data-i18n="soon_p">Process flowcharts for other common quality deliverables.</p>
     </div>
   </div>
 </main>
@@ -60,5 +61,22 @@
   </div>
 </footer>
 
+<script>
+window.I18N_TR = {
+  __title: 'Kalite Bilgi Bankası | Baris Celik',
+  kicker: 'Bilgi Bankası',
+  h1: 'Nasıl yapılır',
+  lede: 'EPC projelerinde kalite işleri için pratik rehberler. Her biri, gerekli bir doküman veya sonucu üretmek için kimin neyi hangi sırayla yaptığını gösteren bir süreç akış şemasıyla başlar. Her adımın ayrıntısı şemanın altında yer alır.',
+  g1_tag: 'Kaynak',
+  g1_h: 'Verimli bir WPS/PQR listesi hazırlamak',
+  g1_p: 'Projede gerçekten bulunan kaynak bağlantılarından başlayın, sonra bunları kodun izin verdiği en az sayıda PQR ile karşılayın.',
+  g1_out: '<b>Çıktı:</b> boru sınıfı çapraz referansıyla onaylı WPS/PQR listesi',
+  g1_codes: '<b>Kodlar:</b> ASME IX, B31.3, B31.12, ASME VIII, API 620/650',
+  read: 'Rehberi okuyun →',
+  soon_tag: 'Sıradakiler', soon_h: 'Yeni rehberler yolda',
+  soon_p: 'Diğer yaygın kalite çıktıları için süreç akış şemaları.'
+};
+</script>
+<script src="../../assets/js/lang.js"></script>
 </body>
 </html>

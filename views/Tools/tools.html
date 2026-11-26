@@ -36,14 +36,15 @@
     .jump a { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 7px 14px; font-size: 14px; text-decoration: none; color: var(--ink); font-weight: 500; }
     .jump a:hover { border-color: var(--green); color: var(--green); }
 
-    .tool { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 28px; margin: 24px 0; scroll-margin-top: 80px; }
+    .tool { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 28px; margin: 24px 0; scroll-margin-top: calc(var(--hdr, 64px) + 16px); }
     .tool h2 { margin: 0 0 4px; font-size: 24px; letter-spacing: -.01em; }
     .tool .what { color: var(--ink-2); margin: 0 0 22px; max-width: 760px; }
-    .grid2 { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; align-items: start; }
+    .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 28px; align-items: start; }
     @media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
 
     .fields { display: grid; gap: 14px; }
-    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+    .grid2 > *, .fields, .row2 > * { min-width: 0; }
     label { display: block; font-size: 13.5px; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
     input, select { width: 100%; font: inherit; font-size: 15px; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
     input:focus, select:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px var(--green-soft); }
@@ -53,7 +54,8 @@
     .seg button[aria-pressed="true"] { background: var(--green); color: #fff; font-weight: 600; }
 
     .result { background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
-    .result .big { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+    .result .big { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
+    @media (max-width: 520px) { .tool { padding: 20px 16px; } .tool .result { padding: 14px; } .tool .result .big { gap: 8px; } .tool .result .big div { padding: 10px 6px; } .tool .result .big b { font-size: 21px; } .tool .result .big b[style] { font-size: 14px !important; } }
     .result .big div { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px; text-align: center; }
     .result .big b { display: block; font-size: 30px; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
     .result .big span { font-size: 12.5px; color: var(--ink-3); }
@@ -90,58 +92,58 @@
 
 <main class="wrap">
   <header class="page">
-    <div class="kicker">Free quality tools</div>
-    <h1>Quality calculators</h1>
-    <p class="lede">Small tools I use on site, made public. Everything runs in your browser; nothing you type is sent anywhere.</p>
+    <div class="kicker" data-i18n="kicker">Free quality tools</div>
+    <h1 data-i18n="h1">Quality calculators</h1>
+    <p class="lede" data-i18n="lede">Small tools I use on site, made public. Everything runs in your browser; nothing you type is sent anywhere.</p>
     <div class="jump">
-      <a href="#sampling">Sampling plan (ISO 2859-1)</a>
-      <a href="#weld">Weld repair rate</a>
-      <a href="#punch">Punch burn-down forecast</a>
+      <a href="#sampling" data-i18n="j1">Sampling plan (ISO 2859-1)</a>
+      <a href="#weld" data-i18n="j2">Weld repair rate</a>
+      <a href="#punch" data-i18n="j3">Punch burn-down forecast</a>
     </div>
   </header>
 
   <!-- 1. Sampling plan -->
   <section class="tool" id="sampling">
-    <h2>Sampling plan – ISO 2859-1 / ANSI Z1.4</h2>
-    <p class="what">How many items to inspect from a lot, and how many defectives you can accept. Single sampling, normal inspection, nonconforming items (AQL up to 10%).</p>
+    <h2 data-i18n="s_h">Sampling plan – ISO 2859-1 / ANSI Z1.4</h2>
+    <p class="what" data-i18n="s_what">How many items to inspect from a lot, and how many defectives you can accept. Single sampling, normal inspection, nonconforming items (AQL up to 10%).</p>
     <div class="grid2">
       <div class="fields">
         <div>
-          <label for="lot">Lot size (N)</label>
+          <label for="lot" data-i18n="s_lot">Lot size (N)</label>
           <input id="lot" type="number" min="2" step="1" value="1000" inputmode="numeric">
         </div>
         <div class="row2">
           <div>
-            <label for="level">Inspection level</label>
+            <label for="level" data-i18n="s_level">Inspection level</label>
             <select id="level">
-              <option value="0">General I (reduced discrimination)</option>
-              <option value="1" selected>General II (normal)</option>
-              <option value="2">General III (more discrimination)</option>
+              <option value="0" data-i18n="s_l1">General I (reduced discrimination)</option>
+              <option value="1" selected data-i18n="s_l2">General II (normal)</option>
+              <option value="2" data-i18n="s_l3">General III (more discrimination)</option>
             </select>
           </div>
           <div>
-            <label for="aql">AQL (% nonconforming)</label>
+            <label for="aql" data-i18n="s_aql">AQL (% nonconforming)</label>
             <select id="aql"></select>
           </div>
         </div>
-        <div class="hint">General level II is the default unless the specification says otherwise.</div>
+        <div class="hint" data-i18n="s_hint">General level II is the default unless the specification says otherwise.</div>
       </div>
       <div class="result" id="samplingOut" aria-live="polite"></div>
     </div>
-    <p class="note">Based on ISO 2859-1 Table 1 (code letters) and Table 2-A (single sampling, normal inspection). For contractual use, confirm against the standard.</p>
+    <p class="note" data-i18n="s_note">Based on ISO 2859-1 Table 1 (code letters) and Table 2-A (single sampling, normal inspection). For contractual use, confirm against the standard.</p>
   </section>
 
   <!-- 2. Weld repair rate -->
   <section class="tool" id="weld">
-    <h2>Weld repair rate</h2>
-    <p class="what">Repair rate from radiography/UT results, by joints or by length, checked against your project's acceptance target.</p>
+    <h2 data-i18n="w_h">Weld repair rate</h2>
+    <p class="what" data-i18n="w_what">Repair rate from radiography/UT results, by joints or by length, checked against your project's acceptance target.</p>
     <div class="grid2">
       <div class="fields">
         <div>
-          <label>Basis</label>
-          <div class="seg" role="group" aria-label="Repair rate basis">
-            <button type="button" data-basis="joints" aria-pressed="true">By joints</button>
-            <button type="button" data-basis="length" aria-pressed="false">By length</button>
+          <label data-i18n="w_basis">Basis</label>
+          <div class="seg" role="group" aria-label="Repair rate basis" data-i18n-attr="aria-label:w_basis">
+            <button type="button" data-basis="joints" aria-pressed="true" data-i18n="w_joints">By joints</button>
+            <button type="button" data-basis="length" aria-pressed="false" data-i18n="w_length">By length</button>
           </div>
         </div>
         <div class="row2">
@@ -156,48 +158,48 @@
         </div>
         <div class="row2">
           <div>
-            <label for="wTarget">Target repair rate (%)</label>
+            <label for="wTarget" data-i18n="w_target">Target repair rate (%)</label>
             <input id="wTarget" type="number" min="0" step="0.1" value="3">
           </div>
           <div>
-            <label for="wWarn">Warning margin (%)</label>
+            <label for="wWarn" data-i18n="w_warn">Warning margin (%)</label>
             <input id="wWarn" type="number" min="0" step="0.1" value="1">
-            <div class="hint">Amber when within this margin below target.</div>
+            <div class="hint" data-i18n="w_hint">Amber when within this margin below target.</div>
           </div>
         </div>
       </div>
       <div class="result" id="weldOut" aria-live="polite"></div>
     </div>
-    <p class="note">Repair rate = rejected ÷ tested × 100. Use the definition in your project quality plan (welder-, process- or line-based) when reporting.</p>
+    <p class="note" data-i18n="w_note">Repair rate = rejected ÷ tested × 100. Use the definition in your project quality plan (welder-, process- or line-based) when reporting.</p>
   </section>
 
   <!-- 3. Punch burn-down -->
   <section class="tool" id="punch">
-    <h2>Punch burn-down forecast</h2>
-    <p class="what">When will the open punch list reach zero? Uses your weekly closure and new-item rates.</p>
+    <h2 data-i18n="p_h">Punch burn-down forecast</h2>
+    <p class="what" data-i18n="p_what">When will the open punch list reach zero? Uses your weekly closure and new-item rates.</p>
     <div class="grid2">
       <div class="fields">
         <div class="row2">
           <div>
-            <label for="pOpen">Open items today</label>
+            <label for="pOpen" data-i18n="p_open">Open items today</label>
             <input id="pOpen" type="number" min="0" step="1" value="1450">
           </div>
           <div>
-            <label for="pTarget">Target date</label>
+            <label for="pTarget" data-i18n="p_target">Target date</label>
             <input id="pTarget" type="date">
           </div>
         </div>
         <div class="row2">
           <div>
-            <label for="pClose">Closed per week</label>
+            <label for="pClose" data-i18n="p_close">Closed per week</label>
             <input id="pClose" type="number" min="0" step="1" value="180">
           </div>
           <div>
-            <label for="pNew">New items per week</label>
+            <label for="pNew" data-i18n="p_new">New items per week</label>
             <input id="pNew" type="number" min="0" step="1" value="45">
           </div>
         </div>
-        <div class="hint">Take the average of the last 4 weeks for both rates.</div>
+        <div class="hint" data-i18n="p_hint">Take the average of the last 4 weeks for both rates.</div>
       </div>
       <div class="result" id="punchOut" aria-live="polite"></div>
     </div>
@@ -212,10 +214,39 @@
 </footer>
 
 <script>
+window.I18N_TR = {
+  __title: 'Kalite Araçları | Baris Celik',
+  kicker: 'Ücretsiz kalite araçları',
+  h1: 'Kalite hesaplayıcıları',
+  lede: 'Sahada kullandığım küçük araçlar, herkesin kullanımına açık. Her şey tarayıcınızda çalışır; yazdığınız hiçbir şey bir yere gönderilmez.',
+  j1: 'Numune alma planı (ISO 2859-1)', j2: 'Kaynak tamir oranı', j3: 'Punch azalma tahmini',
+  s_h: 'Numune alma planı – ISO 2859-1 / ANSI Z1.4',
+  s_what: 'Bir partiden kaç parçanın muayene edileceği ve kaç kusurlu parçanın kabul edilebileceği. Tek numune alma, normal muayene, uygunsuz parçalar (AQL %10’a kadar).',
+  s_lot: 'Parti büyüklüğü (N)', s_level: 'Muayene seviyesi',
+  s_l1: 'Genel I (düşük ayırt edicilik)', s_l2: 'Genel II (normal)', s_l3: 'Genel III (yüksek ayırt edicilik)',
+  s_aql: 'AQL (% uygunsuz)',
+  s_hint: 'Şartname aksini belirtmedikçe varsayılan seviye Genel II’dir.',
+  s_note: 'ISO 2859-1 Tablo 1 (kod harfleri) ve Tablo 2-A’ya (tek numune alma, normal muayene) dayanır. Sözleşmeye bağlı kullanımda standarttan teyit edin.',
+  w_h: 'Kaynak tamir oranı',
+  w_what: 'Radyografi/UT sonuçlarından ek yeri veya uzunluk bazında tamir oranı, projenizin kabul hedefiyle karşılaştırmalı.',
+  w_basis: 'Hesap esası', w_joints: 'Ek yeri bazında', w_length: 'Uzunluk bazında',
+  w_target: 'Hedef tamir oranı (%)', w_warn: 'Uyarı payı (%)',
+  w_hint: 'Hedefin bu pay kadar altındayken sarı gösterir.',
+  w_note: 'Tamir oranı = reddedilen ÷ test edilen × 100. Raporlarken proje kalite planınızdaki tanımı (kaynakçı, proses veya hat bazlı) kullanın.',
+  p_h: 'Punch azalma tahmini',
+  p_what: 'Açık punch listesi ne zaman sıfıra iner? Haftalık kapatma ve yeni kayıt hızlarınızı kullanır.',
+  p_open: 'Bugün açık kalem', p_target: 'Hedef tarih', p_close: 'Haftalık kapanan', p_new: 'Haftalık yeni kalem',
+  p_hint: 'Her iki hız için son 4 haftanın ortalamasını alın.'
+};
+</script>
+<script src="../../assets/js/lang.js"></script>
+<script>
 (function () {
-  var nf = new Intl.NumberFormat('en-US');
+  var L = I18N.L;
+  function nf() { return new Intl.NumberFormat(I18N.lang === 'tr' ? 'tr-TR' : 'en-US'); }
+  function num(v, dp) { return new Intl.NumberFormat(I18N.lang === 'tr' ? 'tr-TR' : 'en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp }).format(v); }
+  function pct(s) { return L(s + '%', '%' + s); }
   function el(id) { return document.getElementById(id); }
-  function esc(s) { return String(s); }
 
   /* ---------- 1. ISO 2859-1 sampling ---------- */
   // Table 1: lot size ranges -> code letters for General I, II, III
@@ -254,107 +285,123 @@
 
   var aqlSel = el('aql');
   AQLS.forEach(function (a, k) {
-    var o = document.createElement('option'); o.value = k; o.textContent = a + ' %';
+    var o = document.createElement('option'); o.value = k;
     if (a === '1.0') o.selected = true;
     aqlSel.appendChild(o);
   });
+  function aqlLabels() {
+    [].slice.call(aqlSel.options).forEach(function (o, k) { o.textContent = I18N.lang === 'tr' ? '%' + AQLS[k].replace('.', ',') : AQLS[k] + ' %'; });
+  }
 
   function sampling() {
-    var out = el('samplingOut');
+    var out = el('samplingOut'), f = nf();
     var N = Math.floor(Number(el('lot').value));
-    if (!N || N < 2) { out.innerHTML = '<p>Enter a lot size of 2 or more.</p>'; return; }
+    if (!N || N < 2) { out.innerHTML = '<p>' + L('Enter a lot size of 2 or more.', '2 veya daha büyük bir parti büyüklüğü girin.') + '</p>'; return; }
     var lvl = Number(el('level').value), j = Number(aqlSel.value);
     var row = LOTS.find(function (r) { return N <= r[0]; });
     var letter = row[1 + lvl], i0 = LETTERS.indexOf(letter);
     var r = resolve(i0, j);
-    if (!r) { out.innerHTML = '<p>No single sampling plan in the table for this combination. Use 100% inspection or check the standard.</p>'; return; }
+    if (!r) { out.innerHTML = '<p>' + L('No single sampling plan in the table for this combination. Use 100% inspection or check the standard.', 'Bu kombinasyon için tabloda tek numune alma planı yok. %100 muayene uygulayın veya standardı kontrol edin.') + '</p>'; return; }
     var n = SIZES[r.i], ac = r.ac, re = ac + 1;
     var hundred = n >= N;
     if (hundred) n = N;
     var html = '<div class="big">' +
-      '<div><b>' + nf.format(n) + '</b><span>inspect' + (hundred ? ' (100%)' : '') + '</span></div>' +
-      '<div><b>' + ac + '</b><span>accept if ≤ (Ac)</span></div>' +
-      '<div><b>' + re + '</b><span>reject if ≥ (Re)</span></div></div>';
-    html += '<p>Code letter <b>' + letter + '</b>' + (r.moved ? ' → table arrow to letter <b>' + LETTERS[r.i] + '</b>' : '') +
-      ', sample size ' + nf.format(SIZES[r.i]) + '.</p>';
-    html += '<p>Inspect ' + nf.format(n) + ' items picked at random from the lot of ' + nf.format(N) + '. ' +
-      'If ' + (ac === 0 ? 'none is' : ac + ' or fewer are') + ' nonconforming, accept the lot; if ' + re + ' or more are, reject it.</p>';
-    if (hundred) html += '<p>The sample size is not smaller than the lot, so inspect every item.</p>';
+      '<div><b>' + f.format(n) + '</b><span>' + L('inspect', 'muayene') + (hundred ? L(' (100%)', ' (%100)') : '') + '</span></div>' +
+      '<div><b>' + ac + '</b><span>' + L('accept if ≤ (Ac)', 'kabul: ≤ (Ac)') + '</span></div>' +
+      '<div><b>' + re + '</b><span>' + L('reject if ≥ (Re)', 'ret: ≥ (Re)') + '</span></div></div>';
+    html += '<p>' + L('Code letter ', 'Kod harfi ') + '<b>' + letter + '</b>' +
+      (r.moved ? L(' → table arrow to letter ', ' → tablo okuyla ') + '<b>' + LETTERS[r.i] + '</b>' + L('', ' harfine') : '') +
+      L(', sample size ', ', numune büyüklüğü ') + f.format(SIZES[r.i]) + '.</p>';
+    html += '<p>' + L(
+      'Inspect ' + f.format(n) + ' items picked at random from the lot of ' + f.format(N) + '. If ' + (ac === 0 ? 'none is' : ac + ' or fewer are') + ' nonconforming, accept the lot; if ' + re + ' or more are, reject it.',
+      f.format(N) + ' adetlik partiden rastgele seçilen ' + f.format(n) + ' parçayı muayene edin. Uygunsuz parça sayısı ' + (ac === 0 ? 'sıfırsa' : ac + ' veya daha azsa') + ' partiyi kabul edin; ' + re + ' veya daha fazlaysa reddedin.'
+    ) + '</p>';
+    if (hundred) html += '<p>' + L('The sample size is not smaller than the lot, so inspect every item.', 'Numune büyüklüğü partiden küçük değil; tüm parçaları muayene edin.') + '</p>';
     out.innerHTML = html;
   }
   ['lot', 'level', 'aql'].forEach(function (id) { el(id).addEventListener('input', sampling); });
-  sampling();
 
   /* ---------- 2. Weld repair rate ---------- */
   var basis = 'joints';
+  function weldLabels() {
+    el('wTestedLbl').textContent = basis === 'joints' ? L('Joints tested', 'Test edilen ek yeri') : L('Length tested (mm)', 'Test edilen uzunluk (mm)');
+    el('wRepLbl').textContent = basis === 'joints' ? L('Joints rejected', 'Reddedilen ek yeri') : L('Repair length (mm)', 'Tamir uzunluğu (mm)');
+  }
   document.querySelectorAll('[data-basis]').forEach(function (b) {
     b.addEventListener('click', function () {
       basis = b.dataset.basis;
       document.querySelectorAll('[data-basis]').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-      el('wTestedLbl').textContent = basis === 'joints' ? 'Joints tested' : 'Length tested (mm)';
-      el('wRepLbl').textContent = basis === 'joints' ? 'Joints rejected' : 'Repair length (mm)';
+      weldLabels();
       if (basis === 'length') { el('wTested').value = 96000; el('wRep').value = 1850; }
       else { el('wTested').value = 420; el('wRep').value = 9; }
       weld();
     });
   });
   function weld() {
-    var out = el('weldOut');
+    var out = el('weldOut'), f = nf();
     var t = Number(el('wTested').value), r = Number(el('wRep').value);
     var target = Number(el('wTarget').value), margin = Number(el('wWarn').value) || 0;
-    if (!(t > 0) || r < 0) { out.innerHTML = '<p>Enter how much was tested (more than 0).</p>'; return; }
-    if (r > t) { out.innerHTML = '<p>Rejected cannot be more than tested.</p>'; return; }
+    if (!(t > 0) || r < 0) { out.innerHTML = '<p>' + L('Enter how much was tested (more than 0).', 'Test edilen miktarı girin (0’dan büyük).') + '</p>'; return; }
+    if (r > t) { out.innerHTML = '<p>' + L('Rejected cannot be more than tested.', 'Reddedilen, test edilenden fazla olamaz.') + '</p>'; return; }
     var rate = r / t * 100;
     var cls, msg;
-    if (rate > target) { cls = 'bad'; msg = '✕ Above target'; }
-    else if (rate > target - margin) { cls = 'warn'; msg = '! Close to target'; }
-    else { cls = 'good'; msg = '✓ Within target'; }
+    if (rate > target) { cls = 'bad'; msg = L('✕ Above target', '✕ Hedefin üzerinde'); }
+    else if (rate > target - margin) { cls = 'warn'; msg = L('! Close to target', '! Hedefe yakın'); }
+    else { cls = 'good'; msg = L('✓ Within target', '✓ Hedef içinde'); }
     var room = basis === 'joints' ? Math.floor(target / 100 * t) - r : null;
+    var tgt = pct(num(target, target % 1 ? 1 : 0));
+    var diff = rate - target;
     var html = '<div class="big">' +
-      '<div><b>' + rate.toFixed(2) + '%</b><span>repair rate</span></div>' +
-      '<div><b>' + target + '%</b><span>target</span></div>' +
-      '<div><b>' + (rate - target > 0 ? '+' : '') + (rate - target).toFixed(2) + '</b><span>points vs target</span></div></div>' +
+      '<div><b>' + pct(num(rate, 2)) + '</b><span>' + L('repair rate', 'tamir oranı') + '</span></div>' +
+      '<div><b>' + tgt + '</b><span>' + L('target', 'hedef') + '</span></div>' +
+      '<div><b>' + (diff > 0 ? '+' : '') + num(diff, 2) + '</b><span>' + L('points vs target', 'hedefe göre puan') + '</span></div></div>' +
       '<span class="verdict ' + cls + '">' + msg + '</span>';
     if (room !== null) {
       html += room >= 0
-        ? '<p>' + room + ' more rejected joint' + (room === 1 ? '' : 's') + ' at the current tested count would still keep you within ' + target + '%.</p>'
-        : '<p>To return within ' + target + '%, about ' + nf.format(Math.ceil(r / (target / 100)) - t) + ' more joints need to pass first time.</p>';
+        ? '<p>' + L(room + ' more rejected joint' + (room === 1 ? '' : 's') + ' at the current tested count would still keep you within ' + tgt + '.',
+                    'Mevcut test sayısında ' + room + ' ek yeri daha reddedilse de ' + tgt + ' içinde kalırsınız.') + '</p>'
+        : '<p>' + L('To return within ' + tgt + ', about ' + f.format(Math.ceil(r / (target / 100)) - t) + ' more joints need to pass first time.',
+                    tgt + ' içine dönmek için yaklaşık ' + f.format(Math.ceil(r / (target / 100)) - t) + ' ek yerinin daha ilk seferde geçmesi gerekiyor.') + '</p>';
     }
     out.innerHTML = html;
   }
   ['wTested', 'wRep', 'wTarget', 'wWarn'].forEach(function (id) { el(id).addEventListener('input', weld); });
-  weld();
 
   /* ---------- 3. Punch burn-down ---------- */
-  var tgt = new Date(); tgt.setDate(tgt.getDate() + 70);
-  el('pTarget').value = tgt.toISOString().slice(0, 10);
-  function fmtDate(d) { return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); }
+  var tgtDate = new Date(); tgtDate.setDate(tgtDate.getDate() + 70);
+  el('pTarget').value = tgtDate.toISOString().slice(0, 10);
+  function fmtDate(d) { return d.toLocaleDateString(I18N.locale, { day: 'numeric', month: 'short', year: 'numeric' }); }
   function punch() {
-    var out = el('punchOut');
+    var out = el('punchOut'), f = nf();
     var open = Number(el('pOpen').value), c = Number(el('pClose').value), nw = Number(el('pNew').value);
     var target = el('pTarget').value ? new Date(el('pTarget').value + 'T00:00:00') : null;
-    if (!(open >= 0)) { out.innerHTML = '<p>Enter the open items.</p>'; return; }
+    if (!(open >= 0)) { out.innerHTML = '<p>' + L('Enter the open items.', 'Açık kalem sayısını girin.') + '</p>'; return; }
     var net = c - nw;
     var today = new Date(); today.setHours(0, 0, 0, 0);
     var html;
-    if (open === 0) { out.innerHTML = '<span class="verdict good">✓ Punch list is clear</span>'; return; }
+    if (open === 0) { out.innerHTML = '<span class="verdict good">' + L('✓ Punch list is clear', '✓ Punch listesi temiz') + '</span>'; return; }
     if (net <= 0) {
-      html = '<div class="big"><div><b>' + nf.format(open) + '</b><span>open</span></div><div><b>' + net + '</b><span>net / week</span></div><div><b>never</b><span>at this rate</span></div></div>' +
-        '<span class="verdict bad">✕ The list is not shrinking</span><p>New items are arriving as fast as they are closed. Closure must rise above ' + nf.format(nw) + ' a week.</p>';
+      html = '<div class="big"><div><b>' + f.format(open) + '</b><span>' + L('open', 'açık') + '</span></div><div><b>' + f.format(net) + '</b><span>' + L('net / week', 'net / hafta') + '</span></div><div><b>' + L('never', 'asla') + '</b><span>' + L('at this rate', 'bu hızla') + '</span></div></div>' +
+        '<span class="verdict bad">' + L('✕ The list is not shrinking', '✕ Liste küçülmüyor') + '</span><p>' +
+        L('New items are arriving as fast as they are closed. Closure must rise above ' + f.format(nw) + ' a week.',
+          'Yeni kalemler kapandıkları hızda geliyor. Haftalık kapatma ' + f.format(nw) + ' kalemin üzerine çıkmalı.') + '</p>';
       out.innerHTML = html; return;
     }
     var weeks = Math.ceil(open / net);
     var finish = new Date(today); finish.setDate(finish.getDate() + weeks * 7);
-    var cls = 'good', msg = '✓ Meets the target date', extra = '';
+    var cls = 'good', msg = L('✓ Meets the target date', '✓ Hedef tarihe yetişiyor'), extra = '';
     if (target) {
       var wk = Math.max(0, (target - today) / (7 * 864e5));
       if (finish > target) {
-        cls = 'bad'; msg = '✕ Misses the target date';
+        cls = 'bad'; msg = L('✕ Misses the target date', '✕ Hedef tarihi kaçırıyor');
         var need = wk > 0 ? Math.ceil(open / wk + nw) : null;
-        extra = need ? '<p>To finish by ' + fmtDate(target) + ', close about <b>' + nf.format(need) + '</b> items a week (now ' + nf.format(c) + ').</p>' : '<p>The target date has already passed.</p>';
+        extra = need
+          ? '<p>' + L('To finish by ' + fmtDate(target) + ', close about <b>' + f.format(need) + '</b> items a week (now ' + f.format(c) + ').',
+                      fmtDate(target) + ' tarihine kadar bitirmek için haftada yaklaşık <b>' + f.format(need) + '</b> kalem kapatın (şu an ' + f.format(c) + ').') + '</p>'
+          : '<p>' + L('The target date has already passed.', 'Hedef tarih geçmiş.') + '</p>';
       }
     }
-    html = '<div class="big"><div><b>' + weeks + '</b><span>weeks to zero</span></div><div><b>' + nf.format(net) + '</b><span>net closed / week</span></div><div><b style="font-size:20px;padding:6px 0">' + fmtDate(finish) + '</b><span>forecast zero</span></div></div>' +
+    html = '<div class="big"><div><b>' + weeks + '</b><span>' + L('weeks to zero', 'sıfıra kalan hafta') + '</span></div><div><b>' + f.format(net) + '</b><span>' + L('net closed / week', 'net kapanan / hafta') + '</span></div><div><b style="font-size:20px;padding:6px 0">' + fmtDate(finish) + '</b><span>' + L('forecast zero', 'tahmini sıfır') + '</span></div></div>' +
       '<span class="verdict ' + cls + '">' + msg + '</span>' + extra;
     // burn-down chart
     var W = 520, H = 170, m = { l: 40, r: 10, t: 10, b: 24 };
@@ -363,15 +410,18 @@
     var Y = function (v) { return m.t + (H - m.t - m.b) * (1 - v / open); };
     var pts = [];
     for (var w = 0; w <= weeks; w++) pts.push(X(w).toFixed(1) + ',' + Y(Math.max(0, open - net * w)).toFixed(1));
-    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Forecast burn-down of open punch items">';
-    [0, 0.5, 1].forEach(function (f) { var y = Y(open * f); svg += '<line x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + y + '" y2="' + y + '" stroke="#e3e7e6"/><text x="' + (m.l - 6) + '" y="' + (y + 4) + '" text-anchor="end">' + nf.format(Math.round(open * f)) + '</text>'; });
-    if (target) { var tx = X(Math.max(0, (target - today) / (7 * 864e5))); svg += '<line x1="' + tx + '" x2="' + tx + '" y1="' + m.t + '" y2="' + (H - m.b) + '" stroke="#6b757b" stroke-dasharray="4 4"/><text x="' + (tx - 4) + '" y="' + (m.t + 10) + '" text-anchor="end">target</text>'; }
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + L('Forecast burn-down of open punch items', 'Açık punch kalemlerinin tahmini azalma eğrisi') + '">';
+    [0, 0.5, 1].forEach(function (fr) { var y = Y(open * fr); svg += '<line x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + y + '" y2="' + y + '" stroke="#e3e7e6"/><text x="' + (m.l - 6) + '" y="' + (y + 4) + '" text-anchor="end">' + f.format(Math.round(open * fr)) + '</text>'; });
+    if (target) { var tx = X(Math.max(0, (target - today) / (7 * 864e5))); svg += '<line x1="' + tx + '" x2="' + tx + '" y1="' + m.t + '" y2="' + (H - m.b) + '" stroke="#6b757b" stroke-dasharray="4 4"/><text x="' + (tx - 4) + '" y="' + (m.t + 10) + '" text-anchor="end">' + L('target', 'hedef') + '</text>'; }
     svg += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="#0f5c4d" stroke-width="2" stroke-linejoin="round"/>';
-    svg += '<text x="' + m.l + '" y="' + (H - 8) + '">today</text><text x="' + X(weeks) + '" y="' + (H - 8) + '" text-anchor="end">wk ' + weeks + '</text></svg>';
+    svg += '<text x="' + m.l + '" y="' + (H - 8) + '">' + L('today', 'bugün') + '</text><text x="' + X(weeks) + '" y="' + (H - 8) + '" text-anchor="end">' + L('wk ', 'hf ') + weeks + '</text></svg>';
     out.innerHTML = html + '<div class="chart">' + svg + '</div>';
   }
   ['pOpen', 'pClose', 'pNew', 'pTarget'].forEach(function (id) { el(id).addEventListener('input', punch); });
-  punch();
+
+  function renderAll() { aqlLabels(); weldLabels(); sampling(); weld(); punch(); }
+  I18N.on(renderAll);
+  renderAll();
 })();
 </script>
 </body>

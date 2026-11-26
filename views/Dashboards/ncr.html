@@ -102,6 +102,7 @@
     table.ds th { text-align: left; font-weight: 600; color: var(--text-secondary); font-size: 12px; border-bottom: 1px solid var(--border); padding: 8px 6px; white-space: nowrap; }
     table.ds td { border-bottom: 1px solid var(--grid); padding: 8px 6px; font-variant-numeric: tabular-nums; }
     table.ds td.num, table.ds th.num { text-align: right; }
+    #register td:first-child { white-space: nowrap; }
     .tbl-scroll { overflow-x: auto; }
     .status { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
     .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
@@ -137,23 +138,23 @@
 <main class="viz-root">
   <div class="wrap">
 
-    <nav class="tabs" aria-label="Dashboards">
-      <a href="dashboards.html">Completion &amp; handover</a>
-      <a href="ncr.html" aria-current="page">NCR tracking</a>
+    <nav class="tabs" aria-label="Dashboards" data-i18n-attr="aria-label:tabs">
+      <a href="dashboards.html" data-i18n="tab1">Completion &amp; handover</a>
+      <a href="ncr.html" aria-current="page" data-i18n="tab2">NCR tracking</a>
     </nav>
 
     <header class="hero">
-      <h1>NCR Tracking Dashboard</h1>
-      <p>How I track nonconformance reports across contractors and vendors on an EPC project: what is being raised,
+      <h1 data-i18n="h1">NCR Tracking Dashboard</h1>
+      <p data-i18n="lede">How I track nonconformance reports across contractors and vendors on an EPC project: what is being raised,
         how fast it is closed, where open NCRs are stuck and which causes keep coming back.</p>
-      <div class="demo-note">ⓘ <span><b>Demo data.</b> "Project X", the contractors and every NCR on this page are fictional. Cut-off: Friday 20 Nov 2026.</span></div>
+      <div class="demo-note">ⓘ <span data-i18n="demo"><b>Demo data.</b> "Project X", the contractors and every NCR on this page are fictional. Cut-off: Friday 20 Nov 2026.</span></div>
     </header>
 
-    <div class="filters" role="group" aria-label="Filters">
-      <span class="lbl">Raised against</span>
+    <div class="filters" role="group" aria-label="Filters" data-i18n-attr="aria-label:filt">
+      <span class="lbl" data-i18n="against">Raised against</span>
       <div id="chips" style="display:contents"></div>
       <span class="sep" aria-hidden="true"></span>
-      <span class="lbl">Severity</span>
+      <span class="lbl" data-i18n="severity">Severity</span>
       <div id="sev" style="display:contents"></div>
     </div>
 
@@ -161,11 +162,11 @@
       <div class="span-12 kpis" id="kpis"></div>
 
       <section class="dcard span-8">
-        <h2>NCRs raised vs closed per month</h2>
-        <p class="sub">Closed = corrective action verified on site and NCR signed off</p>
+        <h2 data-i18n="c1h">NCRs raised vs closed per month</h2>
+        <p class="sub" data-i18n="c1s">Closed = corrective action verified on site and NCR signed off</p>
         <div class="legend">
-          <span><i class="key-rect" style="background:var(--series-1)"></i>Raised</span>
-          <span><i class="key-rect" style="background:var(--series-2)"></i>Closed</span>
+          <span><i class="key-rect" style="background:var(--series-1)"></i><span data-i18n="raised">Raised</span></span>
+          <span><i class="key-rect" style="background:var(--series-2)"></i><span data-i18n="closed">Closed</span></span>
         </div>
         <div id="flow"></div>
         <button class="toggle-table" type="button" data-for="flow-table">Show data table</button>
@@ -173,65 +174,71 @@
       </section>
 
       <section class="dcard span-4">
-        <h2>Age of open NCRs</h2>
-        <p class="sub">Days since issue · target is closure within 30 days</p>
+        <h2 data-i18n="c2h">Age of open NCRs</h2>
+        <p class="sub" data-i18n="c2s">Days since issue · target is closure within 30 days</p>
         <div id="ageing"></div>
       </section>
 
       <section class="dcard span-5">
-        <h2>Open NCR backlog</h2>
-        <p class="sub">Open NCRs at each month end</p>
+        <h2 data-i18n="c3h">Open NCR backlog</h2>
+        <p class="sub" data-i18n="c3s">Open NCRs at each month end</p>
         <div id="backlog"></div>
       </section>
 
       <section class="dcard span-7">
-        <h2>NCRs by cause category</h2>
-        <p class="sub">All NCRs raised in the last 12 months, largest first</p>
+        <h2 data-i18n="c4h">NCRs by cause category</h2>
+        <p class="sub" data-i18n="c4s">All NCRs raised in the last 12 months, largest first</p>
         <div id="pareto"></div>
         <button class="toggle-table" type="button" data-for="pareto-table">Show data table</button>
         <div class="data-view" id="pareto-table"></div>
       </section>
 
       <section class="dcard span-4">
-        <h2>Where open NCRs are waiting</h2>
-        <p class="sub">Current step in the NCR workflow</p>
+        <h2 data-i18n="c5h">Where open NCRs are waiting</h2>
+        <p class="sub" data-i18n="c5s">Current step in the NCR workflow</p>
         <div id="stage"></div>
       </section>
 
       <section class="dcard span-8">
-        <h2>Overdue NCR register</h2>
-        <p class="sub">Open more than 30 days, oldest first</p>
+        <h2 data-i18n="c6h">Overdue NCR register</h2>
+        <p class="sub" data-i18n="c6s">Open more than 30 days, oldest first</p>
         <div class="tbl-scroll" id="register"></div>
       </section>
     </div>
 
     <section class="how dcard">
-      <h2>How it's built</h2>
+      <h2 data-i18n="howh">How it's built</h2>
       <div class="how-grid">
         <div>
-          <ul>
+          <ul data-lang="en">
             <li><b>Source:</b> the project NCR log (one row per NCR) with issue, response, acceptance and close-out dates, refreshed weekly.</li>
             <li><b>Overdue:</b> open more than 30 days after issue. Majors are escalated to the contractor's project manager at 14 days.</li>
             <li><b>Repeat NCR:</b> the same contractor gets an NCR for the same defect in the same area within 90 days of an earlier one being closed. A high repeat rate means the corrective action did not reach the root cause.</li>
             <li><b>Closed means verified:</b> an NCR only counts as closed once the action is checked on site, not when the contractor submits its response.</li>
           </ul>
-          <div class="flow" aria-label="NCR workflow">
-            <span class="step">Issued</span><span class="arr">→</span>
-            <span class="step">Contractor response</span><span class="arr">→</span>
-            <span class="step">Action accepted</span><span class="arr">→</span>
-            <span class="step">Verified</span><span class="arr">→</span>
-            <span class="step">Closed</span>
+          <ul data-lang="tr" hidden>
+            <li><b>Kaynak:</b> haftalık yenilenen proje NCR kaydı (her NCR için bir satır); yayım, yanıt, kabul ve kapanış tarihleriyle.</li>
+            <li><b>Gecikmiş:</b> yayımdan sonra 30 günden uzun süredir açık. Majör NCR’lar 14. günde yüklenicinin proje müdürüne eskale edilir.</li>
+            <li><b>Tekrarlayan NCR:</b> aynı yüklenici, aynı alanda aynı kusur için, öncekinin kapanmasından sonraki 90 gün içinde yeniden NCR alır. Yüksek tekrar oranı, düzeltici faaliyetin kök nedene ulaşmadığını gösterir.</li>
+            <li><b>Kapalı, doğrulanmış demektir:</b> bir NCR, yüklenici yanıtını gönderdiğinde değil, faaliyet sahada kontrol edildiğinde kapalı sayılır.</li>
+          </ul>
+          <div class="flow" aria-label="NCR workflow" data-i18n-attr="aria-label:wf">
+            <span class="step" data-i18n="f1">Issued</span><span class="arr">→</span>
+            <span class="step" data-i18n="f2">Contractor response</span><span class="arr">→</span>
+            <span class="step" data-i18n="f3">Action accepted</span><span class="arr">→</span>
+            <span class="step" data-i18n="f4">Verified</span><span class="arr">→</span>
+            <span class="step" data-i18n="f5">Closed</span>
           </div>
         </div>
         <div>
-          <div class="sub" style="margin:0">Days open (calculated column)</div>
+          <div class="sub" style="margin:0" data-i18n="dax1">Days open (calculated column)</div>
 <pre class="dax">Days Open =
 DATEDIFF (
     NCR[Issue Date],
     COALESCE ( NCR[Close Date], [Cut-off Date] ),
     DAY
 )</pre>
-          <div class="sub" style="margin:10px 0 0">Overdue NCRs</div>
+          <div class="sub" style="margin:10px 0 0" data-i18n="dax2">Overdue NCRs</div>
 <pre class="dax">Overdue NCRs =
 CALCULATE (
     COUNTROWS ( NCR ),
@@ -242,13 +249,55 @@ CALCULATE (
       </div>
     </section>
 
-    <footer class="pf">© 2026 Baris Celik · Demo built in HTML/SVG to mirror a Power BI NCR report.</footer>
+    <footer class="pf" data-i18n="foot">© 2026 Baris Celik · Demo built in HTML/SVG to mirror a Power BI NCR report.</footer>
   </div>
   <div class="tip" id="tip" role="tooltip"></div>
 </main>
 
 <script>
+window.I18N_TR = {
+  __title: 'NCR Takip Gösterge Paneli | Baris Celik',
+  tabs: 'Gösterge panelleri', tab1: 'Tamamlama ve teslim', tab2: 'NCR takibi',
+  h1: 'NCR Takip Gösterge Paneli',
+  lede: 'Bir EPC projesinde yükleniciler ve tedarikçiler genelinde uygunsuzluk raporlarını (NCR) nasıl takip ettiğim: neler açılıyor, ne kadar hızlı kapanıyor, açık NCR’lar nerede bekliyor ve hangi nedenler tekrar ediyor.',
+  demo: '<b>Demo veri.</b> “Proje X”, yükleniciler ve bu sayfadaki tüm NCR’lar kurgusaldır. Kesim tarihi: Cuma, 20 Kasım 2026.',
+  filt: 'Filtreler', against: 'Muhatap', severity: 'Önem',
+  c1h: 'Aylık açılan ve kapanan NCR’lar', c1s: 'Kapanan = düzeltici faaliyet sahada doğrulandı ve NCR imzayla kapatıldı',
+  raised: 'Açılan', closed: 'Kapanan',
+  c2h: 'Açık NCR’ların yaşı', c2s: 'Yayımdan bu yana geçen gün · hedef 30 gün içinde kapanış',
+  c3h: 'Açık NCR birikimi', c3s: 'Her ay sonunda açık NCR sayısı',
+  c4h: 'Neden kategorisine göre NCR’lar', c4s: 'Son 12 ayda açılan tüm NCR’lar, en büyükten küçüğe',
+  c5h: 'Açık NCR’lar nerede bekliyor', c5s: 'NCR iş akışındaki mevcut adım',
+  c6h: 'Gecikmiş NCR listesi', c6s: '30 günden uzun süredir açık, en eskiden yeniye',
+  howh: 'Nasıl hazırlandı', wf: 'NCR iş akışı',
+  f1: 'Yayımlandı', f2: 'Yüklenici yanıtı', f3: 'Faaliyet kabul edildi', f4: 'Doğrulandı', f5: 'Kapandı',
+  dax1: 'Açık gün sayısı (hesaplanmış sütun)', dax2: 'Gecikmiş NCR’lar',
+  foot: '© 2026 Baris Celik · Bir Power BI NCR raporunu yansıtmak için HTML/SVG ile hazırlanmış demo.'
+};
+</script>
+<script src="../../assets/js/lang.js"></script>
+<script>
 (function () {
+  var L = I18N.L;
+  // Turkish labels for the data values (the data itself stays in English)
+  var T = {
+    'Contractor A': 'Yüklenici A', 'Contractor B': 'Yüklenici B', 'Contractor C': 'Yüklenici C', 'Contractor D': 'Yüklenici D', 'Vendors': 'Tedarikçiler',
+    'Welding': 'Kaynak', 'Documentation / ITP': 'Doküman / ITP', 'Material traceability': 'Malzeme izlenebilirliği', 'Coating': 'Kaplama',
+    'Dimensional': 'Boyutsal', 'Bolting & torque': 'Cıvata ve tork', 'NDT': 'NDT', 'Calibration': 'Kalibrasyon', 'Other': 'Diğer',
+    'porosity': 'gözenek', 'undercut': 'yanma oluğu', 'lack of fusion': 'ergime yetersizliği', 'WPS not followed': 'WPS’e uyulmadı', 'welder not qualified': 'kaynakçı yeterliliği yok',
+    'hold point bypassed': 'bekleme noktası atlandı', 'ITP not approved': 'ITP onaysız', 'records incomplete': 'kayıtlar eksik', 'superseded drawing used': 'geçersiz revizyon çizim kullanıldı',
+    'heat number missing': 'döküm numarası yok', 'MTC mismatch': 'MTC uyumsuz', 'wrong material grade': 'yanlış malzeme sınıfı', 'PMI not done': 'PMI yapılmadı',
+    'DFT out of range': 'DFT aralık dışı', 'surface prep below Sa 2½': 'yüzey hazırlığı Sa 2½ altında', 'holiday test failed': 'holiday testi başarısız', 'cure time not met': 'kürlenme süresi sağlanmadı',
+    'out of tolerance': 'tolerans dışı', 'misalignment': 'eksen kaçıklığı', 'wrong orientation': 'yanlış yönlendirme',
+    'torque not recorded': 'tork kaydı yok', 'wrong gasket': 'yanlış conta', 'bolt tensioning sequence': 'cıvata gerdirme sırası',
+    'RT film quality': 'RT film kalitesi', 'UT procedure not approved': 'UT prosedürü onaysız', 'NDT % not met': 'NDT oranı sağlanmadı',
+    'expired calibration': 'kalibrasyon süresi dolmuş', 'no calibration certificate': 'kalibrasyon sertifikası yok',
+    'housekeeping': 'saha düzeni', 'storage & preservation': 'depolama ve koruma', 'unapproved subcontractor': 'onaysız taşeron',
+    'Process unit': 'Proses ünitesi', 'Utilities': 'Yardımcı tesisler', 'Pipe rack': 'Boru köprüsü', 'Tank farm': 'Tank sahası', 'Substation': 'Trafo merkezi',
+    'Awaiting response': 'Yanıt bekleniyor', 'Response under review': 'Yanıt inceleniyor', 'Action in progress': 'Faaliyet sürüyor', 'Awaiting verification': 'Doğrulama bekleniyor',
+    '0–30 days': '0–30 gün', '31–60 days': '31–60 gün', '61–90 days': '61–90 gün', 'Over 90 days': '90 günden fazla'
+  };
+  function tr(s) { return L(s, T[s] || s); }
   // ---------- Fictional data: one record per NCR ----------
   var CONTRACTORS = [
     { id: 'a', name: 'Contractor A', rate: 9,  speed: 0.9 },
@@ -278,9 +327,9 @@ CALCULATE (
   var DAY = 864e5;
   var MONTHS = [];
   for (var mi = 0; mi < 12; mi++) MONTHS.push(new Date(2025, 11 + mi, 1));
-  var fmtM = function (d) { return d.toLocaleDateString('en-GB', { month: 'short' }); };
-  var fmtMY = function (d) { return d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }); };
-  var fmtD = function (d) { return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); };
+  var fmtM = function (d) { return d.toLocaleDateString(I18N.locale, { month: 'short' }); };
+  var fmtMY = function (d) { return d.toLocaleDateString(I18N.locale, { month: 'short', year: 'numeric' }); };
+  var fmtD = function (d) { return d.toLocaleDateString(I18N.locale, { day: 'numeric', month: 'short', year: 'numeric' }); };
 
   function rng(seed) { return function () { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }; }
   var r = rng(2026);
@@ -368,8 +417,8 @@ CALCULATE (
   function el(tag, attrs, parent) { var e = document.createElementNS(SVGNS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
   function txt(tag, attrs, text, parent) { var e = el(tag, attrs, parent); e.textContent = text; return e; }
   function nice(max) { if (max <= 0) return 5; var p = Math.pow(10, Math.floor(Math.log10(max))); var step = [1, 2, 2.5, 5, 10].map(function (s) { return s * p / 2; }).find(function (s) { return max / s <= 5; }) || p * 2; return Math.ceil(max / step) * step; }
-  var nf = new Intl.NumberFormat('en-US');
-  var pct = function (x) { return Math.round(100 * x) + '%'; };
+  var nf = { format: function (v) { return new Intl.NumberFormat(I18N.lang === 'tr' ? 'tr-TR' : 'en-US').format(v); } };
+  var pct = function (x) { var v = Math.round(100 * x); return L(v + '%', '%' + v); };
   function roundedTop(x, y, w, h, rad) {
     if (h <= 0) return '';
     rad = Math.min(rad, w / 2, h);
@@ -425,15 +474,18 @@ CALCULATE (
   function renderKpis(s) {
     var k = document.getElementById('kpis'); k.innerHTML = '';
     var thisMonth = s.raisedM[11], closedNow = s.closedM[11];
+    var majors = s.overdue.filter(function (n) { return n.major; }).length;
     [
-      { l: 'NCRs raised', v: nf.format(s.rows.length), f: 'last 12 months' },
-      { l: 'Open', v: nf.format(s.open.length), f: pct(s.open.length / Math.max(1, s.rows.length)) + ' of raised',
-        tag: closedNow >= thisMonth ? ['ok', '▼ ' + closedNow + ' closed vs ' + thisMonth + ' raised in Nov'] : ['bad', '▲ ' + thisMonth + ' raised vs ' + closedNow + ' closed in Nov'] },
-      { l: 'Overdue (>30 days)', v: nf.format(s.overdue.length), f: pct(s.overdue.length / Math.max(1, s.open.length)) + ' of open',
-        tag: s.overdue.length ? ['bad', '⚠ ' + s.overdue.filter(function (n) { return n.major; }).length + ' major'] : null },
-      { l: 'Median days to close', v: s.median + ' d', f: 'target 30 days' },
-      { l: 'Closed on time', v: pct(s.onTime), f: 'within 30 days of issue' },
-      { l: 'Repeat NCRs', v: pct(s.repeat), f: 'same defect within 90 days of closure' }
+      { l: L('NCRs raised', 'Açılan NCR'), v: nf.format(s.rows.length), f: L('last 12 months', 'son 12 ay') },
+      { l: L('Open', 'Açık'), v: nf.format(s.open.length), f: L(pct(s.open.length / Math.max(1, s.rows.length)) + ' of raised', 'açılanların ' + pct(s.open.length / Math.max(1, s.rows.length)) + '’i'),
+        tag: closedNow >= thisMonth
+          ? ['ok', L('▼ ' + closedNow + ' closed vs ' + thisMonth + ' raised in Nov', '▼ Kasım’da ' + closedNow + ' kapandı, ' + thisMonth + ' açıldı')]
+          : ['bad', L('▲ ' + thisMonth + ' raised vs ' + closedNow + ' closed in Nov', '▲ Kasım’da ' + thisMonth + ' açıldı, ' + closedNow + ' kapandı')] },
+      { l: L('Overdue (>30 days)', 'Gecikmiş (>30 gün)'), v: nf.format(s.overdue.length), f: L(pct(s.overdue.length / Math.max(1, s.open.length)) + ' of open', 'açıkların ' + pct(s.overdue.length / Math.max(1, s.open.length)) + '’i'),
+        tag: s.overdue.length ? ['bad', L('⚠ ' + majors + ' major', '⚠ ' + majors + ' majör')] : null },
+      { l: L('Median days to close', 'Medyan kapanış süresi'), v: L(s.median + ' d', s.median + ' gün'), f: L('target 30 days', 'hedef 30 gün') },
+      { l: L('Closed on time', 'Zamanında kapanan'), v: pct(s.onTime), f: L('within 30 days of issue', 'yayımdan sonra 30 gün içinde') },
+      { l: L('Repeat NCRs', 'Tekrarlayan NCR'), v: pct(s.repeat), f: L('same defect within 90 days of closure', 'kapanıştan sonra 90 gün içinde aynı kusur') }
     ].forEach(function (c) {
       var card = document.createElement('div'); card.className = 'dcard kpi';
       var l = document.createElement('div'); l.className = 'k-label'; l.textContent = c.l;
@@ -448,7 +500,7 @@ CALCULATE (
   function renderFlow(s) {
     var host = document.getElementById('flow'); host.innerHTML = '';
     var W = 720, H = 260, m = { t: 12, r: 8, b: 28, l: 36 }, iw = W - m.l - m.r, ih = H - m.t - m.b;
-    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'NCRs raised and closed per month' }, host);
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': L('NCRs raised and closed per month', 'Aylık açılan ve kapanan NCR’lar') }, host);
     var ymax = nice(Math.max.apply(null, s.raisedM.concat(s.closedM)) * 1.05);
     var Y = function (v) { return m.t + ih * (1 - v / ymax); };
     var ax = el('g', { class: 'axis' }, svg);
@@ -467,16 +519,16 @@ CALCULATE (
       hoverable(hit, function (x, y) {
         a.classList.add('on'); b.classList.add('on');
         var net = s.raisedM[i] - s.closedM[i];
-        showTip(x, y, fmtMY(mo) + (i === 11 ? ' (to 20 Nov)' : ''), [
-          { name: 'Raised', value: nf.format(s.raisedM[i]), color: 'var(--series-1)' },
-          { name: 'Closed', value: nf.format(s.closedM[i]), color: 'var(--series-2)' },
-          { name: 'Backlog change', value: (net > 0 ? '+' : '') + net }
+        showTip(x, y, fmtMY(mo) + (i === 11 ? L(' (to 20 Nov)', ' (20 Kasım’a kadar)') : ''), [
+          { name: L('Raised', 'Açılan'), value: nf.format(s.raisedM[i]), color: 'var(--series-1)' },
+          { name: L('Closed', 'Kapanan'), value: nf.format(s.closedM[i]), color: 'var(--series-2)' },
+          { name: L('Backlog change', 'Birikim değişimi'), value: (net > 0 ? '+' : '') + net }
         ]);
       });
       hit.addEventListener('pointerleave', function () { a.classList.remove('on'); b.classList.remove('on'); });
       hit.addEventListener('blur', function () { a.classList.remove('on'); b.classList.remove('on'); });
     });
-    table('flow-table', ['Month', 'Raised', 'Closed', 'Open at month end'], MONTHS.map(function (mo, i) {
+    table('flow-table', [L('Month', 'Ay'), L('Raised', 'Açılan'), L('Closed', 'Kapanan'), L('Open at month end', 'Ay sonunda açık')], MONTHS.map(function (mo, i) {
       return [fmtMY(mo), nf.format(s.raisedM[i]), nf.format(s.closedM[i]), nf.format(s.backlog[i])];
     }));
   }
@@ -490,18 +542,18 @@ CALCULATE (
     var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': opts.label }, host);
     var valW = 64, iw = W - lw - valW;
     items.forEach(function (it, i) {
-      var y = i * rowH, bh = 18, by = y + (rowH - bh) / 2;
-      if (lw) txt('text', { x: lw - 10, y: by + 13, fill: 'var(--text-secondary)', 'font-size': 12.5, 'text-anchor': 'end' }, it.n, svg);
+      var y = i * rowH, bh = 18, by = y + (rowH - bh) / 2, name = tr(it.n);
+      if (lw) txt('text', { x: lw - 10, y: by + 13, fill: 'var(--text-secondary)', 'font-size': 12.5, 'text-anchor': 'end' }, name, svg);
       var color = typeof opts.color === 'function' ? opts.color(i) : opts.color;
       var w = Math.max(it.v ? 2 : 0, iw * it.v / max);
       var bar = el('path', { class: 'bar', d: roundedRight(lw, by, w, bh, 4), fill: color }, svg);
-      var share = Math.round(100 * it.v / total);
+      var share = pct(it.v / total);
       txt('text', { x: lw + w + 6, y: by + 13, fill: 'var(--text-primary)', 'font-size': 12, 'font-weight': 600 }, nf.format(it.v), svg);
-      txt('text', { x: lw + w + 6 + String(nf.format(it.v)).length * 7.5 + 4, y: by + 13, fill: 'var(--text-muted)', 'font-size': 11.5 }, share + '%', svg);
+      txt('text', { x: lw + w + 6 + String(nf.format(it.v)).length * 7.5 + 4, y: by + 13, fill: 'var(--text-muted)', 'font-size': 11.5 }, share, svg);
       var hit = el('rect', { class: 'bar-hit', x: 0, y: y, width: W, height: rowH }, svg);
       hoverable(hit, function (x, yy) {
         bar.classList.add('on');
-        showTip(x, yy, it.n, [{ name: opts.unit, value: nf.format(it.v), color: color }, { name: 'Share', value: share + '%' }]);
+        showTip(x, yy, name, [{ name: opts.unit, value: nf.format(it.v), color: color }, { name: L('Share', 'Pay'), value: share }]);
       });
       hit.addEventListener('pointerleave', function () { bar.classList.remove('on'); });
       hit.addEventListener('blur', function () { bar.classList.remove('on'); });
@@ -515,14 +567,14 @@ CALCULATE (
     var max = Math.max(1, Math.max.apply(null, items.map(function (x) { return x.v; })));
     var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': opts.label }, host);
     items.forEach(function (it, i) {
-      var y = i * rowH, color = opts.color(i), share = Math.round(100 * it.v / total);
-      txt('text', { x: 0, y: y + 14, fill: 'var(--text-secondary)', 'font-size': 12.5 }, it.n, svg);
-      txt('text', { x: W, y: y + 14, fill: 'var(--text-primary)', 'font-size': 12.5, 'font-weight': 600, 'text-anchor': 'end' }, nf.format(it.v) + '  ·  ' + share + '%', svg);
+      var y = i * rowH, color = opts.color(i), share = pct(it.v / total), name = tr(it.n);
+      txt('text', { x: 0, y: y + 14, fill: 'var(--text-secondary)', 'font-size': 12.5 }, name, svg);
+      txt('text', { x: W, y: y + 14, fill: 'var(--text-primary)', 'font-size': 12.5, 'font-weight': 600, 'text-anchor': 'end' }, nf.format(it.v) + '  ·  ' + share, svg);
       var bar = el('path', { class: 'bar', d: roundedRight(0, y + 22, Math.max(it.v ? 3 : 0, W * it.v / max), 18, 4), fill: color }, svg);
       var hit = el('rect', { class: 'bar-hit', x: 0, y: y, width: W, height: rowH - 4 }, svg);
       hoverable(hit, function (x, yy) {
         bar.classList.add('on');
-        showTip(x, yy, it.n, [{ name: 'Open NCRs', value: nf.format(it.v), color: color }, { name: 'Share of open', value: share + '%' }]);
+        showTip(x, yy, name, [{ name: L('Open NCRs', 'Açık NCR'), value: nf.format(it.v), color: color }, { name: L('Share of open', 'Açıklar içindeki pay'), value: share }]);
       });
       hit.addEventListener('pointerleave', function () { bar.classList.remove('on'); });
       hit.addEventListener('blur', function () { bar.classList.remove('on'); });
@@ -534,7 +586,7 @@ CALCULATE (
   function renderBacklog(s) {
     var host = document.getElementById('backlog'); host.innerHTML = '';
     var W = 460, H = 240, m = { t: 14, r: 34, b: 28, l: 36 }, iw = W - m.l - m.r, ih = H - m.t - m.b, N = 12;
-    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Open NCR backlog at each month end' }, host);
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': L('Open NCR backlog at each month end', 'Her ay sonunda açık NCR birikimi') }, host);
     var ymax = nice(Math.max.apply(null, s.backlog) * 1.1);
     var X = function (i) { return m.l + iw * i / (N - 1); }, Y = function (v) { return m.t + ih * (1 - v / ymax); };
     var ax = el('g', { class: 'axis' }, svg);
@@ -556,9 +608,9 @@ CALCULATE (
       cur = i; cross.setAttribute('visibility', 'visible'); dot.setAttribute('visibility', 'visible');
       cross.setAttribute('x1', X(i)); cross.setAttribute('x2', X(i)); dot.setAttribute('cx', X(i)); dot.setAttribute('cy', Y(s.backlog[i]));
       var prev = i ? s.backlog[i] - s.backlog[i - 1] : null;
-      showTip(cx, cy, (i === N - 1 ? 'Cut-off 20 Nov 2026' : 'End of ' + fmtMY(MONTHS[i])), [
-        { name: 'Open NCRs', value: nf.format(s.backlog[i]), color: 'var(--series-1)', line: true }
-      ].concat(prev === null ? [] : [{ name: 'Change', value: (prev > 0 ? '+' : '') + prev }]));
+      showTip(cx, cy, (i === N - 1 ? L('Cut-off 20 Nov 2026', 'Kesim: 20 Kasım 2026') : L('End of ' + fmtMY(MONTHS[i]), fmtMY(MONTHS[i]) + ' sonu')), [
+        { name: L('Open NCRs', 'Açık NCR'), value: nf.format(s.backlog[i]), color: 'var(--series-1)', line: true }
+      ].concat(prev === null ? [] : [{ name: L('Change', 'Değişim'), value: (prev > 0 ? '+' : '') + prev }]));
     }
     function off() { cross.setAttribute('visibility', 'hidden'); dot.setAttribute('visibility', 'hidden'); hideTip(); }
     hit.addEventListener('pointermove', function (e) {
@@ -577,70 +629,81 @@ CALCULATE (
   // ---------- Overdue register ----------
   function renderRegister(s) {
     var host = document.getElementById('register'); host.innerHTML = '';
-    if (!s.overdue.length) { host.innerHTML = '<p class="muted" style="font-size:13.5px">No overdue NCRs for this selection.</p>'; return; }
+    if (!s.overdue.length) { host.innerHTML = '<p class="muted" style="font-size:13.5px">' + L('No overdue NCRs for this selection.', 'Bu seçim için gecikmiş NCR yok.') + '</p>'; return; }
     var t = document.createElement('table'); t.className = 'ds';
     var th = t.createTHead().insertRow();
-    [['NCR no.'], ['Raised against'], ['Cause'], ['Severity'], ['Issued'], ['Days open', 'num'], ['Waiting on']].forEach(function (h) {
+    [[L('NCR no.', 'NCR no.')], [L('Raised against', 'Muhatap')], [L('Cause', 'Neden')], [L('Severity', 'Önem')], [L('Issued', 'Yayım')], [L('Days open', 'Açık gün'), 'num'], [L('Waiting on', 'Bekleyen adım')]].forEach(function (h) {
       var c = document.createElement('th'); c.textContent = h[0]; if (h[1]) c.className = h[1]; th.appendChild(c);
     });
     var tb = t.createTBody();
     s.overdue.slice(0, 10).forEach(function (n) {
-      var tr = tb.insertRow();
-      tr.insertCell().textContent = n.no;
-      tr.insertCell().textContent = NAME[n.c];
-      var cc = tr.insertCell(); cc.textContent = n.cat;
-      var iss = document.createElement('div'); iss.className = 'muted'; iss.style.fontSize = '12px'; iss.textContent = n.issue + ' · ' + n.area; cc.appendChild(iss);
-      var sv = tr.insertCell(), st = document.createElement('span'); st.className = 'status';
+      var row = tb.insertRow();
+      row.insertCell().textContent = n.no;
+      row.insertCell().textContent = tr(NAME[n.c]);
+      var cc = row.insertCell(); cc.textContent = tr(n.cat);
+      var iss = document.createElement('div'); iss.className = 'muted'; iss.style.fontSize = '12px'; iss.textContent = tr(n.issue) + ' · ' + tr(n.area); cc.appendChild(iss);
+      var sv = row.insertCell(), st = document.createElement('span'); st.className = 'status';
       var dot = document.createElement('i'); dot.className = 'dot'; dot.style.background = n.major ? 'var(--critical)' : 'var(--warning)';
-      st.appendChild(dot); st.appendChild(document.createTextNode(n.major ? 'Major' : 'Minor')); sv.appendChild(st);
-      tr.insertCell().textContent = fmtD(n.raised);
-      var d = tr.insertCell(); d.className = 'num' + (n.age > 90 ? ' late' : ''); d.textContent = n.age;
-      tr.insertCell().textContent = n.stage;
+      st.appendChild(dot); st.appendChild(document.createTextNode(n.major ? L('Major', 'Majör') : L('Minor', 'Minör'))); sv.appendChild(st);
+      row.insertCell().textContent = fmtD(n.raised);
+      var d = row.insertCell(); d.className = 'num' + (n.age > 90 ? ' late' : ''); d.textContent = n.age;
+      row.insertCell().textContent = tr(n.stage);
     });
     host.appendChild(t);
     if (s.overdue.length > 10) {
       var p = document.createElement('p'); p.className = 'sub'; p.style.margin = '10px 0 0';
-      p.textContent = 'Showing 10 of ' + s.overdue.length + ' overdue NCRs.';
+      p.textContent = L('Showing 10 of ' + s.overdue.length + ' overdue NCRs.', s.overdue.length + ' gecikmiş NCR’ın 10’u gösteriliyor.');
       host.appendChild(p);
     }
   }
 
   // ---------- Filters ----------
+  var chipSets = [];
   function chips(hostId, items, key) {
     var host = document.getElementById(hostId);
     items.forEach(function (it, i) {
       var b = document.createElement('button'); b.className = 'chip'; b.type = 'button';
-      b.textContent = it.name; b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+      b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
       b.addEventListener('click', function () {
         host.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); });
         b.setAttribute('aria-pressed', 'true'); state[key] = it.id; render();
       });
       host.appendChild(b);
     });
+    chipSets.push({ host: host, items: items });
   }
-  chips('chips', [{ id: 'all', name: 'All' }].concat(CONTRACTORS), 'c');
-  chips('sev', [{ id: 'all', name: 'All' }, { id: 'major', name: 'Major' }, { id: 'minor', name: 'Minor' }], 'sev');
+  function chipLabels() {
+    chipSets.forEach(function (cs) { [].slice.call(cs.host.children).forEach(function (b, i) { var it = cs.items[i]; b.textContent = it.tr ? L(it.name, it.tr) : tr(it.name); }); });
+  }
+  chips('chips', [{ id: 'all', name: 'All', tr: 'Tümü' }].concat(CONTRACTORS), 'c');
+  chips('sev', [{ id: 'all', name: 'All', tr: 'Tümü' }, { id: 'major', name: 'Major', tr: 'Majör' }, { id: 'minor', name: 'Minor', tr: 'Minör' }], 'sev');
 
-  document.querySelectorAll('.toggle-table').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var v = document.getElementById(b.dataset.for), open = v.classList.toggle('open');
-      b.textContent = open ? 'Hide data table' : 'Show data table';
+  var toggles = [].slice.call(document.querySelectorAll('.toggle-table'));
+  function toggleLabels() {
+    toggles.forEach(function (b) {
+      var open = document.getElementById(b.dataset.for).classList.contains('open');
+      b.textContent = open ? L('Hide data table', 'Veri tablosunu gizle') : L('Show data table', 'Veri tablosunu göster');
     });
+  }
+  toggles.forEach(function (b) {
+    b.addEventListener('click', function () { document.getElementById(b.dataset.for).classList.toggle('open'); toggleLabels(); });
   });
 
   function render() {
     var s = slice();
     renderKpis(s);
     renderFlow(s);
-    labelled('ageing', s.buckets, { label: 'Open NCRs by age', color: function (i) { return RAMP[i]; } });
+    labelled('ageing', s.buckets, { label: L('Open NCRs by age', 'Yaşa göre açık NCR’lar'), color: function (i) { return RAMP[i]; } });
     renderBacklog(s);
-    hbars('pareto', s.cats, { label: 'NCRs by cause category', W: 560, lw: 160, rowH: 30, color: 'var(--series-1)', unit: 'NCRs' });
-    table('pareto-table', ['Cause category', 'NCRs', 'Share'], s.cats.map(function (c) {
-      return [c.n, nf.format(c.v), Math.round(100 * c.v / Math.max(1, s.rows.length)) + '%'];
+    hbars('pareto', s.cats, { label: L('NCRs by cause category', 'Neden kategorisine göre NCR’lar'), W: 560, lw: 160, rowH: 30, color: 'var(--series-1)', unit: 'NCR' });
+    table('pareto-table', [L('Cause category', 'Neden kategorisi'), 'NCR', L('Share', 'Pay')], s.cats.map(function (c) {
+      return [tr(c.n), nf.format(c.v), pct(c.v / Math.max(1, s.rows.length))];
     }));
-    labelled('stage', s.stages, { label: 'Open NCRs by workflow step', color: function (i) { return RAMP[i]; } });
+    labelled('stage', s.stages, { label: L('Open NCRs by workflow step', 'İş akışı adımına göre açık NCR’lar'), color: function (i) { return RAMP[i]; } });
     renderRegister(s);
   }
+  I18N.on(function () { hideTip(); chipLabels(); toggleLabels(); render(); });
+  chipLabels(); toggleLabels();
   render();
 })();
 </script>

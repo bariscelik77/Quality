@@ -152,20 +152,20 @@
 <main class="viz-root">
   <div class="wrap">
 
-    <nav class="tabs" aria-label="Dashboards">
-      <a href="dashboards.html" aria-current="page">Completion &amp; handover</a>
-      <a href="ncr.html">NCR tracking</a>
+    <nav class="tabs" aria-label="Dashboards" data-i18n-attr="aria-label:tabs">
+      <a href="dashboards.html" aria-current="page" data-i18n="tab1">Completion &amp; handover</a>
+      <a href="ncr.html" data-i18n="tab2">NCR tracking</a>
     </nav>
 
     <header class="hero">
-      <h1>Completion &amp; Handover Dashboard</h1>
-      <p>A replica of the Power BI completion dashboards I build for large EPC projects: tracking subsystems from
+      <h1 data-i18n="h1">Completion &amp; Handover Dashboard</h1>
+      <p data-i18n="lede">A replica of the Power BI completion dashboards I build for large EPC projects: tracking subsystems from
         mechanical completion through commissioning and start-up handover, with ITR progress and punch lists in one view.</p>
-      <div class="demo-note">ⓘ <span><b>Demo data.</b> "Project X" and every figure on this page are fictional. No client or project data is shown.</span></div>
+      <div class="demo-note">ⓘ <span data-i18n="demo"><b>Demo data.</b> "Project X" and every figure on this page are fictional. No client or project data is shown.</span></div>
     </header>
 
-    <div class="filters" role="group" aria-label="Filter by area">
-      <span class="lbl">Area</span>
+    <div class="filters" role="group" aria-label="Filter by area" data-i18n-attr="aria-label:filt">
+      <span class="lbl" data-i18n="area">Area</span>
       <div id="chips" style="display:contents"></div>
     </div>
 
@@ -173,11 +173,11 @@
       <div class="span-12 kpis" id="kpis"></div>
 
       <section class="dcard span-8">
-        <h2>Cumulative CCC signed vs plan</h2>
-        <p class="sub">Construction Completion Certificates, weekly cut-off every Friday</p>
+        <h2 data-i18n="c1h">Cumulative CCC signed vs plan</h2>
+        <p class="sub" data-i18n="c1s">Construction Completion Certificates, weekly cut-off every Friday</p>
         <div class="legend">
-          <span><i class="key-line" style="border-color:var(--series-1)"></i>Actual</span>
-          <span><i class="key-line dash" style="border-color:var(--plan)"></i>Plan</span>
+          <span><i class="key-line" style="border-color:var(--series-1)"></i><span data-i18n="actual">Actual</span></span>
+          <span><i class="key-line dash" style="border-color:var(--plan)"></i><span data-i18n="plan">Plan</span></span>
         </div>
         <div id="scurve"></div>
         <button class="toggle-table" data-for="scurve-table">Show data table</button>
@@ -185,14 +185,14 @@
       </section>
 
       <section class="dcard span-4">
-        <h2>Handover funnel</h2>
-        <p class="sub">Subsystems reaching each certificate</p>
+        <h2 data-i18n="c2h">Handover funnel</h2>
+        <p class="sub" data-i18n="c2s">Subsystems reaching each certificate</p>
         <div id="funnel"></div>
       </section>
 
       <section class="dcard span-5">
-        <h2>Open punch items by discipline</h2>
-        <p class="sub">Cat A must be cleared before CCC · Cat B before handover</p>
+        <h2 data-i18n="c3h">Open punch items by discipline</h2>
+        <p class="sub" data-i18n="c3s">Cat A must be cleared before CCC · Cat B before handover</p>
         <div class="legend">
           <span><i class="key-rect" style="background:var(--series-1)"></i>Punch A</span>
           <span><i class="key-rect" style="background:var(--series-2)"></i>Punch B</span>
@@ -203,23 +203,29 @@
       </section>
 
       <section class="dcard span-7">
-        <h2>Subsystems closest to the critical path</h2>
-        <p class="sub">Not yet STCC, sorted by open Punch A</p>
+        <h2 data-i18n="c4h">Subsystems closest to the critical path</h2>
+        <p class="sub" data-i18n="c4s">Not yet STCC, sorted by open Punch A</p>
         <div id="crit"></div>
       </section>
     </div>
 
     <section class="how dcard">
-      <h2>How it's built</h2>
+      <h2 data-i18n="howh">How it's built</h2>
       <div class="how-grid">
         <div>
-          <ul>
+          <ul data-lang="en">
             <li><b>Sources:</b> completion-system exports (subsystems, ITR-A/B/C, punch, certificates) refreshed weekly.</li>
             <li><b>Model:</b> star schema with a system → subsystem hierarchy, a shared date table and a Friday week-ending key, so every page cuts off on the same day.</li>
             <li><b>Status mapping:</b> raw statuses are normalised in Power Query (e.g. “Complete” → “Completed”, not-issued items → “Outstanding”) so totals reconcile across contractors.</li>
             <li><b>Pages:</b> overall summary for management, one page per package or area, punch origin, equipment outstanding and manpower demobilisation.</li>
           </ul>
-          <div class="flow" aria-label="Handover sequence">
+          <ul data-lang="tr" hidden>
+            <li><b>Kaynaklar:</b> tamamlama sisteminden haftalık yenilenen dışa aktarımlar (alt sistemler, ITR-A/B/C, punch, sertifikalar).</li>
+            <li><b>Model:</b> sistem → alt sistem hiyerarşisi, ortak bir tarih tablosu ve Cuma hafta-sonu anahtarı olan yıldız şema; böylece her sayfa aynı günde kesilir.</li>
+            <li><b>Durum eşleştirme:</b> ham durumlar Power Query’de standartlaştırılır (ör. “Complete” → “Completed”, yayımlanmamış kalemler → “Outstanding”); böylece toplamlar yükleniciler arasında tutarlı olur.</li>
+            <li><b>Sayfalar:</b> yönetim için genel özet, her paket veya alan için bir sayfa, punch kaynağı, eksik ekipmanlar ve personel demobilizasyonu.</li>
+          </ul>
+          <div class="flow" aria-label="Handover sequence" data-i18n-attr="aria-label:seq">
             <span class="step">MC / ITR-A</span><span class="arr">→</span>
             <span class="step">CCC</span><span class="arr">→</span>
             <span class="step">ITR-B</span><span class="arr">→</span>
@@ -228,10 +234,10 @@
           </div>
         </div>
         <div>
-          <div class="sub" style="margin:0">Week-ending key (calculated column)</div>
+          <div class="sub" style="margin:0" data-i18n="dax1">Week-ending key (calculated column)</div>
 <pre class="dax">Week Ending =
 'Date'[Date] + MOD ( 6 - WEEKDAY ( 'Date'[Date], 1 ), 7 )</pre>
-          <div class="sub" style="margin:10px 0 0">Cumulative certificates signed</div>
+          <div class="sub" style="margin:10px 0 0" data-i18n="dax2">Cumulative certificates signed</div>
 <pre class="dax">CCC Signed (Cum) =
 CALCULATE (
     COUNTROWS ( Certificates ),
@@ -243,28 +249,52 @@ CALCULATE (
       </div>
     </section>
 
-    <footer class="pf">© 2026 Baris Celik · Demo built in HTML/SVG to mirror the original Power BI report layout.</footer>
+    <footer class="pf" data-i18n="foot">© 2026 Baris Celik · Demo built in HTML/SVG to mirror the original Power BI report layout.</footer>
   </div>
   <div class="tip" id="tip" role="tooltip"></div>
 </main>
 
 <script>
+window.I18N_TR = {
+  __title: 'Tamamlama Gösterge Paneli | Baris Celik',
+  tabs: 'Gösterge panelleri', tab1: 'Tamamlama ve teslim', tab2: 'NCR takibi',
+  h1: 'Tamamlama ve Teslim Gösterge Paneli',
+  lede: 'Büyük EPC projeleri için hazırladığım Power BI tamamlama panellerinin bir kopyası: alt sistemleri mekanik tamamlamadan devreye alma ve işletmeye teslime kadar izler; ITR ilerlemesi ve punch listeleri tek ekranda.',
+  demo: '<b>Demo veri.</b> “Proje X” ve bu sayfadaki tüm rakamlar kurgusaldır. Hiçbir müşteri veya proje verisi gösterilmez.',
+  filt: 'Alana göre filtrele', area: 'Alan',
+  c1h: 'Kümülatif imzalanan CCC ve plan', c1s: 'İnşaat Tamamlama Sertifikaları, her Cuma haftalık kesim',
+  actual: 'Gerçekleşen', plan: 'Plan',
+  c2h: 'Teslim hunisi', c2s: 'Her sertifikaya ulaşan alt sistemler',
+  c3h: 'Disipline göre açık punch kalemleri', c3s: 'A kategorisi CCC’den önce, B kategorisi teslimden önce kapatılmalı',
+  c4h: 'Kritik yola en yakın alt sistemler', c4s: 'Henüz STCC olmamış, açık Punch A sayısına göre sıralı',
+  howh: 'Nasıl hazırlandı', seq: 'Teslim sırası',
+  dax1: 'Hafta-sonu anahtarı (hesaplanmış sütun)', dax2: 'Kümülatif imzalanan sertifikalar',
+  foot: '© 2026 Baris Celik · Orijinal Power BI rapor düzenini yansıtmak için HTML/SVG ile hazırlanmış demo.'
+};
+</script>
+<script src="../../assets/js/lang.js"></script>
+<script>
 (function () {
+  var L = I18N.L;
   // ---------- Fictional data ----------
   var AREAS = [
-    { id: 'process',   name: 'Process',   subs: 420, progress: 0.78, lag: 0.06 },
-    { id: 'utilities', name: 'Utilities', subs: 260, progress: 0.86, lag: 0.03 },
-    { id: 'wind',      name: 'Wind',      subs: 180, progress: 0.72, lag: 0.09 },
-    { id: 'solar',     name: 'Solar',     subs: 220, progress: 0.91, lag: 0.02 },
-    { id: 'grid',      name: 'Grid',      subs: 120, progress: 0.64, lag: 0.11 }
+    { id: 'process',   name: 'Process',   tr: 'Proses',              subs: 420, progress: 0.78, lag: 0.06 },
+    { id: 'utilities', name: 'Utilities', tr: 'Yardımcı tesisler',   subs: 260, progress: 0.86, lag: 0.03 },
+    { id: 'wind',      name: 'Wind',      tr: 'Rüzgâr',              subs: 180, progress: 0.72, lag: 0.09 },
+    { id: 'solar',     name: 'Solar',     tr: 'Güneş',               subs: 220, progress: 0.91, lag: 0.02 },
+    { id: 'grid',      name: 'Grid',      tr: 'Şebeke',              subs: 120, progress: 0.64, lag: 0.11 }
   ];
+  var AREA_BY = {}; AREAS.forEach(function (a) { AREA_BY[a.id] = a; });
+  function areaName(id) { var a = AREA_BY[id]; return L(a.name, a.tr); }
   var DISCIPLINES = ['Piping', 'Mechanical', 'Electrical', 'Instrumentation', 'Civil', 'HVAC'];
+  var DISC_TR = { Piping: 'Borulama', Mechanical: 'Mekanik', Electrical: 'Elektrik', Instrumentation: 'Enstrümantasyon', Civil: 'İnşaat', HVAC: 'HVAC' };
+  function disc(d) { return L(d, DISC_TR[d]); }
 
   // Fridays: 15 May 2026 → 13 Nov 2026
   var WEEKS = [];
   for (var d = new Date(2026, 4, 15); d <= new Date(2026, 10, 13); d.setDate(d.getDate() + 7)) WEEKS.push(new Date(d));
   var N = WEEKS.length;
-  var fmt = function (dt) { return dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }); };
+  var fmt = function (dt) { return dt.toLocaleDateString(I18N.locale, { day: 'numeric', month: 'short' }); };
 
   function rng(seed) { return function () { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }; }
   function sCurve(t) { return 1 / (1 + Math.exp(-9 * (t - 0.5))); }
@@ -299,10 +329,10 @@ CALCULATE (
       var sysNo = String(100 + Math.floor(r() * 800));
       critical.push({
         id: a.name.slice(0, 2).toUpperCase() + '-' + sysNo + '-' + String.fromCharCode(65 + k) + String(1 + Math.floor(r() * 9)),
-        area: a.name,
+        area: a.id,
         itra: Math.round(70 + r() * 29),
         pa: Math.round(2 + r() * 14),
-        stage: r() > 0.45 ? 'CCC signed' : 'Awaiting CCC'
+        signed: r() > 0.45
       });
     }
     var itraDone = Math.round(a.progress * 100 + 4);
@@ -342,7 +372,7 @@ CALCULATE (
   }
   function txt(tag, attrs, text, parent) { var e = el(tag, attrs, parent); e.textContent = text; return e; }
   function nice(max) { var p = Math.pow(10, Math.floor(Math.log10(max))); var m = max / p; var s = m <= 2 ? 2 : m <= 5 ? 5 : 10; return Math.ceil(max / (s * p / 5)) * (s * p / 5); }
-  var nf = new Intl.NumberFormat('en-US');
+  var nf = { format: function (v) { return new Intl.NumberFormat(I18N.lang === 'tr' ? 'tr-TR' : 'en-US').format(v); } };
 
   var tip = document.getElementById('tip');
   function showTip(x, y, head, rows) {
@@ -370,14 +400,15 @@ CALCULATE (
   // ---------- KPIs ----------
   function renderKpis(s) {
     var k = document.getElementById('kpis'); k.innerHTML = '';
-    var pct = function (a, b) { return Math.round(100 * a / b) + '%'; };
+    var pv = function (x) { return L(x + '%', '%' + x); };
+    var ofSubs = function (a) { return L(pv(Math.round(100 * a / s.subs)) + ' of subsystems', 'alt sistemlerin ' + pv(Math.round(100 * a / s.subs)) + '’i'); };
     [
-      { l: 'Subsystems', v: nf.format(s.subs), f: 'in scope' },
-      { l: 'ITR-A complete', v: s.itra + '%', f: 'construction checks' },
-      { l: 'CCC signed', v: nf.format(s.ccc), f: pct(s.ccc, s.subs) + ' of subsystems', up: '+' + s.weekGain + ' this week' },
-      { l: 'STCC signed', v: nf.format(s.stcc), f: pct(s.stcc, s.subs) + ' of subsystems' },
-      { l: 'STSC signed', v: nf.format(s.stsc), f: pct(s.stsc, s.subs) + ' of subsystems' },
-      { l: 'Open punch A / B', v: nf.format(s.openA) + ' / ' + nf.format(s.openB), f: 'items outstanding', sm: true }
+      { l: L('Subsystems', 'Alt sistem'), v: nf.format(s.subs), f: L('in scope', 'kapsamda') },
+      { l: L('ITR-A complete', 'ITR-A tamamlanan'), v: pv(s.itra), f: L('construction checks', 'inşaat kontrolleri') },
+      { l: L('CCC signed', 'İmzalanan CCC'), v: nf.format(s.ccc), f: ofSubs(s.ccc), up: '+' + s.weekGain + L(' this week', ' bu hafta') },
+      { l: L('STCC signed', 'İmzalanan STCC'), v: nf.format(s.stcc), f: ofSubs(s.stcc) },
+      { l: L('STSC signed', 'İmzalanan STSC'), v: nf.format(s.stsc), f: ofSubs(s.stsc) },
+      { l: L('Open punch A / B', 'Açık punch A / B'), v: nf.format(s.openA) + ' / ' + nf.format(s.openB), f: L('items outstanding', 'açık kalem'), sm: true }
     ].forEach(function (c) {
       var card = document.createElement('div'); card.className = 'dcard kpi';
       var l = document.createElement('div'); l.className = 'k-label'; l.textContent = c.l;
@@ -393,7 +424,7 @@ CALCULATE (
     var host = document.getElementById('scurve'); host.innerHTML = '';
     var W = 720, H = 280, m = { t: 12, r: 64, b: 28, l: 44 };
     var iw = W - m.l - m.r, ih = H - m.t - m.b;
-    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Cumulative CCC signed vs plan by week' }, host);
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': L('Cumulative CCC signed vs plan by week', 'Haftalık kümülatif imzalanan CCC ve plan') }, host);
     var ymax = nice(Math.max(s.plan[N - 1], s.actual[N - 1]) * 1.05);
     var X = function (i) { return m.l + iw * i / (N - 1); };
     var Y = function (v) { return m.t + ih * (1 - v / ymax); };
@@ -411,7 +442,7 @@ CALCULATE (
     var ya = Y(s.actual[N - 1]), yp = Y(s.plan[N - 1]);
     if (Math.abs(ya - yp) < 14) { if (ya > yp) ya = yp + 14; else yp = ya + 14; }
     txt('text', { x: X(N - 1) + 8, y: ya + 4, fill: 'var(--text-primary)', 'font-size': 12, 'font-weight': 600 }, nf.format(s.actual[N - 1]), svg);
-    txt('text', { x: X(N - 1) + 8, y: yp + 4, fill: 'var(--text-muted)', 'font-size': 12 }, nf.format(s.plan[N - 1]) + ' plan', svg);
+    txt('text', { x: X(N - 1) + 8, y: yp + 4, fill: 'var(--text-muted)', 'font-size': 12 }, nf.format(s.plan[N - 1]) + L(' plan', ' plan'), svg);
     el('circle', { cx: X(N - 1), cy: Y(s.actual[N - 1]), r: 4, fill: 'var(--series-1)', stroke: 'var(--surface-1)', 'stroke-width': 2 }, svg);
     // crosshair
     var cross = el('line', { y1: m.t, y2: m.t + ih, stroke: 'var(--text-muted)', 'stroke-width': 1, visibility: 'hidden' }, svg);
@@ -426,10 +457,10 @@ CALCULATE (
       dotA.setAttribute('cx', X(i)); dotA.setAttribute('cy', Y(s.actual[i]));
       dotP.setAttribute('cx', X(i)); dotP.setAttribute('cy', Y(s.plan[i]));
       var gap = s.actual[i] - s.plan[i];
-      showTip(cx, cy, 'Week ending ' + fmt(WEEKS[i]) + ' 2026', [
-        { name: 'Actual', value: nf.format(s.actual[i]), color: 'var(--series-1)' },
+      showTip(cx, cy, L('Week ending ', 'Hafta bitişi: ') + fmt(WEEKS[i]) + ' 2026', [
+        { name: L('Actual', 'Gerçekleşen'), value: nf.format(s.actual[i]), color: 'var(--series-1)' },
         { name: 'Plan', value: nf.format(s.plan[i]), color: 'var(--plan)', dash: true },
-        { name: 'Variance', value: (gap > 0 ? '+' : '') + nf.format(gap), color: 'transparent' }
+        { name: L('Variance', 'Sapma'), value: (gap > 0 ? '+' : '') + nf.format(gap), color: 'transparent' }
       ]);
     }
     function off() { [cross, dotA, dotP].forEach(function (n) { n.setAttribute('visibility', 'hidden'); }); hideTip(); }
@@ -449,7 +480,7 @@ CALCULATE (
       var r = svg.getBoundingClientRect(); at(cur, r.left + r.width * X(cur) / W, r.top + r.height * Y(s.actual[cur]) / H);
     });
     // table view
-    table('scurve-table', ['Week ending', 'Plan', 'Actual', 'Variance'], WEEKS.map(function (w, i) {
+    table('scurve-table', [L('Week ending', 'Hafta bitişi'), 'Plan', L('Actual', 'Gerçekleşen'), L('Variance', 'Sapma')], WEEKS.map(function (w, i) {
       return [fmt(w), nf.format(s.plan[i]), nf.format(s.actual[i]), nf.format(s.actual[i] - s.plan[i])];
     }));
   }
@@ -458,26 +489,26 @@ CALCULATE (
   function renderFunnel(s) {
     var host = document.getElementById('funnel'); host.innerHTML = '';
     var stages = [
-      { n: 'In scope', v: s.subs, c: 'var(--ramp-1)' },
+      { n: L('In scope', 'Kapsamda'), v: s.subs, c: 'var(--ramp-1)' },
       { n: 'CCC', v: s.ccc, c: 'var(--ramp-2)' },
       { n: 'STCC', v: s.stcc, c: 'var(--ramp-3)' },
       { n: 'STSC', v: s.stsc, c: 'var(--ramp-4)' }
     ];
     var W = 360, rowH = 76, H = stages.length * rowH, lw = 0;
-    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Handover funnel' }, host);
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': L('Handover funnel', 'Teslim hunisi') }, host);
     stages.forEach(function (st, i) {
       var y = i * rowH;
       var bw = Math.max(4, (W - lw) * st.v / s.subs);
       txt('text', { x: 0, y: y + 14, fill: 'var(--text-secondary)', 'font-size': 12.5 }, st.n, svg);
       var pct = Math.round(100 * st.v / s.subs);
-      txt('text', { x: W, y: y + 14, fill: 'var(--text-primary)', 'font-size': 12.5, 'font-weight': 600, 'text-anchor': 'end' }, nf.format(st.v) + '  ·  ' + pct + '%', svg);
+      txt('text', { x: W, y: y + 14, fill: 'var(--text-primary)', 'font-size': 12.5, 'font-weight': 600, 'text-anchor': 'end' }, nf.format(st.v) + '  ·  ' + L(pct + '%', '%' + pct), svg);
       var bar = el('rect', { class: 'bar', x: lw, y: y + 22, width: bw, height: 22, rx: 4, fill: st.c }, svg);
       var hit = el('rect', { class: 'bar-hit', x: 0, y: y, width: W, height: rowH - 4, tabindex: 0 }, svg);
       var on = function (e) {
         bar.classList.add('on');
         var r = hit.getBoundingClientRect();
         var cx = e && e.clientX ? e.clientX : r.left + r.width / 2, cy = e && e.clientY ? e.clientY : r.top;
-        showTip(cx, cy, st.n, [{ name: 'Subsystems', value: nf.format(st.v), color: st.c, rect: true }, { name: 'Share of scope', value: pct + '%', color: 'transparent', rect: true }]);
+        showTip(cx, cy, st.n, [{ name: L('Subsystems', 'Alt sistem'), value: nf.format(st.v), color: st.c, rect: true }, { name: L('Share of scope', 'Kapsam payı'), value: L(pct + '%', '%' + pct), color: 'transparent', rect: true }]);
       };
       var offf = function () { bar.classList.remove('on'); hideTip(); };
       hit.addEventListener('pointermove', on); hit.addEventListener('focus', on);
@@ -492,10 +523,10 @@ CALCULATE (
     var W = 460, rowH = 34, m = { l: 104, r: 44, t: 4 }, H = m.t + rows.length * rowH;
     var iw = W - m.l - m.r;
     var max = Math.max.apply(null, rows.map(function (r) { return r.A + r.B; }));
-    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Open punch items by discipline' }, host);
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': L('Open punch items by discipline', 'Disipline göre açık punch kalemleri') }, host);
     rows.forEach(function (r, i) {
       var y = m.t + i * rowH, bh = 18, by = y + (rowH - bh) / 2;
-      txt('text', { x: m.l - 10, y: by + 13, fill: 'var(--text-secondary)', 'font-size': 12.5, 'text-anchor': 'end' }, r.d, svg);
+      txt('text', { x: m.l - 10, y: by + 13, fill: 'var(--text-secondary)', 'font-size': 12.5, 'text-anchor': 'end' }, disc(r.d), svg);
       var wa = iw * r.A / max, wb = iw * r.B / max;
       var segA = el('rect', { class: 'bar', x: m.l, y: by, width: Math.max(1, wa - 1), height: bh, fill: 'var(--series-1)' }, svg);
       // rounded data-end only on the outer segment
@@ -504,7 +535,7 @@ CALCULATE (
       [[segA, 'Punch A', r.A, 'var(--series-1)'], [segB, 'Punch B', r.B, 'var(--series-2)']].forEach(function (s2) {
         var on = function (e) {
           s2[0].classList.add('on');
-          showTip(e.clientX, e.clientY, r.d, [
+          showTip(e.clientX, e.clientY, disc(r.d), [
             { name: 'Punch A', value: nf.format(r.A), color: 'var(--series-1)', rect: true },
             { name: 'Punch B', value: nf.format(r.B), color: 'var(--series-2)', rect: true }
           ]);
@@ -513,8 +544,8 @@ CALCULATE (
         s2[0].addEventListener('pointerleave', function () { s2[0].classList.remove('on'); hideTip(); });
       });
     });
-    table('punch-table', ['Discipline', 'Punch A', 'Punch B', 'Total'], rows.map(function (r) {
-      return [r.d, nf.format(r.A), nf.format(r.B), nf.format(r.A + r.B)];
+    table('punch-table', [L('Discipline', 'Disiplin'), 'Punch A', 'Punch B', L('Total', 'Toplam')], rows.map(function (r) {
+      return [disc(r.d), nf.format(r.A), nf.format(r.B), nf.format(r.A + r.B)];
     }));
   }
   function roundedRight(x, y, w, h, r) {
@@ -528,23 +559,23 @@ CALCULATE (
     var host = document.getElementById('crit'); host.innerHTML = '';
     var t = document.createElement('table'); t.className = 'ds';
     var th = t.createTHead().insertRow();
-    [['Subsystem', ''], ['Area', ''], ['ITR-A', ''], ['Punch A', 'num'], ['Stage', '']].forEach(function (h) {
+    [[L('Subsystem', 'Alt sistem'), ''], [L('Area', 'Alan'), ''], ['ITR-A', ''], ['Punch A', 'num'], [L('Stage', 'Aşama'), '']].forEach(function (h) {
       var c = document.createElement('th'); c.textContent = h[0]; if (h[1]) c.className = h[1]; th.appendChild(c);
     });
     var tb = t.createTBody();
     s.critical.forEach(function (r) {
       var tr = tb.insertRow();
       tr.insertCell().textContent = r.id;
-      tr.insertCell().textContent = r.area;
+      tr.insertCell().textContent = areaName(r.area);
       var c3 = tr.insertCell();
       var pb = document.createElement('span'); pb.className = 'pbar'; var fill = document.createElement('i'); fill.style.width = r.itra + '%'; pb.appendChild(fill);
-      c3.appendChild(pb); c3.appendChild(document.createTextNode(r.itra + '%'));
+      c3.appendChild(pb); c3.appendChild(document.createTextNode(L(r.itra + '%', '%' + r.itra)));
       var c4 = tr.insertCell(); c4.className = 'num'; c4.textContent = r.pa;
       var c5 = tr.insertCell();
       var st = document.createElement('span'); st.className = 'status';
       var dot = document.createElement('i'); dot.className = 'dot';
-      dot.style.background = r.stage === 'CCC signed' ? 'var(--good)' : 'var(--warning)';
-      st.appendChild(dot); st.appendChild(document.createTextNode((r.stage === 'CCC signed' ? '✓ ' : '◷ ') + r.stage));
+      dot.style.background = r.signed ? 'var(--good)' : 'var(--warning)';
+      st.appendChild(dot); st.appendChild(document.createTextNode(r.signed ? L('✓ CCC signed', '✓ CCC imzalandı') : L('◷ Awaiting CCC', '◷ CCC bekleniyor')));
       c5.appendChild(st);
     });
     host.appendChild(t);
@@ -559,19 +590,26 @@ CALCULATE (
     rows.forEach(function (r) { var tr = tb.insertRow(); r.forEach(function (v, i) { var c = tr.insertCell(); c.textContent = v; if (i) c.className = 'num'; }); });
     host.appendChild(t);
   }
-  document.querySelectorAll('.toggle-table').forEach(function (b) {
+  var toggles = [].slice.call(document.querySelectorAll('.toggle-table'));
+  function toggleLabels() {
+    toggles.forEach(function (b) {
+      var open = document.getElementById(b.dataset.for).classList.contains('open');
+      b.textContent = open ? L('Hide data table', 'Veri tablosunu gizle') : L('Show data table', 'Veri tablosunu göster');
+    });
+  }
+  toggles.forEach(function (b) {
     b.addEventListener('click', function () {
-      var v = document.getElementById(b.dataset.for);
-      var open = v.classList.toggle('open');
-      b.textContent = open ? 'Hide data table' : 'Show data table';
+      document.getElementById(b.dataset.for).classList.toggle('open');
+      toggleLabels();
     });
   });
 
   // ---------- Filters ----------
   var chips = document.getElementById('chips');
-  [{ id: 'all', name: 'All areas' }].concat(AREAS).forEach(function (a, i) {
+  var CHIP_AREAS = [{ id: 'all', name: 'All areas', tr: 'Tüm alanlar' }].concat(AREAS);
+  CHIP_AREAS.forEach(function (a, i) {
     var b = document.createElement('button'); b.className = 'chip'; b.type = 'button';
-    b.textContent = a.name; b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+    b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
     b.addEventListener('click', function () {
       chips.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); });
       b.setAttribute('aria-pressed', 'true');
@@ -579,11 +617,16 @@ CALCULATE (
     });
     chips.appendChild(b);
   });
+  function chipLabels() { [].slice.call(chips.children).forEach(function (b, i) { b.textContent = L(CHIP_AREAS[i].name, CHIP_AREAS[i].tr); }); }
 
+  var current = 'all';
   function render(id) {
+    current = id;
     var s = slice(id);
     renderKpis(s); renderScurve(s); renderFunnel(s); renderPunch(s); renderCrit(s);
   }
+  I18N.on(function () { hideTip(); chipLabels(); toggleLabels(); render(current); });
+  chipLabels(); toggleLabels();
   render('all');
 })();
 </script>
