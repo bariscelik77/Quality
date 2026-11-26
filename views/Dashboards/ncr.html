@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NCR Tracking Dashboard | Baris Celik</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Demo of a nonconformance report (NCR) tracking dashboard: raised vs closed, ageing, root-cause Pareto and overdue register. Built by Baris Celik. All data is fictional.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* shared site header */
+    .site-top { position: sticky; top: 0; z-index: 1000; background: rgba(255,255,255,.94); backdrop-filter: blur(8px); border-bottom: 1px solid #e3e7e6; font-family: "Inter", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; }
+    .site-wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; box-sizing: border-box; }
+    .site-brand { font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #101314; text-decoration: none; font-size: 15px; }
+    .site-brand span { color: #0f5c4d; }
+    .site-nav { display: flex; gap: 20px; }
+    .site-nav a { color: #4a5359; text-decoration: none; font-size: 14.5px; font-weight: 500; }
+    .site-nav a:hover, .site-nav a.active { color: #0f5c4d; }
+    @media (max-width: 560px) { .site-nav { gap: 14px; } .site-nav a { font-size: 13.5px; } }
+
+    .viz-root {
+      color-scheme: light;
+      --page: #f3f2ef;
+      --surface-1: #fcfcfb;
+      --border: #e2e1dc;
+      --grid: #ebeae6;
+      --text-primary: #0b0b0b;
+      --text-secondary: #52514e;
+      --text-muted: #6f6e69;
+      --series-1: #2a78d6;
+      --series-2: #eb6834;
+      --ramp-1: #86b6ef; --ramp-2: #5598e7; --ramp-3: #2a78d6; --ramp-4: #1c5cab;
+      --good: #0ca30c; --warning: #fab219; --critical: #d03b3b;
+      --good-text: #006300; --critical-text: #a32020;
+      --tip-bg: #ffffff;
+    }
+    body { margin: 0; }
+    .viz-root * { box-sizing: border-box; }
+    .viz-root h1, .viz-root h2, .viz-root h3 { color: var(--text-primary); }
+    .viz-root {
+      background: var(--page); color: var(--text-primary);
+      font-family: "Inter", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+      min-height: 100vh; padding: 24px 0 48px;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+    .tabs { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 18px; background: var(--surface-1); }
+    .tabs a { padding: 7px 14px; font-size: 13.5px; font-weight: 600; color: var(--text-secondary); text-decoration: none; }
+    .tabs a + a { border-left: 1px solid var(--border); }
+    .tabs a[aria-current="page"] { background: var(--text-primary); color: var(--surface-1); }
+
+    .hero h1 { font-size: 30px; font-weight: 700; margin: 0 0 6px; }
+    .hero p { color: var(--text-secondary); max-width: 760px; margin: 0 0 14px; font-size: 16px; line-height: 1.5; }
+    .demo-note { display: inline-flex; gap: 8px; align-items: center; border: 1px solid var(--border); background: var(--surface-1); border-radius: 8px; padding: 6px 12px; font-size: 13px; color: var(--text-secondary); }
+    .demo-note b { color: var(--text-primary); }
+
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 22px 0 16px; }
+    .filters .lbl { font-size: 13px; color: var(--text-muted); margin-right: 4px; }
+    .filters .sep { width: 1px; height: 22px; background: var(--border); margin: 0 6px; }
+    .chip { border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary); border-radius: 999px; padding: 6px 14px; font-size: 14px; cursor: pointer; font-family: inherit; }
+    .chip:hover { border-color: var(--text-muted); }
+    .chip[aria-pressed="true"] { background: var(--text-primary); color: var(--surface-1); border-color: var(--text-primary); font-weight: 600; }
+    .chip:focus-visible { outline: 2px solid var(--series-1); outline-offset: 2px; }
+
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(12, 1fr); }
+    .dcard { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+    .dcard h2 { font-size: 15px; font-weight: 600; margin: 0 0 2px; }
+    .dcard .sub { font-size: 12.5px; color: var(--text-muted); margin: 0 0 10px; }
+    .span-12 { grid-column: span 12; } .span-8 { grid-column: span 8; } .span-4 { grid-column: span 4; }
+    .span-7 { grid-column: span 7; } .span-5 { grid-column: span 5; }
+    @media (max-width: 900px) { .span-8, .span-4, .span-7, .span-5 { grid-column: span 12; } }
+
+    .kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+    @media (max-width: 900px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+    .kpi .k-label { font-size: 12.5px; color: var(--text-secondary); margin-bottom: 6px; }
+    .kpi .k-value { white-space: nowrap; font-size: 28px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .kpi .k-foot { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+    .kpi .k-foot .bad { color: var(--critical-text); font-weight: 600; display: block; }
+    .kpi .k-foot .ok { color: var(--good-text); font-weight: 600; display: block; }
+
+    .legend { display: flex; gap: 16px; font-size: 12.5px; color: var(--text-secondary); margin-bottom: 4px; flex-wrap: wrap; }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .key-line { width: 18px; height: 0; border-top: 2px solid; display: inline-block; }
+    .key-line.dash { border-top-style: dashed; }
+    .key-rect { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+    svg { display: block; width: 100%; height: auto; overflow: visible; }
+    svg text { font-family: inherit; }
+    .axis text { fill: var(--text-muted); font-size: 11px; }
+    .gridline { stroke: var(--grid); stroke-width: 1; }
+    .bar-hit { fill: transparent; }
+    .bar:hover, .bar.on { filter: brightness(1.12); }
+
+    .tip { position: fixed; pointer-events: none; z-index: 50; display: none; background: var(--tip-bg); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,.14); padding: 8px 10px; font-size: 12.5px; min-width: 150px; }
+    .tip .t-head { color: var(--text-muted); margin-bottom: 4px; }
+    .tip .t-row { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+    .tip .t-row .nm { display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary); }
+    .tip .t-row b { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+
+    table.ds { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    table.ds th { text-align: left; font-weight: 600; color: var(--text-secondary); font-size: 12px; border-bottom: 1px solid var(--border); padding: 8px 6px; white-space: nowrap; }
+    table.ds td { border-bottom: 1px solid var(--grid); padding: 8px 6px; font-variant-numeric: tabular-nums; }
+    table.ds td.num, table.ds th.num { text-align: right; }
+    .tbl-scroll { overflow-x: auto; }
+    .status { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+    .muted { color: var(--text-muted); }
+    .late { color: var(--critical-text); font-weight: 600; }
+
+    .toggle-table { background: none; border: none; color: var(--series-1); font-size: 12.5px; padding: 0; cursor: pointer; text-decoration: underline; font-family: inherit; }
+    .data-view { display: none; margin-top: 10px; max-height: 260px; overflow: auto; }
+    .data-view.open { display: block; }
+
+    .how { margin-top: 28px; }
+    .how h2 { font-size: 20px; font-weight: 700; margin: 0 0 12px; }
+    .how-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 28px; }
+    @media (max-width: 900px) { .how-grid { grid-template-columns: minmax(0,1fr); } }
+    .how ul { color: var(--text-secondary); line-height: 1.6; padding-left: 20px; margin: 0; }
+    .how li b { color: var(--text-primary); }
+    pre.dax { background: var(--page); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; font-size: 12.5px; color: var(--text-primary); overflow-x: auto; margin: 8px 0 0; }
+    .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 12px; }
+    .flow span.step { border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 13px; background: var(--page); }
+    .flow span.arr { color: var(--text-muted); }
+    footer.pf { margin-top: 30px; font-size: 12.5px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+<header class="site-top">
+  <div class="site-wrap">
+    <a class="site-brand" href="../../index.html" lang="en">Baris <span>Celik</span></a>
+    <nav class="site-nav"><a href="../../index.html">Home</a><a href="../Timeline/timeline.html">Timeline</a><a href="dashboards.html" class="active">Dashboards</a><a href="../Tools/tools.html">Tools</a></nav>
+  </div>
+</header>
+
+<main class="viz-root">
+  <div class="wrap">
+
+    <nav class="tabs" aria-label="Dashboards">
+      <a href="dashboards.html">Completion &amp; handover</a>
+      <a href="ncr.html" aria-current="page">NCR tracking</a>
+    </nav>
+
+    <header class="hero">
+      <h1>NCR Tracking Dashboard</h1>
+      <p>How I track nonconformance reports across contractors and vendors on an EPC project: what is being raised,
+        how fast it is closed, where open NCRs are stuck and which causes keep coming back.</p>
+      <div class="demo-note">ⓘ <span><b>Demo data.</b> "Project X", the contractors and every NCR on this page are fictional. Cut-off: Friday 20 Nov 2026.</span></div>
+    </header>
+
+    <div class="filters" role="group" aria-label="Filters">
+      <span class="lbl">Raised against</span>
+      <div id="chips" style="display:contents"></div>
+      <span class="sep" aria-hidden="true"></span>
+      <span class="lbl">Severity</span>
+      <div id="sev" style="display:contents"></div>
+    </div>
+
+    <div class="grid">
+      <div class="span-12 kpis" id="kpis"></div>
+
+      <section class="dcard span-8">
+        <h2>NCRs raised vs closed per month</h2>
+        <p class="sub">Closed = corrective action verified on site and NCR signed off</p>
+        <div class="legend">
+          <span><i class="key-rect" style="background:var(--series-1)"></i>Raised</span>
+          <span><i class="key-rect" style="background:var(--series-2)"></i>Closed</span>
+        </div>
+        <div id="flow"></div>
+        <button class="toggle-table" type="button" data-for="flow-table">Show data table</button>
+        <div class="data-view" id="flow-table"></div>
+      </section>
+
+      <section class="dcard span-4">
+        <h2>Age of open NCRs</h2>
+        <p class="sub">Days since issue · target is closure within 30 days</p>
+        <div id="ageing"></div>
+      </section>
+
+      <section class="dcard span-5">
+        <h2>Open NCR backlog</h2>
+        <p class="sub">Open NCRs at each month end</p>
+        <div id="backlog"></div>
+      </section>
+
+      <section class="dcard span-7">
+        <h2>NCRs by cause category</h2>
+        <p class="sub">All NCRs raised in the last 12 months, largest first</p>
+        <div id="pareto"></div>
+        <button class="toggle-table" type="button" data-for="pareto-table">Show data table</button>
+        <div class="data-view" id="pareto-table"></div>
+      </section>
+
+      <section class="dcard span-4">
+        <h2>Where open NCRs are waiting</h2>
+        <p class="sub">Current step in the NCR workflow</p>
+        <div id="stage"></div>
+      </section>
+
+      <section class="dcard span-8">
+        <h2>Overdue NCR register</h2>
+        <p class="sub">Open more than 30 days, oldest first</p>
+        <div class="tbl-scroll" id="register"></div>
+      </section>
+    </div>
+
+    <section class="how dcard">
+      <h2>How it's built</h2>
+      <div class="how-grid">
+        <div>
+          <ul>
+            <li><b>Source:</b> the project NCR log (one row per NCR) with issue, response, acceptance and close-out dates, refreshed weekly.</li>
+            <li><b>Overdue:</b> open more than 30 days after issue. Majors are escalated to the contractor's project manager at 14 days.</li>
+            <li><b>Repeat NCR:</b> the same contractor gets an NCR for the same defect in the same area within 90 days of an earlier one being closed. A high repeat rate means the corrective action did not reach the root cause.</li>
+            <li><b>Closed means verified:</b> an NCR only counts as closed once the action is checked on site, not when the contractor submits its response.</li>
+          </ul>
+          <div class="flow" aria-label="NCR workflow">
+            <span class="step">Issued</span><span class="arr">→</span>
+            <span class="step">Contractor response</span><span class="arr">→</span>
+            <span class="step">Action accepted</span><span class="arr">→</span>
+            <span class="step">Verified</span><span class="arr">→</span>
+            <span class="step">Closed</span>
+          </div>
+        </div>
+        <div>
+          <div class="sub" style="margin:0">Days open (calculated column)</div>
+<pre class="dax">Days Open =
+DATEDIFF (
+    NCR[Issue Date],
+    COALESCE ( NCR[Close Date], [Cut-off Date] ),
+    DAY
+)</pre>
+          <div class="sub" style="margin:10px 0 0">Overdue NCRs</div>
+<pre class="dax">Overdue NCRs =
+CALCULATE (
+    COUNTROWS ( NCR ),
+    ISBLANK ( NCR[Close Date] ),
+    NCR[Days Open] &gt; 30
+)</pre>
+        </div>
+      </div>
+    </section>
+
+    <footer class="pf">© 2026 Baris Celik · Demo built in HTML/SVG to mirror a Power BI NCR report.</footer>
+  </div>
+  <div class="tip" id="tip" role="tooltip"></div>
+</main>
+
+<script>
+(function () {
+  // ---------- Fictional data: one record per NCR ----------
+  var CONTRACTORS = [
+    { id: 'a', name: 'Contractor A', rate: 9,  speed: 0.9 },
+    { id: 'b', name: 'Contractor B', rate: 7,  speed: 1.25 },
+    { id: 'c', name: 'Contractor C', rate: 6,  speed: 0.8 },
+    { id: 'd', name: 'Contractor D', rate: 4,  speed: 1.5 },
+    { id: 'v', name: 'Vendors',      rate: 5,  speed: 1.1 }
+  ];
+  var CATS = [
+    ['Welding', 22], ['Documentation / ITP', 18], ['Material traceability', 14], ['Coating', 11],
+    ['Dimensional', 9], ['Bolting & torque', 8], ['NDT', 7], ['Calibration', 6], ['Other', 5]
+  ];
+  var ISSUES = {
+    'Welding': ['porosity', 'undercut', 'lack of fusion', 'WPS not followed', 'welder not qualified'],
+    'Documentation / ITP': ['hold point bypassed', 'ITP not approved', 'records incomplete', 'superseded drawing used'],
+    'Material traceability': ['heat number missing', 'MTC mismatch', 'wrong material grade', 'PMI not done'],
+    'Coating': ['DFT out of range', 'surface prep below Sa 2½', 'holiday test failed', 'cure time not met'],
+    'Dimensional': ['out of tolerance', 'misalignment', 'wrong orientation'],
+    'Bolting & torque': ['torque not recorded', 'wrong gasket', 'bolt tensioning sequence'],
+    'NDT': ['RT film quality', 'UT procedure not approved', 'NDT % not met'],
+    'Calibration': ['expired calibration', 'no calibration certificate'],
+    'Other': ['housekeeping', 'storage & preservation', 'unapproved subcontractor']
+  };
+  var AREAS = ['Process unit', 'Utilities', 'Pipe rack', 'Tank farm', 'Substation'];
+  var STAGES = ['Awaiting response', 'Response under review', 'Action in progress', 'Awaiting verification'];
+  var CUTOFF = new Date(2026, 10, 20);
+  var DAY = 864e5;
+  var MONTHS = [];
+  for (var mi = 0; mi < 12; mi++) MONTHS.push(new Date(2025, 11 + mi, 1));
+  var fmtM = function (d) { return d.toLocaleDateString('en-GB', { month: 'short' }); };
+  var fmtMY = function (d) { return d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }); };
+  var fmtD = function (d) { return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); };
+
+  function rng(seed) { return function () { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }; }
+  var r = rng(2026);
+  function pick(list) {
+    var tot = list.reduce(function (s, x) { return s + x[1]; }, 0), t = r() * tot;
+    for (var i = 0; i < list.length; i++) { t -= list[i][1]; if (t <= 0) return list[i][0]; }
+    return list[list.length - 1][0];
+  }
+
+  var NCRS = [];
+  CONTRACTORS.forEach(function (c) {
+    var seq = 0;
+    MONTHS.forEach(function (m, i) {
+      // volume peaks mid-year with construction activity
+      var n = Math.round(c.rate * (0.65 + 0.7 * Math.sin(Math.PI * (i + 1) / 13)) * (0.75 + 0.5 * r()));
+      var lastDay = i === 11 ? CUTOFF.getDate() : new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
+      for (var k = 0; k < n; k++) {
+        var raised = new Date(m.getFullYear(), m.getMonth(), 1 + Math.floor(r() * lastDay));
+        var major = r() < 0.18;
+        var days = Math.round(c.speed * (8 + 42 * Math.pow(r(), 2.2)) + (major ? 12 : 0) + (r() < 0.08 ? 60 + 60 * r() : 0));
+        var closed = new Date(raised.getTime() + days * DAY);
+        var cat = pick(CATS), list = ISSUES[cat];
+        NCRS.push({
+          c: c.id, cat: cat, issue: list[Math.floor(r() * list.length)], area: AREAS[Math.floor(r() * AREAS.length)], major: major, raised: raised,
+          closed: closed <= CUTOFF ? closed : null
+        });
+      }
+    });
+  });
+  NCRS.sort(function (x, y) { return x.raised - y.raised; });
+  var counters = {};
+  NCRS.forEach(function (n) {
+    counters[n.c] = (counters[n.c] || 0) + 1;
+    n.no = 'NCR-' + n.c.toUpperCase() + '-' + String(counters[n.c]).padStart(4, '0');
+    n.age = Math.round(((n.closed || CUTOFF) - n.raised) / DAY);
+    if (!n.closed) {
+      var a = Math.round((CUTOFF - n.raised) / DAY);
+      var w = a < 10 ? [6, 2, 1, 0] : a < 30 ? [3, 3, 3, 1] : [2, 2, 4, 3];
+      n.stage = pick(STAGES.map(function (s, i) { return [s, w[i]]; }));
+    }
+  });
+  // repeat = same contractor + same defect raised again within 90 days of an earlier NCR being closed
+  NCRS.forEach(function (n, i) {
+    for (var j = 0; j < i; j++) {
+      var p = NCRS[j];
+      if (p.c === n.c && p.issue === n.issue && p.area === n.area && p.closed && p.closed <= n.raised && (n.raised - p.closed) / DAY <= 90) { n.repeat = true; break; }
+    }
+  });
+  var NAME = {}; CONTRACTORS.forEach(function (c) { NAME[c.id] = c.name; });
+
+  // ---------- slicing ----------
+  var state = { c: 'all', sev: 'all' };
+  function slice() {
+    var rows = NCRS.filter(function (n) {
+      return (state.c === 'all' || n.c === state.c) && (state.sev === 'all' || (state.sev === 'major') === n.major);
+    });
+    var open = rows.filter(function (n) { return !n.closed; });
+    var closed = rows.filter(function (n) { return n.closed; });
+    var monthIdx = function (d) { return (d.getFullYear() - 2025) * 12 + d.getMonth() - 11; };
+    var raisedM = MONTHS.map(function () { return 0; }), closedM = raisedM.slice();
+    rows.forEach(function (n) { raisedM[monthIdx(n.raised)]++; if (n.closed) closedM[monthIdx(n.closed)]++; });
+    var backlog = MONTHS.map(function (m, i) {
+      var end = i === 11 ? CUTOFF : new Date(m.getFullYear(), m.getMonth() + 1, 0);
+      return rows.filter(function (n) { return n.raised <= end && (!n.closed || n.closed > end); }).length;
+    });
+    var buckets = [['0–30 days', 0, 30], ['31–60 days', 31, 60], ['61–90 days', 61, 90], ['Over 90 days', 91, 1e9]].map(function (b) {
+      return { n: b[0], v: open.filter(function (n) { return n.age >= b[1] && n.age <= b[2]; }).length };
+    });
+    var cats = CATS.map(function (c) { return { n: c[0], v: rows.filter(function (n) { return n.cat === c[0]; }).length }; })
+      .sort(function (a, b) { return b.v - a.v; });
+    var stages = STAGES.map(function (s) { return { n: s, v: open.filter(function (n) { return n.stage === s; }).length }; });
+    var durs = closed.map(function (n) { return n.age; }).sort(function (a, b) { return a - b; });
+    var median = durs.length ? durs[Math.floor(durs.length / 2)] : 0;
+    return {
+      rows: rows, open: open, closed: closed, raisedM: raisedM, closedM: closedM, backlog: backlog,
+      buckets: buckets, cats: cats, stages: stages, median: median,
+      onTime: closed.length ? closed.filter(function (n) { return n.age <= 30; }).length / closed.length : 0,
+      overdue: open.filter(function (n) { return n.age > 30; }).sort(function (a, b) { return b.age - a.age; }),
+      repeat: rows.length ? rows.filter(function (n) { return n.repeat; }).length / rows.length : 0
+    };
+  }
+
+  // ---------- helpers ----------
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent) { var e = document.createElementNS(SVGNS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+  function txt(tag, attrs, text, parent) { var e = el(tag, attrs, parent); e.textContent = text; return e; }
+  function nice(max) { if (max <= 0) return 5; var p = Math.pow(10, Math.floor(Math.log10(max))); var step = [1, 2, 2.5, 5, 10].map(function (s) { return s * p / 2; }).find(function (s) { return max / s <= 5; }) || p * 2; return Math.ceil(max / step) * step; }
+  var nf = new Intl.NumberFormat('en-US');
+  var pct = function (x) { return Math.round(100 * x) + '%'; };
+  function roundedTop(x, y, w, h, rad) {
+    if (h <= 0) return '';
+    rad = Math.min(rad, w / 2, h);
+    return 'M' + x + ' ' + (y + h) + 'V' + (y + rad) + 'Q' + x + ' ' + y + ' ' + (x + rad) + ' ' + y +
+      'H' + (x + w - rad) + 'Q' + (x + w) + ' ' + y + ' ' + (x + w) + ' ' + (y + rad) + 'V' + (y + h) + 'Z';
+  }
+  function roundedRight(x, y, w, h, rad) {
+    if (w <= 0) return '';
+    rad = Math.min(rad, w, h / 2);
+    return 'M' + x + ' ' + y + 'H' + (x + w - rad) + 'Q' + (x + w) + ' ' + y + ' ' + (x + w) + ' ' + (y + rad) +
+      'V' + (y + h - rad) + 'Q' + (x + w) + ' ' + (y + h) + ' ' + (x + w - rad) + ' ' + (y + h) + 'H' + x + 'Z';
+  }
+
+  var tip = document.getElementById('tip');
+  function showTip(x, y, head, rows) {
+    tip.innerHTML = '';
+    var h = document.createElement('div'); h.className = 't-head'; h.textContent = head; tip.appendChild(h);
+    rows.forEach(function (rw) {
+      var row = document.createElement('div'); row.className = 't-row';
+      var nm = document.createElement('span'); nm.className = 'nm';
+      if (rw.color) { var key = document.createElement('i'); key.className = rw.line ? 'key-line' : 'key-rect'; key.style[rw.line ? 'borderColor' : 'background'] = rw.color; nm.appendChild(key); }
+      nm.appendChild(document.createTextNode(rw.name));
+      var b = document.createElement('b'); b.textContent = rw.value;
+      row.appendChild(nm); row.appendChild(b); tip.appendChild(row);
+    });
+    tip.style.display = 'block';
+    var w = tip.offsetWidth, hgt = tip.offsetHeight, left = x + 14, top = y - hgt - 10;
+    if (left + w > window.innerWidth - 8) left = x - w - 14;
+    if (top < 8) top = y + 14;
+    tip.style.left = left + 'px'; tip.style.top = top + 'px';
+  }
+  function hideTip() { tip.style.display = 'none'; }
+  function hoverable(node, onFn) {
+    node.setAttribute('tabindex', 0);
+    var on = function (e) {
+      var b = node.getBoundingClientRect();
+      onFn(e && e.clientX ? e.clientX : b.left + b.width / 2, e && e.clientY ? e.clientY : b.top);
+    };
+    node.addEventListener('pointermove', on); node.addEventListener('focus', on);
+    node.addEventListener('pointerleave', hideTip); node.addEventListener('blur', hideTip);
+  }
+  function table(id, heads, rows) {
+    var host = document.getElementById(id); host.innerHTML = '';
+    var t = document.createElement('table'); t.className = 'ds';
+    var hr = t.createTHead().insertRow();
+    heads.forEach(function (h, i) { var c = document.createElement('th'); c.textContent = h; if (i) c.className = 'num'; hr.appendChild(c); });
+    var tb = t.createTBody();
+    rows.forEach(function (rw) { var tr = tb.insertRow(); rw.forEach(function (v, i) { var c = tr.insertCell(); c.textContent = v; if (i) c.className = 'num'; }); });
+    host.appendChild(t);
+  }
+
+  // ---------- KPIs ----------
+  function renderKpis(s) {
+    var k = document.getElementById('kpis'); k.innerHTML = '';
+    var thisMonth = s.raisedM[11], closedNow = s.closedM[11];
+    [
+      { l: 'NCRs raised', v: nf.format(s.rows.length), f: 'last 12 months' },
+      { l: 'Open', v: nf.format(s.open.length), f: pct(s.open.length / Math.max(1, s.rows.length)) + ' of raised',
+        tag: closedNow >= thisMonth ? ['ok', '▼ ' + closedNow + ' closed vs ' + thisMonth + ' raised in Nov'] : ['bad', '▲ ' + thisMonth + ' raised vs ' + closedNow + ' closed in Nov'] },
+      { l: 'Overdue (>30 days)', v: nf.format(s.overdue.length), f: pct(s.overdue.length / Math.max(1, s.open.length)) + ' of open',
+        tag: s.overdue.length ? ['bad', '⚠ ' + s.overdue.filter(function (n) { return n.major; }).length + ' major'] : null },
+      { l: 'Median days to close', v: s.median + ' d', f: 'target 30 days' },
+      { l: 'Closed on time', v: pct(s.onTime), f: 'within 30 days of issue' },
+      { l: 'Repeat NCRs', v: pct(s.repeat), f: 'same defect within 90 days of closure' }
+    ].forEach(function (c) {
+      var card = document.createElement('div'); card.className = 'dcard kpi';
+      var l = document.createElement('div'); l.className = 'k-label'; l.textContent = c.l;
+      var v = document.createElement('div'); v.className = 'k-value'; v.textContent = c.v;
+      var f = document.createElement('div'); f.className = 'k-foot'; f.textContent = c.f;
+      if (c.tag) { var u = document.createElement('span'); u.className = c.tag[0]; u.textContent = c.tag[1]; f.appendChild(u); }
+      card.appendChild(l); card.appendChild(v); card.appendChild(f); k.appendChild(card);
+    });
+  }
+
+  // ---------- Raised vs closed (grouped bars) ----------
+  function renderFlow(s) {
+    var host = document.getElementById('flow'); host.innerHTML = '';
+    var W = 720, H = 260, m = { t: 12, r: 8, b: 28, l: 36 }, iw = W - m.l - m.r, ih = H - m.t - m.b;
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'NCRs raised and closed per month' }, host);
+    var ymax = nice(Math.max.apply(null, s.raisedM.concat(s.closedM)) * 1.05);
+    var Y = function (v) { return m.t + ih * (1 - v / ymax); };
+    var ax = el('g', { class: 'axis' }, svg);
+    for (var t = 0; t <= 5; t++) {
+      var v = ymax * t / 5;
+      el('line', { class: 'gridline', x1: m.l, x2: m.l + iw, y1: Y(v), y2: Y(v) }, ax);
+      txt('text', { x: m.l - 8, y: Y(v) + 4, 'text-anchor': 'end' }, nf.format(v), ax);
+    }
+    var band = iw / 12, bw = Math.min(18, (band - 14) / 2);
+    MONTHS.forEach(function (mo, i) {
+      var cx = m.l + band * (i + .5);
+      txt('text', { x: cx, y: H - 8, 'text-anchor': 'middle' }, fmtM(mo), ax);
+      var a = el('path', { class: 'bar', d: roundedTop(cx - bw - 1, Y(s.raisedM[i]), bw, ih + m.t - Y(s.raisedM[i]), 4), fill: 'var(--series-1)' }, svg);
+      var b = el('path', { class: 'bar', d: roundedTop(cx + 1, Y(s.closedM[i]), bw, ih + m.t - Y(s.closedM[i]), 4), fill: 'var(--series-2)' }, svg);
+      var hit = el('rect', { class: 'bar-hit', x: cx - band / 2, y: m.t, width: band, height: ih }, svg);
+      hoverable(hit, function (x, y) {
+        a.classList.add('on'); b.classList.add('on');
+        var net = s.raisedM[i] - s.closedM[i];
+        showTip(x, y, fmtMY(mo) + (i === 11 ? ' (to 20 Nov)' : ''), [
+          { name: 'Raised', value: nf.format(s.raisedM[i]), color: 'var(--series-1)' },
+          { name: 'Closed', value: nf.format(s.closedM[i]), color: 'var(--series-2)' },
+          { name: 'Backlog change', value: (net > 0 ? '+' : '') + net }
+        ]);
+      });
+      hit.addEventListener('pointerleave', function () { a.classList.remove('on'); b.classList.remove('on'); });
+      hit.addEventListener('blur', function () { a.classList.remove('on'); b.classList.remove('on'); });
+    });
+    table('flow-table', ['Month', 'Raised', 'Closed', 'Open at month end'], MONTHS.map(function (mo, i) {
+      return [fmtMY(mo), nf.format(s.raisedM[i]), nf.format(s.closedM[i]), nf.format(s.backlog[i])];
+    }));
+  }
+
+  // ---------- horizontal bars (ageing, stage, pareto) ----------
+  function hbars(id, items, opts) {
+    var host = document.getElementById(id); host.innerHTML = '';
+    var W = opts.W || 360, rowH = opts.rowH || 34, lw = opts.lw || 0, H = items.length * rowH;
+    var total = items.reduce(function (t, x) { return t + x.v; }, 0) || 1;
+    var max = Math.max(1, Math.max.apply(null, items.map(function (x) { return x.v; })));
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': opts.label }, host);
+    var valW = 64, iw = W - lw - valW;
+    items.forEach(function (it, i) {
+      var y = i * rowH, bh = 18, by = y + (rowH - bh) / 2;
+      if (lw) txt('text', { x: lw - 10, y: by + 13, fill: 'var(--text-secondary)', 'font-size': 12.5, 'text-anchor': 'end' }, it.n, svg);
+      var color = typeof opts.color === 'function' ? opts.color(i) : opts.color;
+      var w = Math.max(it.v ? 2 : 0, iw * it.v / max);
+      var bar = el('path', { class: 'bar', d: roundedRight(lw, by, w, bh, 4), fill: color }, svg);
+      var share = Math.round(100 * it.v / total);
+      txt('text', { x: lw + w + 6, y: by + 13, fill: 'var(--text-primary)', 'font-size': 12, 'font-weight': 600 }, nf.format(it.v), svg);
+      txt('text', { x: lw + w + 6 + String(nf.format(it.v)).length * 7.5 + 4, y: by + 13, fill: 'var(--text-muted)', 'font-size': 11.5 }, share + '%', svg);
+      var hit = el('rect', { class: 'bar-hit', x: 0, y: y, width: W, height: rowH }, svg);
+      hoverable(hit, function (x, yy) {
+        bar.classList.add('on');
+        showTip(x, yy, it.n, [{ name: opts.unit, value: nf.format(it.v), color: color }, { name: 'Share', value: share + '%' }]);
+      });
+      hit.addEventListener('pointerleave', function () { bar.classList.remove('on'); });
+      hit.addEventListener('blur', function () { bar.classList.remove('on'); });
+    });
+  }
+  function labelled(id, items, opts) {
+    // label above bar variant for narrow cards
+    var host = document.getElementById(id); host.innerHTML = '';
+    var W = 360, rowH = 54, H = items.length * rowH;
+    var total = items.reduce(function (t, x) { return t + x.v; }, 0) || 1;
+    var max = Math.max(1, Math.max.apply(null, items.map(function (x) { return x.v; })));
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': opts.label }, host);
+    items.forEach(function (it, i) {
+      var y = i * rowH, color = opts.color(i), share = Math.round(100 * it.v / total);
+      txt('text', { x: 0, y: y + 14, fill: 'var(--text-secondary)', 'font-size': 12.5 }, it.n, svg);
+      txt('text', { x: W, y: y + 14, fill: 'var(--text-primary)', 'font-size': 12.5, 'font-weight': 600, 'text-anchor': 'end' }, nf.format(it.v) + '  ·  ' + share + '%', svg);
+      var bar = el('path', { class: 'bar', d: roundedRight(0, y + 22, Math.max(it.v ? 3 : 0, W * it.v / max), 18, 4), fill: color }, svg);
+      var hit = el('rect', { class: 'bar-hit', x: 0, y: y, width: W, height: rowH - 4 }, svg);
+      hoverable(hit, function (x, yy) {
+        bar.classList.add('on');
+        showTip(x, yy, it.n, [{ name: 'Open NCRs', value: nf.format(it.v), color: color }, { name: 'Share of open', value: share + '%' }]);
+      });
+      hit.addEventListener('pointerleave', function () { bar.classList.remove('on'); });
+      hit.addEventListener('blur', function () { bar.classList.remove('on'); });
+    });
+  }
+  var RAMP = ['var(--ramp-1)', 'var(--ramp-2)', 'var(--ramp-3)', 'var(--ramp-4)'];
+
+  // ---------- Backlog line ----------
+  function renderBacklog(s) {
+    var host = document.getElementById('backlog'); host.innerHTML = '';
+    var W = 460, H = 240, m = { t: 14, r: 34, b: 28, l: 36 }, iw = W - m.l - m.r, ih = H - m.t - m.b, N = 12;
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Open NCR backlog at each month end' }, host);
+    var ymax = nice(Math.max.apply(null, s.backlog) * 1.1);
+    var X = function (i) { return m.l + iw * i / (N - 1); }, Y = function (v) { return m.t + ih * (1 - v / ymax); };
+    var ax = el('g', { class: 'axis' }, svg);
+    for (var t = 0; t <= 4; t++) {
+      var v = ymax * t / 4;
+      el('line', { class: 'gridline', x1: m.l, x2: m.l + iw, y1: Y(v), y2: Y(v) }, ax);
+      txt('text', { x: m.l - 8, y: Y(v) + 4, 'text-anchor': 'end' }, nf.format(v), ax);
+    }
+    for (var i = 0; i < N; i += 2) txt('text', { x: X(i), y: H - 8, 'text-anchor': 'middle' }, fmtM(MONTHS[i]), ax);
+    el('path', { d: s.backlog.map(function (v, i) { return (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1); }).join(' '),
+      fill: 'none', stroke: 'var(--series-1)', 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+    el('circle', { cx: X(N - 1), cy: Y(s.backlog[N - 1]), r: 4, fill: 'var(--series-1)', stroke: 'var(--surface-1)', 'stroke-width': 2 }, svg);
+    txt('text', { x: X(N - 1) + 8, y: Y(s.backlog[N - 1]) + 4, fill: 'var(--text-primary)', 'font-size': 12, 'font-weight': 600 }, nf.format(s.backlog[N - 1]), svg);
+    var cross = el('line', { y1: m.t, y2: m.t + ih, stroke: 'var(--text-muted)', 'stroke-width': 1, visibility: 'hidden' }, svg);
+    var dot = el('circle', { r: 4.5, fill: 'var(--series-1)', stroke: 'var(--surface-1)', 'stroke-width': 2, visibility: 'hidden' }, svg);
+    var hit = el('rect', { x: m.l, y: m.t, width: iw, height: ih, fill: 'transparent', tabindex: 0 }, svg);
+    var cur = N - 1;
+    function at(i, cx, cy) {
+      cur = i; cross.setAttribute('visibility', 'visible'); dot.setAttribute('visibility', 'visible');
+      cross.setAttribute('x1', X(i)); cross.setAttribute('x2', X(i)); dot.setAttribute('cx', X(i)); dot.setAttribute('cy', Y(s.backlog[i]));
+      var prev = i ? s.backlog[i] - s.backlog[i - 1] : null;
+      showTip(cx, cy, (i === N - 1 ? 'Cut-off 20 Nov 2026' : 'End of ' + fmtMY(MONTHS[i])), [
+        { name: 'Open NCRs', value: nf.format(s.backlog[i]), color: 'var(--series-1)', line: true }
+      ].concat(prev === null ? [] : [{ name: 'Change', value: (prev > 0 ? '+' : '') + prev }]));
+    }
+    function off() { cross.setAttribute('visibility', 'hidden'); dot.setAttribute('visibility', 'hidden'); hideTip(); }
+    hit.addEventListener('pointermove', function (e) {
+      var b = svg.getBoundingClientRect(), px = (e.clientX - b.left) * W / b.width;
+      at(Math.max(0, Math.min(N - 1, Math.round((px - m.l) / iw * (N - 1)))), e.clientX, e.clientY);
+    });
+    hit.addEventListener('pointerleave', off); hit.addEventListener('blur', off);
+    var kb = function () { var b = svg.getBoundingClientRect(); at(cur, b.left + b.width * X(cur) / W, b.top + b.height * Y(s.backlog[cur]) / H); };
+    hit.addEventListener('focus', kb);
+    hit.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault(); cur = Math.max(0, Math.min(N - 1, cur + (e.key === 'ArrowRight' ? 1 : -1))); kb();
+    });
+  }
+
+  // ---------- Overdue register ----------
+  function renderRegister(s) {
+    var host = document.getElementById('register'); host.innerHTML = '';
+    if (!s.overdue.length) { host.innerHTML = '<p class="muted" style="font-size:13.5px">No overdue NCRs for this selection.</p>'; return; }
+    var t = document.createElement('table'); t.className = 'ds';
+    var th = t.createTHead().insertRow();
+    [['NCR no.'], ['Raised against'], ['Cause'], ['Severity'], ['Issued'], ['Days open', 'num'], ['Waiting on']].forEach(function (h) {
+      var c = document.createElement('th'); c.textContent = h[0]; if (h[1]) c.className = h[1]; th.appendChild(c);
+    });
+    var tb = t.createTBody();
+    s.overdue.slice(0, 10).forEach(function (n) {
+      var tr = tb.insertRow();
+      tr.insertCell().textContent = n.no;
+      tr.insertCell().textContent = NAME[n.c];
+      var cc = tr.insertCell(); cc.textContent = n.cat;
+      var iss = document.createElement('div'); iss.className = 'muted'; iss.style.fontSize = '12px'; iss.textContent = n.issue + ' · ' + n.area; cc.appendChild(iss);
+      var sv = tr.insertCell(), st = document.createElement('span'); st.className = 'status';
+      var dot = document.createElement('i'); dot.className = 'dot'; dot.style.background = n.major ? 'var(--critical)' : 'var(--warning)';
+      st.appendChild(dot); st.appendChild(document.createTextNode(n.major ? 'Major' : 'Minor')); sv.appendChild(st);
+      tr.insertCell().textContent = fmtD(n.raised);
+      var d = tr.insertCell(); d.className = 'num' + (n.age > 90 ? ' late' : ''); d.textContent = n.age;
+      tr.insertCell().textContent = n.stage;
+    });
+    host.appendChild(t);
+    if (s.overdue.length > 10) {
+      var p = document.createElement('p'); p.className = 'sub'; p.style.margin = '10px 0 0';
+      p.textContent = 'Showing 10 of ' + s.overdue.length + ' overdue NCRs.';
+      host.appendChild(p);
+    }
+  }
+
+  // ---------- Filters ----------
+  function chips(hostId, items, key) {
+    var host = document.getElementById(hostId);
+    items.forEach(function (it, i) {
+      var b = document.createElement('button'); b.className = 'chip'; b.type = 'button';
+      b.textContent = it.name; b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+      b.addEventListener('click', function () {
+        host.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); });
+        b.setAttribute('aria-pressed', 'true'); state[key] = it.id; render();
+      });
+      host.appendChild(b);
+    });
+  }
+  chips('chips', [{ id: 'all', name: 'All' }].concat(CONTRACTORS), 'c');
+  chips('sev', [{ id: 'all', name: 'All' }, { id: 'major', name: 'Major' }, { id: 'minor', name: 'Minor' }], 'sev');
+
+  document.querySelectorAll('.toggle-table').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var v = document.getElementById(b.dataset.for), open = v.classList.toggle('open');
+      b.textContent = open ? 'Hide data table' : 'Show data table';
+    });
+  });
+
+  function render() {
+    var s = slice();
+    renderKpis(s);
+    renderFlow(s);
+    labelled('ageing', s.buckets, { label: 'Open NCRs by age', color: function (i) { return RAMP[i]; } });
+    renderBacklog(s);
+    hbars('pareto', s.cats, { label: 'NCRs by cause category', W: 560, lw: 160, rowH: 30, color: 'var(--series-1)', unit: 'NCRs' });
+    table('pareto-table', ['Cause category', 'NCRs', 'Share'], s.cats.map(function (c) {
+      return [c.n, nf.format(c.v), Math.round(100 * c.v / Math.max(1, s.rows.length)) + '%'];
+    }));
+    labelled('stage', s.stages, { label: 'Open NCRs by workflow step', color: function (i) { return RAMP[i]; } });
+    renderRegister(s);
+  }
+  render();
+})();
+</script>
+</body>
+</html>

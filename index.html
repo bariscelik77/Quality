@@ -277,7 +277,7 @@
         </div>
       </div>
       <div class="portrait">
-        <img src="./assets/images/Bariscelik.png" alt="Photo of Baris Celik" width="300" height="375">
+        <img src="./assets/images/Bariscelik.jpg" alt="Photo of Baris Celik" width="300" height="375">
       </div>
     </div>
   </section>
@@ -285,7 +285,7 @@
   <div class="stats">
     <div class="wrap">
       <div class="stat"><b>20+</b><span data-i18n="st1">years in quality</span></div>
-      <div class="stat"><b>11</b><span data-i18n="st2">EPC megaprojects</span></div>
+      <div class="stat"><b>11</b><span data-i18n="st2">major projects</span></div>
       <div class="stat"><b>5</b><span data-i18n="st3">countries</span></div>
       <div class="stat"><b data-i18n="st4b">Owner &amp; EPC</b><span data-i18n="st4">for BP, Aramco, ADNOC, LUKOIL</span></div>
     </div>
@@ -360,7 +360,7 @@
       </div>
       <div class="proj-grid">
         <article class="proj-card feature">
-          <img src="./assets/images/main-12.png" alt="NEOM Green Hydrogen project" loading="lazy">
+          <img src="./assets/images/main-12.jpg" alt="NEOM Green Hydrogen project" loading="lazy">
           <div class="body">
             <span data-i18n="tag1" class="tag">Green hydrogen · 2023 – present</span>
             <h3>NEOM Green Hydrogen Project</h3>
@@ -389,7 +389,7 @@
           </div>
         </article>
         <article class="proj-card">
-          <img src="./assets/images/SD2.png" alt="Shah Deniz Stage 2 terminal" loading="lazy">
+          <img src="./assets/images/SD2.jpg" alt="Shah Deniz Stage 2 terminal" loading="lazy">
           <div class="body">
             <span data-i18n="tag4" class="tag">Gas · 2016 – 2018</span>
             <h3>Shah Deniz Stage 2 Onshore Terminal</h3>
@@ -478,13 +478,17 @@
     <div class="wrap dash">
       <div>
         <div data-i18n="dash_k" class="kicker">Digital quality</div>
-        <div class="sec-head" style="margin-bottom:0"><h2 data-i18n="dash_h">Completion dashboards</h2></div>
+        <div class="sec-head" style="margin-bottom:0"><h2 data-i18n="dash_h">Quality dashboards</h2></div>
         <ul>
           <li data-i18n="dash_l1">Subsystem tracking from mechanical completion to start-up (CCC → STCC → STSC)</li>
           <li data-i18n="dash_l2">ITR progress, punch A/B by discipline and the critical-path list in one view</li>
+          <li data-i18n="dash_l4">NCR tracking: raised vs closed, ageing, root causes and the overdue register</li>
           <li data-i18n="dash_l3">Weekly Friday cut-off so every report agrees</li>
         </ul>
-        <a data-i18n="dash_btn" class="btn btn-primary" href="./views/Dashboards/dashboards.html">Open the interactive demo</a>
+        <div class="cta" style="display:flex;flex-wrap:wrap;gap:10px">
+          <a data-i18n="dash_btn" class="btn btn-primary" href="./views/Dashboards/dashboards.html">Completion demo</a>
+          <a data-i18n="dash_btn2" class="btn btn-ghost" href="./views/Dashboards/ncr.html">NCR tracking demo</a>
+        </div>
       </div>
       <a class="shot" href="./views/Dashboards/dashboards.html" aria-label="Open the dashboard demo">
         <img src="./assets/images/dashboard-preview.jpg" alt="Preview of the completion dashboard demo" loading="lazy" width="960" height="679">
@@ -534,7 +538,7 @@
     eyebrow: 'Kalite · Tamamlama · Devreye Alma',
     role: 'Kıdemli Kalite Müdürü · NEOM Green Hydrogen Company',
     lede: 'Orta Doğu ve Orta Asya’daki milyar dolarlık EPC projelerinde QA/QC, tamamlama ve operasyonel hazırlık alanında 20 yılı aşkın liderlik deneyimi. Şu anda dünyanın en büyük yeşil hidrojen ve amonyak tesisinin kalite yönetimini yürütüyorum.',
-    st1: 'yıl kalite deneyimi', st2: 'EPC megaprojesi', st3: 'ülke', st4b: 'İşveren &amp; EPC', st4: 'BP, Aramco, ADNOC, LUKOIL için',
+    st1: 'yıl kalite deneyimi', st2: 'büyük proje', st3: 'ülke', st4b: 'İşveren &amp; EPC', st4: 'BP, Aramco, ADNOC, LUKOIL için',
     about_k: 'Hakkımda', about_h: 'İlk kaynaktan devreye almaya kalite',
     about_p1: 'NEOM Green Hydrogen Company’de HIDC, GHE ve PWE (Şebeke, Rüzgâr, Güneş) paketlerinde İşveren QA/QC ekibini yönetiyorum: yüklenicilerin kalite planlarını inceliyor, kalite programlarını denetliyor ve teslime kadar performansı raporluyorum.',
     about_p2: 'NEOM’dan önce BP, Saudi Aramco, ADNOC ve LUKOIL için rafineri, LNG, petrokimya, upstream ve enerji projelerinde işveren ve EPC yüklenicileri adına kalite ve tamamlama faaliyetlerini yönettim. ISO 9001 ve müşteri standartlarına uygun proje kalite sistemleri kuruyor, tamamlama verilerini gerçekten kullanılan gösterge panellerine dönüştürmeyi seviyorum.',
@@ -567,11 +571,13 @@
     t1_h: 'Numune alma planı (ISO 2859-1)', t1_p: 'Her parti ve AQL için numune büyüklüğü ve kabul/ret sayıları.',
     t2_h: 'Kaynak tamir oranı', t2_p: 'Ek yeri veya uzunluk bazında tamir oranı, hedefinizle karşılaştırmalı.',
     t3_h: 'Punch azalma tahmini', t3_p: 'Punch listesinin ne zaman sıfırlanacağı ve hedef tarih için gereken kapatma hızı.',
-    dash_k: 'Dijital kalite', dash_h: 'Tamamlama gösterge panelleri',
+    dash_k: 'Dijital kalite', dash_h: 'Kalite gösterge panelleri',
+    dash_l4: 'NCR takibi: açılan ve kapanan NCR’lar, yaşlandırma, kök nedenler ve gecikmiş NCR listesi',
+    dash_btn2: 'NCR takip demosu',
     dash_l1: 'Mekanik tamamlamadan devreye almaya alt sistem takibi (CCC → STCC → STSC)',
     dash_l2: 'ITR ilerlemesi, disipline göre A/B punch ve kritik yol listesi tek ekranda',
     dash_l3: 'Her raporun aynı sonucu vermesi için haftalık Cuma kesim tarihi',
-    dash_btn: 'İnteraktif demoyu açın',
+    dash_btn: 'Tamamlama demosu',
     ct_h: 'Görüşelim', ct_p: 'Enerji ve altyapı projeleri için kalite liderliği, tamamlama ve devreye alma hazırlığı.',
     f_tl: 'Zaman çizelgesi'
   };
