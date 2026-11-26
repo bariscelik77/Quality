@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WPS/PQR Register Guide | Baris Celik</title>
+  <meta name="description" content="How to build an efficient WPS/PQR register for an EPC project: process flowchart, welding matrix, PQR rationalisation, gap analysis, approval workflow and ammonia/hydrogen points.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="knowledge.css">
+</head>
+<body>
+
+<header class="site-top">
+  <div class="wrap">
+    <a class="site-brand" href="../../index.html">Baris <span>Celik</span></a>
+    <nav class="site-nav">
+      <a href="../../index.html">Home</a>
+      <a href="../Timeline/timeline.html" class="hide-sm">Timeline</a>
+      <a href="../Dashboards/dashboards.html" class="hide-sm">Dashboards</a>
+      <a href="../Tools/tools.html">Tools</a>
+      <a href="knowledge.html" class="active">Knowledge</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <header class="page-head">
+    <div class="crumbs"><a href="knowledge.html">Knowledge</a> › Welding</div>
+    <div class="kicker">Welding</div>
+    <h1>Building an efficient WPS/PQR register</h1>
+    <p class="lede">Start from the joints the project actually has. Work out every welding combination the drawings and specs
+      require, then cover them with as few PQRs as the code allows. Starting from the contractor's existing PQR library and
+      hoping it covers everything is the usual source of gaps.</p>
+    <div class="facts">
+      <span><b>Output:</b> approved WPS/PQR register + piping class cross-reference</span>
+      <span><b>Prepared by:</b> EPC contractor</span>
+      <span><b>Reviewed by:</b> Owner / PMC</span>
+      <span><b>Qualification standard:</b> ASME IX or EN ISO 15614-1</span>
+    </div>
+  </header>
+
+  <div class="guide">
+    <nav class="toc" aria-label="On this page">
+      <b>On this page</b>
+      <ol>
+        <li><a href="#flow">Process at a glance</a></li>
+        <li><a href="#inputs">1. Collect the inputs</a></li>
+        <li><a href="#matrix">2. Build the welding matrix</a></li>
+        <li><a href="#rationalise">3. Minimum PQR set</a></li>
+        <li><a href="#gaps">4. Gap analysis</a></li>
+        <li><a href="#register">5. The register</a></li>
+        <li><a href="#approval">6. Approval workflow</a></li>
+        <li><a href="#service">7. Ammonia &amp; hydrogen</a></li>
+        <li><a href="#pitfalls">Review pitfalls</a></li>
+      </ol>
+    </nav>
+
+    <article>
+      <!-- ================= FLOWCHART ================= -->
+      <section class="flow-card" id="flow" aria-labelledby="flow-h">
+        <h2 id="flow-h">Process at a glance</h2>
+        <div class="flow-legend">
+          <span><i class="who c">Contractor</i></span>
+          <span><i class="who o">Owner / PMC</i></span>
+          <span><i class="who l">TPI / lab</i></span>
+          <span><i class="hold">H</i> Hold point</span>
+          <span>Click a step to jump to its detail.</span>
+        </div>
+
+        <div class="flow">
+          <a class="node" href="#inputs">
+            <span class="who c">Contractor</span>
+            <span class="num">1</span><span class="t">Collect the inputs</span>
+            <span class="d">Codes per package, project welding spec, MSDs, piping classes, line list, vendor weld maps</span>
+          </a>
+          <div class="arrow"></div>
+          <a class="node" href="#matrix">
+            <span class="who c">Contractor</span>
+            <span class="num">2</span><span class="t">Build the welding matrix</span>
+            <span class="d">One row per unique combination of P-No, thickness, process, filler, impacts, PWHT and extra tests</span>
+          </a>
+          <div class="arrow"></div>
+          <a class="node" href="#rationalise">
+            <span class="who c">Contractor</span>
+            <span class="num">3</span><span class="t">Rationalise to the minimum PQR set</span>
+            <span class="d">Thick coupons, lowest impact temperature, extra tests on the coupon</span>
+          </a>
+          <div class="arrow"></div>
+          <a class="node" href="#gaps">
+            <span class="who c">Contractor</span>
+            <span class="num">4</span><span class="t">Gap analysis against existing PQRs</span>
+            <span class="d">Map the contractor's and fabricators' PQR libraries onto the matrix</span>
+          </a>
+          <div class="arrow"></div>
+          <a class="node" href="#approval">
+            <span class="who c">Contractor</span>
+            <span class="num">5</span><span class="t">Submit matrix, register and pWPSs</span>
+            <span class="d">Rows without a valid PQR are listed as the new PQR test programme</span>
+          </a>
+          <div class="arrow"></div>
+          <a class="node" href="#approval">
+            <span class="who o">Owner / PMC</span>
+            <span class="num">6</span><span class="t">Review and comment</span>
+            <span class="d">Coverage, code compliance, project spec requirements</span>
+          </a>
+          <div class="loop-note">↺ Comments? The contractor revises and resubmits.</div>
+          <div class="arrow"></div>
+
+          <div class="decision">
+            <div class="diamond"><span>Valid PQR for this row?</span></div>
+          </div>
+          <div class="split" style="width:calc(50% + 8px)"></div>
+          <div class="branches">
+            <div class="branch">
+              <div class="arrow"></div>
+              <span class="lbl yes">✓ Yes</span>
+              <div class="arrow"></div>
+              <div class="node">
+                <span class="t">Cite the existing PQR on the WPS</span>
+                <span class="d">Code edition, heat input, PWHT and extra tests all cover the WPS</span>
+              </div>
+              <div class="grow"></div>
+            </div>
+            <div class="branch">
+              <div class="arrow"></div>
+              <span class="lbl no">✕ No</span>
+              <div class="arrow"></div>
+              <div class="node">
+                <span class="who l">TPI + Owner witness</span>
+                <span class="t">Weld the PQR coupon <i class="hold">H</i></span>
+                <span class="d">Record all variables, including heat input</span>
+              </div>
+              <div class="arrow"></div>
+              <div class="node">
+                <span class="who l">Accredited lab</span>
+                <span class="t">Mechanical testing</span>
+                <span class="d">Bend, tensile, impact, macro, hardness and any extras</span>
+              </div>
+              <div class="arrow"></div>
+              <div class="node">
+                <span class="t">PQR certified</span>
+              </div>
+              <div class="grow"></div>
+            </div>
+          </div>
+          <div class="merge" style="width:calc(50% + 8px)"></div>
+          <div class="arrow"></div>
+
+          <a class="node" href="#approval">
+            <span class="who o">Owner / PMC</span>
+            <span class="num">7</span><span class="t">WPS issued at Rev 0 and approved</span>
+            <span class="d">Supporting PQR numbers listed on every WPS</span>
+          </a>
+          <div class="arrow"></div>
+          <a class="node" href="#approval">
+            <span class="who l">TPI witness</span>
+            <span class="num">8</span><span class="t">Welder qualification tests</span>
+            <span class="d">WQTs against the approved WPSs; welder continuity log starts</span>
+          </a>
+          <div class="arrow"></div>
+          <a class="node out" href="#register">
+            <span class="num">✓</span><span class="t">Output: live WPS/PQR register</span>
+            <span class="d">With the piping class → WPS cross-reference, revision control and ITP links</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ================= DETAIL ================= -->
+      <h2 id="inputs"><span class="n">1.</span>Collect the inputs</h2>
+      <p>Before you open any PQR, gather the documents that set the welding requirements:</p>
+      <ul>
+        <li><b>Governing codes per package.</b> For example ASME B31.3 / B31.12 (hydrogen piping), ASME VIII Div. 1/2,
+          API 650/620 (ammonia storage), AWS D1.1 (structural) and EN ISO 15614 (European vendor packages).
+          ASME IX or EN ISO 15614-1 is the qualification standard.</li>
+        <li><b>The project welding specification and client/EPC specs.</b> These usually add rules on top of the codes:
+          impact testing, hardness limits, PWHT, PMI, ferrite, and banned processes (for example no GMAW short-circuit on pressure parts).</li>
+        <li><b>Material selection diagrams, piping class specs and the line list.</b> These give the base materials,
+          thicknesses, design and minimum design metal temperatures (MDMT) and service.</li>
+        <li><b>Equipment datasheets and vendor weld maps.</b> These cover shop-fabricated items.</li>
+      </ul>
+
+      <h2 id="matrix"><span class="n">2.</span>Build the welding matrix</h2>
+      <p>Pull out every distinct welding situation. Each row is one unique combination of:</p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Variable</th><th>Why it matters (ASME IX)</th></tr></thead>
+          <tbody>
+            <tr><td>Base metal P-No / Group No</td><td>Qualification grouping (QW-420)</td></tr>
+            <tr><td>Thickness range</td><td>Range qualified by the test coupon (QW-451)</td></tr>
+            <tr><td>Process(es)</td><td>GTAW, SMAW, SAW, GMAW/FCAW, or combinations such as GTAW root + SMAW fill</td></tr>
+            <tr><td>Filler F-No / A-No</td><td>Essential variables</td></tr>
+            <tr><td>Impact requirement and test temperature</td><td>Supplementary essential variables apply, including heat input and Group No</td></tr>
+            <tr><td>PWHT (yes/no, and range)</td><td>Essential variable; as-welded and PWHT need separate PQRs</td></tr>
+            <tr><td>Service-specific tests</td><td>Hardness, ferrite, corrosion test (ASTM G48), PMI</td></tr>
+            <tr><td>Joint type</td><td>Butt, branch, fillet, overlay, tube-to-tubesheet (QW-193)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Sort it by P-No combination, then service, then thickness. Typical families on a green ammonia plant:</p>
+      <ul>
+        <li>Carbon steel P1, low temperature, impact tested</li>
+        <li>Carbon steel in ammonia service (PWHT plus hardness)</li>
+        <li>Carbon steel in KOH/lye service on the electrolyser side (caustic SCC, so PWHT is often needed above a temperature threshold)</li>
+        <li>Austenitic stainless P8 (hydrogen, water, cryogenic)</li>
+        <li>Duplex P10H</li>
+        <li>Dissimilar welds (P1 to P8)</li>
+        <li>Structural steel</li>
+      </ul>
+
+      <h2 id="rationalise"><span class="n">3.</span>Rationalise to the minimum PQR set</h2>
+      <p>This is where the cost saving comes from.</p>
+      <ul>
+        <li><b>One PQR can support many WPSs.</b> One WPS can also cite several PQRs, for example one per process or thickness range.</li>
+        <li><b>Use thicker coupons.</b> A coupon of 1.5 in (38 mm) or more qualifies up to 8 in (203 mm) for most processes (QW-451.1).
+          A small number of thick PQRs covers most of the thickness range.</li>
+        <li><b>Impact test at the lowest temperature needed.</b> One PQR tested at, say, −46 °C covers services at −29 °C.
+          Record the heat input, because the WPS can't exceed the PQR heat input when impacts apply.</li>
+        <li><b>Run PWHT and as-welded as separate coupons</b> where the project needs both.</li>
+        <li><b>Add hardness, ferrite and corrosion tests on the PQR coupon</b> whenever a WPS in that family needs them. Re-testing later costs more.</li>
+        <li><b>Combination processes.</b> Qualifying the processes separately (a GTAW root PQR plus an SMAW fill PQR) usually gives more flexibility than one combined coupon.</li>
+      </ul>
+
+      <h2 id="gaps"><span class="n">4.</span>Gap analysis against existing PQRs</h2>
+      <p>Ask the EPC contractor and each fabricator for their PQR library and map it against the matrix. For each existing PQR, check:</p>
+      <ul>
+        <li>Code edition, and whether the project accepts it</li>
+        <li>Whether supplementary essential variables (heat input) were recorded, if impacts are needed</li>
+        <li>Whether the PWHT temperature and time cover the project range</li>
+        <li>Hardness and other tests: done, and within the project limits?</li>
+        <li>Whether the PQR belongs to the same company. ASME IX doesn't allow transfer between companies, except under SWPS or the QW-201 ownership rules.</li>
+      </ul>
+      <div class="callout"><span class="ct">Result</span><p>Rows with no valid PQR become the <b>new PQR test programme</b>.</p></div>
+
+      <h2 id="register"><span class="n">5.</span>The register itself</h2>
+      <p>Suggested columns:</p>
+      <div class="cols">
+        <span>WPS No</span><span>Rev</span><span>Supporting PQR No(s)</span><span>Code</span><span>Process</span>
+        <span>P-No/Gr (A × B)</span><span>Base material spec/grade</span><span>Filler (SFA/AWS class, F-No, A-No)</span>
+        <span>Thickness range qualified</span><span>Diameter range</span><span>Position</span><span>Preheat / interpass</span>
+        <span>PWHT</span><span>Impact test temp</span><span>Max heat input</span><span>Hardness limit</span>
+        <span>Additional tests (ferrite, G48, PMI)</span><span>Applicable piping classes / equipment</span><span>Service</span>
+        <span>Fabricator / contractor</span><span>Approval status</span><span>Approval date</span><span>Remarks</span>
+      </div>
+      <div class="callout">
+        <span class="ct">Add a piping class → WPS cross-reference</span>
+        <p>It's the most-used tab during construction and surveillance, because inspectors check from the piping class, not from the WPS.</p>
+      </div>
+
+      <h2 id="approval"><span class="n">6.</span>Approval workflow</h2>
+      <ol>
+        <li>Contractor submits the matrix and register, with each pWPS.</li>
+        <li>Owner/PMC reviews them.</li>
+        <li>PQR coupon welding, with hold/witness points for third-party inspection and the client.</li>
+        <li>Mechanical testing at an accredited lab, including bend, tensile, impact, macro, hardness and any extras.</li>
+        <li>PQR certified; WPS issued at Rev 0 and approved.</li>
+        <li>Welder qualification tests (WQTs) against the approved WPSs; welder continuity log starts.</li>
+        <li>Register kept live, with revision control on every WPS change and the ITP linked to it.</li>
+      </ol>
+
+      <h2 id="service"><span class="n">7.</span>Points specific to ammonia and hydrogen service</h2>
+      <ul>
+        <li><b>Anhydrous ammonia (carbon steel):</b> stress corrosion cracking risk. Check the spec for PWHT, the hardness ceiling
+          and weld metal strength limits. Overmatching welds are often restricted for refrigerated NH₃ tanks.</li>
+        <li><b>Refrigerated ammonia storage (around −33 °C):</b> impact tests at or below the MDMT for the weld metal and the HAZ.</li>
+        <li><b>Hydrogen piping (ASME B31.12):</b> hardness limits, low-hydrogen consumables, and stricter PQR test requirements for some material categories.</li>
+        <li><b>KOH/lye systems:</b> PWHT for carbon steel above the caustic SCC temperature threshold. Use NACE SP0403 or the project's caustic curve.</li>
+        <li><b>Stainless and duplex:</b> ferrite range on the PQR, and G48 corrosion testing for duplex where specified.</li>
+      </ul>
+
+      <h2 id="pitfalls">Common review pitfalls</h2>
+      <div class="callout warn">
+        <ul>
+          <li>A WPS cites a PQR with a lower heat input than the WPS allows, while impact testing applies.</li>
+          <li>The PQR thickness doesn't support the full WPS range, especially at the low end when the PQR coupon was thick.</li>
+          <li>PWHT on the PQR is outside the time and temperature range on the WPS.</li>
+          <li>Filler brand or classification changes without checking whether a supplementary essential variable is affected.</li>
+          <li>Vendor shop WPSs never land in the project register, leaving gaps at site.</li>
+        </ul>
+      </div>
+
+      <p class="disclaimer">General guidance based on project experience. Always check the current code edition and the project
+        specifications; they take precedence over anything on this page.</p>
+    </article>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span>© 2026 Baris Celik</span>
+    <span><a href="knowledge.html">All guides</a> · <a href="../../index.html">Home</a> · <a href="mailto:bariscelik77@gmail.com">bariscelik77@gmail.com</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

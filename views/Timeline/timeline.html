@@ -18,7 +18,7 @@
     .site-nav { display: flex; gap: 20px; }
     .site-nav a { color: #4a5359; text-decoration: none; font-size: 14.5px; font-weight: 500; }
     .site-nav a:hover, .site-nav a.active { color: #0f5c4d; }
-    @media (max-width: 560px) { .site-nav { gap: 14px; } .site-nav a { font-size: 13.5px; } }
+    @media (max-width: 560px) { .site-nav { gap: 14px; } .site-nav a { font-size: 13.5px; } .site-nav a.hide-sm { display: none; } }
   </style>
 </head>
 <body>
@@ -26,7 +26,7 @@
 <header class="site-top">
   <div class="site-wrap">
     <a class="site-brand" href="../../index.html" lang="en">Baris <span>Celik</span></a>
-    <nav class="site-nav"><a href="../../index.html">Home</a><a href="../Timeline/timeline.html" class="active" aria-current="page">Timeline</a><a href="../Dashboards/dashboards.html">Dashboards</a><a href="../Tools/tools.html">Tools</a></nav>
+    <nav class="site-nav"><a href="../../index.html">Home</a><a href="../Timeline/timeline.html" class="hide-sm active" aria-current="page">Timeline</a><a href="../Dashboards/dashboards.html">Dashboards</a><a href="../Tools/tools.html">Tools</a><a href="../Knowledge/knowledge.html">Knowledge</a></nav>
   </div>
 </header>
 
