@@ -110,7 +110,7 @@
           <label><span data-i18n="to">to</span> <input type="text" id="trimB" size="7"></label>
           <button class="link" type="button" id="trimBNow" data-i18n="ph">use playhead</button>
         </div>
-        <p class="fine" data-i18n="fullNote">Rendering runs in real time, so a 50-minute ride takes about 50 minutes.</p>
+        <p class="fine" data-i18n="fullNote">Full rides take a while; the progress bar shows the time left. You choose where to save the file first.</p>
       </div>
       <label class="full"><span data-i18n="title">Title</span> <input type="text" id="titleIn"></label>
       <div class="checks">
@@ -136,7 +136,7 @@
 
       <button class="btn btn-ride big" id="renderBtn" type="button" data-i18n="render">Render video</button>
       <div class="progress" id="renProg" hidden><div class="bar"></div><span class="lbl"></span><button class="link" id="renCancel" type="button" data-i18n="cancel">Cancel</button></div>
-      <p class="fine" data-i18n="rt">Rendering plays the video in real time. Keep this tab open and in front.</p>
+      <p class="fine" data-i18n="rt">Every frame is rendered exactly, so the video never stutters. Keep this tab open until it finishes.</p>
       <div id="result" hidden>
         <video id="resultVideo" controls playsinline></video>
         <a class="btn btn-ride" id="downloadLink" download>Download</a>
@@ -164,11 +164,11 @@ window.I18N_TR = {
   s1: 'Dosyalar', s2: 'Senkronizasyon', s3: 'Videoyu oluştur',
   tz: 'Kamera saat dilimi (UTC ±s)', fine: 'İnce ayar: rakamlar görüntüyle eşleşene kadar kaydırın',
   mH: 'Öne çıkanlar', mF: 'Tüm sürüş', len: 'Uzunluk', each: 'Her klip', from: 'Başlangıç', to: 'bitiş', ph: 'oynatma noktası',
-  fullNote: 'Oluşturma gerçek zamanlı çalışır; 50 dakikalık bir sürüş yaklaşık 50 dakika sürer.',
+  fullNote: 'Tüm sürüşler biraz zaman alır; ilerleme çubuğu kalan süreyi gösterir. Önce dosyanın nereye kaydedileceğini seçersiniz.',
   title: 'Başlık', showT: 'Başta başlık kartı', maxhr: 'Maksimum nabız', stamp: 'Kamera tarih damgası',
   stZ: 'Yakınlaştırıp gizle', stO: 'Olduğu gibi bırak', sound: 'Ses', music: 'Arka plan müziği…', remove: 'kaldır',
   mvol: 'Müzik sesi', cvol: 'Kamera sesi (rüzgâr, yol)', render: 'Videoyu oluştur', cancel: 'İptal',
-  rt: 'Oluşturma videoyu gerçek zamanlı oynatır. Bu sekmeyi açık ve önde tutun.',
+  rt: 'Her kare tam olarak işlenir, video takılmaz. İşlem bitene kadar bu sekmeyi açık tutun.',
   about: 'Claude ile yapıldı. Masaüstü sürümü ve nasıl yapıldığı:', aboutL: 'RideVideo’yu nasıl yaptım'
 };
 </script>

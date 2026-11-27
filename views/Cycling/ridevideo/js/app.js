@@ -4,6 +4,7 @@ import { probe, detectStart, guessTz, applySync, STAMP_BOX, fmtNaive, parseNaive
 import { Overlay, makeLayout, sourceCrop, drawCamera, loadFonts, fmtTime } from './overlay.js';
 import { findHighlights, fullSegments } from './highlights.js';
 import { renderVideo, pickMime } from './render.js';
+import { encodeVideo, prepareTracks, canEncode } from './encode.js';
 
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -183,7 +184,8 @@ async function doRender() {
   }
   if (!segs?.length) return toast(L('Nothing to render: check the sync.', 'Oluşturulacak bir şey yok: senkronizasyonu kontrol edin.'));
   v.pause();
-  const mime = pickMime(), ext = mime.includes('mp4') ? 'mp4' : 'webm';
+  const exact = canEncode();
+  const mime = exact ? 'video/mp4' : pickMime(), ext = mime.includes('mp4') ? 'mp4' : 'webm';
   const s = st.ride.summary(), d = new Date((s.start.getTime() / 1000 + st.tz * 3600) * 1000).toISOString().slice(0, 10);
   const slug = ($('#titleIn').value || 'ride').replace(/[^\w-]+/g, '_').slice(0, 40);
   const name = `${d}_${slug}_${S.mode}_${S.kind === 'landscape' ? '16x9' : 'reel'}.${ext}`;
@@ -199,17 +201,28 @@ async function doRender() {
   prog.hidden = false; bar.style.width = '0'; $('#renderBtn').disabled = true; $('#result').hidden = true;
   const total = segs.reduce((a, x) => a + x.dur, 0);
   try {
-    const out = await renderVideo({
+    const job = {
       clips: st.clips, segments: segs, overlay: st.overlay, summary: s, stampMode: S.stamp, stampBox: STAMP_BOX,
       highlights: S.mode === 'highlights', showTitle: S.showTitle,
       musicUrl: st.music?.url, musicVol: +S.musicVol, camVol: +S.camVol, writable, signal: ac.signal,
-      onProgress: p => {
+    };
+    // preferred: frame-exact WebCodecs encoder; fallback: real-time recording
+    const tracks = exact ? await prepareTracks(st.clips, segs) : null;
+    let out;
+    if (tracks) {
+      out = await encodeVideo({ ...job, tracks, onProgress: (p, note) => {
+        bar.style.width = `${p * 100}%`;
+        lbl.textContent = `${L('Rendering', 'Oluşturuluyor')}… ${Math.round(p * 100)}% · ${note || ''}`;
+      } });
+    } else {
+      if (exact) toast(L('This video format can’t be decoded directly; using real-time recording. Keep this tab in front.', 'Bu video biçimi doğrudan çözülemiyor; gerçek zamanlı kayıt kullanılıyor. Sekmeyi önde tutun.'), 7000);
+      out = await renderVideo({ ...job, onProgress: p => {
         bar.style.width = `${p * 100}%`;
         const left = (1 - p) * total;
         lbl.textContent = L(`Rendering… ${Math.round(p * 100)}% · ${left > 90 ? Math.round(left / 60) + ' min' : Math.round(left) + ' s'} left`,
           `Oluşturuluyor… %${Math.round(p * 100)} · ${left > 90 ? Math.round(left / 60) + ' dk' : Math.round(left) + ' sn'} kaldı`);
-      },
-    });
+      } });
+    }
     if (out.saved) toast(L('Saved to the file you chose.', 'Seçtiğiniz dosyaya kaydedildi.'), 6000);
     else {
       const url = URL.createObjectURL(out.blob);

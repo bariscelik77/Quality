@@ -46,6 +46,25 @@ function text(g, x, y, s, px, { weight = 700, fill = WHITE, align = 'left', shad
   g.fillStyle = fill; g.fillText(s, x, y);
   return g.measureText(s).width;
 }
+/** largest size (size → min) at which s fits maxW, on one line or two balanced lines → [px, lines] */
+function fitLines(g, s, maxW, size, min, weight = 700, wrap = true) {
+  const words = s.split(' ');
+  let best = [s];
+  const w = (t, px) => { g.font = font(px, weight); return g.measureText(t).width; };
+  for (let px = size; px >= min; px -= 2) {
+    if (w(s, px) <= maxW) return [px, [s]];
+    if (wrap && words.length > 1) {
+      let pick = null, pickW = Infinity;
+      for (let k = 1; k < words.length; k++) {
+        const a = words.slice(0, k).join(' '), b = words.slice(k).join(' '), m = Math.max(w(a, px), w(b, px));
+        if (m < pickW) { pickW = m; pick = [a, b]; }
+      }
+      best = pick;
+      if (pickW <= maxW) return [px, pick];
+    }
+  }
+  return [min, best];
+}
 function rrect(g, x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
 function vgrad(g, x, y, w, h, a0, a1) {
   const gr = g.createLinearGradient(0, y, 0, y + h);
@@ -61,7 +80,9 @@ function heart(g, cx, cy, s, fill) {
 }
 
 // ---------------------------------------------------------------- camera picture
-const bgSmall = mk(1, 1);
+// blurred side-fill for 9:16: a mid-size canvas with a blur filter, scaled up with plain smoothing.
+// (A tiny canvas upscaled with imageSmoothingQuality 'high' cost ~20 ms a frame; this is ~3 ms.)
+let bgMid = null;
 export function drawCamera(g, v, L, crop) {
   const [cx, cy, cw, ch] = crop, { W, H } = L;
   if (L.kind === 'landscape') { g.drawImage(v, cx, cy, cw, ch, 0, 0, W, H); return; }
@@ -70,12 +91,12 @@ export function drawCamera(g, v, L, crop) {
     g.drawImage(v, x, cy, w, ch, 0, 0, W, H); return;
   }
   // vertical-fit: soft blurred cover background (drawn tiny, then scaled up) + the whole picture in the middle
-  const sw = 54, sh = 96;
-  if (bgSmall.width !== sw) { bgSmall.width = sw; bgSmall.height = sh; }
-  const bg = bgSmall.getContext('2d'), w = (ch * sw) / sh;
-  bg.drawImage(v, cx + (cw - w) / 2, cy, w, ch, 0, 0, sw, sh);
-  g.imageSmoothingQuality = 'high';
-  g.drawImage(bgSmall, 0, 0, W, H);
+  const sw = 270, sh = 480;
+  if (!bgMid) { bgMid = mk(sw, sh); bgMid.getContext('2d').filter = 'blur(6px)'; }
+  const w = (ch * sw) / sh;
+  bgMid.getContext('2d').drawImage(v, cx + (cw - w) / 2, cy, w, ch, 0, 0, sw, sh);
+  g.imageSmoothingQuality = 'low';
+  g.drawImage(bgMid, 0, 0, W, H);
   g.fillStyle = 'rgba(0,0,0,.38)'; g.fillRect(0, 0, W, H);
   const [vx, vy, vw, vh] = L.video;
   g.drawImage(v, cx, cy, cw, ch, vx, vy, vw, vh);
@@ -260,17 +281,20 @@ export class Overlay {
     const bits = [`${s.km.toFixed(1)} km`, `${s.gain.toFixed(0)} m climb`, fmtTime(s.moving), `${s.avgSpeed.toFixed(1)} km/h avg`];
     if (s.avgHr) bits.push(`${s.avgHr.toFixed(0)} bpm avg`);
     g.save(); g.globalAlpha = alpha;
+    const title = String(this.title || '').replace(/_+/g, ' ').replace(/\s+/g, ' ').trim();
     if (kind === 'landscape') {
-      const u = this.u, x = 56 * u;
-      vgrad(g, 0, 0, W, H * 0.38, 0.75, 0);
-      text(g, x, 118 * u, this.title, 86 * u);
-      g.fillStyle = ACCENT; rrect(g, x, 140 * u, 90 * u, 7 * u, 3); g.fill();
-      text(g, x, 196 * u, date, 34 * u, { weight: 600, fill: SOFT });
-      text(g, x, 250 * u, bits.join('   ·   '), 34 * u, { weight: 600 });
+      const u = this.u, x = 56 * u, [px, lines] = fitLines(g, title, W - 2 * x, 86 * u, 46 * u), lh = px * 1.08, dy = lh * (lines.length - 1);
+      vgrad(g, 0, 0, W, H * 0.38 + dy, 0.75, 0);
+      lines.forEach((ln, k) => text(g, x, 118 * u + k * lh, ln, px));
+      g.fillStyle = ACCENT; rrect(g, x, 140 * u + dy, 90 * u, 7 * u, 3); g.fill();
+      text(g, x, 196 * u + dy, date, 34 * u, { weight: 600, fill: SOFT });
+      const line = bits.join('   ·   '), [sp] = fitLines(g, line, W - 2 * x, 34 * u, 22 * u, 600, false);
+      text(g, x, 250 * u + dy, line, sp, { weight: 600 });
     } else {
       const areaH = kind === 'vertical-fit' ? this.L.video[1] : 560, cx = W / 2, yb = areaH - 70;
       if (kind === 'vertical-crop') vgrad(g, 0, 0, W, 620, 0.8, 0);
-      text(g, cx, yb - 170, this.title, 92, { align: 'center' });
+      const [px, lines] = fitLines(g, title, W - 120, 92, 54), lh = px * 1.08, top = yb - 170 - lh * (lines.length - 1);
+      lines.forEach((ln, k) => text(g, cx, top + k * lh, ln, px, { align: 'center' }));
       g.fillStyle = ACCENT; rrect(g, cx - 50, yb - 140, 100, 7, 3); g.fill();
       text(g, cx, yb - 80, date, 38, { weight: 600, fill: SOFT, align: 'center' });
       text(g, cx, yb - 16, bits.slice(0, 3).join('   ·   '), 36, { weight: 600, align: 'center' });
