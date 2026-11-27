@@ -60,6 +60,8 @@
   /* switch in the header */
   var css = document.createElement('style');
   css.textContent =
+    /* the other language's block stays hidden even when its own CSS sets display (e.g. flex) */
+    '[data-lang][hidden]{display:none!important}' +
     '.lang-sw{display:inline-flex;flex:none;border:1px solid #e3e7e6;border-radius:8px;overflow:hidden;font-family:Inter,"Segoe UI",system-ui,sans-serif}' +
     '.lang-sw button{font:inherit;font-size:12.5px;font-weight:600;border:0;background:#fff;color:#6b757b;padding:5px 9px;cursor:pointer;line-height:1.2}' +
     '.lang-sw button[aria-pressed="true"]{background:#101314;color:#fff}' +
