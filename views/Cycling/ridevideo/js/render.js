@@ -2,6 +2,7 @@
 // Real time: a 60 s reel takes about 60 s; a 50 min ride takes about 50 min (keep the tab in front).
 // Adapted from AsanaReel (theyoginim/video/js/render.js), including its stall watchdog.
 import { drawCamera, sourceCrop, loadFonts } from './overlay.js';
+import { drawStamp } from './brand.js';
 
 const TITLE_LEN = 3.5, TITLE_FADE = 0.8, FADE = 0.25;
 
@@ -66,6 +67,7 @@ export async function renderVideo(job) {
       const t = v.currentTime, local = Math.max(0, t - seg.start), outT = done + local;
       drawCamera(ctx, v, L, crop);
       job.overlay.draw(ctx, clip.startUtc + t, seg.label);
+      if (job.brand) drawStamp(ctx, W, H);
       if (job.showTitle && outT < TITLE_LEN + TITLE_FADE) job.overlay.drawTitle(ctx, job.summary, outT < TITLE_LEN ? 1 : 1 - (outT - TITLE_LEN) / TITLE_FADE);
       if (job.highlights) {
         const a = Math.max(0, 1 - local / FADE, 1 - (seg.dur - local) / FADE);

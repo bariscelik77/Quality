@@ -1,6 +1,7 @@
 // RideVideo (web) — main UI.
 import { loadRideFile, ACTIVITY_EXT } from './telemetry.js';
 import { SPORTS, detectSport, presetStyle } from './fields.js';
+import { drawStamp } from './brand.js';
 import { probe, detectStart, guessTz, applySync, STAMP_BOX, fmtNaive, parseNaive } from './sync.js';
 import { Overlay, makeLayout, sourceCrop, drawCamera, loadFonts, fmtTime } from './overlay.js';
 import { findHighlights, fullSegments } from './highlights.js';
@@ -17,7 +18,7 @@ let toastT;
 const toast = (m, ms = 3500) => { const el = $('#toast'); el.textContent = m; el.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), ms); };
 
 // ---------- settings ----------
-const DEF = { kind: 'landscape', mode: 'highlights', hlLen: 60, hlClip: 5, tz: -new Date().getTimezoneOffset() / 60, maxHr: 185, stamp: 'zoom', musicVol: 0.7, camVol: 0.4, showTitle: true };
+const DEF = { kind: 'landscape', mode: 'highlights', hlLen: 60, hlClip: 5, tz: -new Date().getTimezoneOffset() / 60, maxHr: 185, stamp: 'zoom', musicVol: 0.7, camVol: 0.4, showTitle: true, brand: true };
 let S = { ...DEF };
 try { S = { ...DEF, ...JSON.parse(localStorage.getItem('ridevideo') || '{}') }; } catch {}
 const save = () => { try { localStorage.setItem('ridevideo', JSON.stringify(S)); } catch {} };
@@ -146,6 +147,7 @@ function loop() {
     if (st.overlay && c.startUtc != null) {
       const t = c.startUtc + v.currentTime, seg = st.segs.find(s => s.clip === st.cur && v.currentTime >= s.start && v.currentTime < s.start + s.dur);
       st.overlay.draw(ctx, t, S.mode === 'highlights' ? seg?.label : null);
+      if (S.brand) drawStamp(ctx, st.layout.W, st.layout.H);
       const inRide = t >= st.ride.t0 && t <= st.ride.t1;
       $('#nowLbl').innerHTML = inRide ? L(`Ride time <b>${fmtTime(t - st.ride.t0)}</b> · check that speed and heart rate match the picture`, `Sürüş zamanı <b>${fmtTime(t - st.ride.t0)}</b> · hız ve nabzın görüntüyle uyuştuğunu kontrol edin`)
         : L('This moment is outside the ride data.', 'Bu an sürüş verisinin dışında.');
@@ -209,7 +211,7 @@ async function doRender() {
   try {
     const job = {
       clips: st.clips, segments: segs, overlay: st.overlay, summary: s, stampMode: S.stamp, stampBox: STAMP_BOX,
-      highlights: S.mode === 'highlights', showTitle: S.showTitle,
+      highlights: S.mode === 'highlights', showTitle: S.showTitle, brand: S.brand,
       musicUrl: st.music?.url, musicVol: +S.musicVol, camVol: +S.camVol, writable, signal: ac.signal,
     };
     // preferred: frame-exact WebCodecs encoder; fallback: real-time recording
@@ -254,7 +256,7 @@ function applyUI() {
   $('#hlOpts').hidden = S.mode !== 'highlights'; $('#fullOpts').hidden = S.mode !== 'full';
   $('#hlLen').value = String(S.hlLen); $('#hlClip').value = String(S.hlClip);
   $('#maxHr').value = S.maxHr; $('#stampSel').value = S.stamp;
-  $('#musicVol').value = S.musicVol; $('#camVol').value = S.camVol; $('#showTitle').checked = S.showTitle;
+  $('#musicVol').value = S.musicVol; $('#camVol').value = S.camVol; $('#showTitle').checked = S.showTitle; $('#brandChk').checked = S.brand;
 }
 
 function bind() {
@@ -286,6 +288,7 @@ function bind() {
   $('#titleIn').onchange = () => rebuildOverlay();
   $('#sportSel').onchange = e => { st.sport = e.target.value; rebuildOverlay(); refreshHighlights(); };
   $('#showTitle').onchange = e => { S.showTitle = e.target.checked; save(); };
+  $('#brandChk').onchange = e => { S.brand = e.target.checked; save(); };
   $('#maxHr').onchange = e => { S.maxHr = +e.target.value || 185; save(); rebuildOverlay(); };
   $('#stampSel').onchange = e => { S.stamp = e.target.value; save(); rebuildOverlay(); };
   $('#musicVol').oninput = e => { S.musicVol = +e.target.value; save(); };

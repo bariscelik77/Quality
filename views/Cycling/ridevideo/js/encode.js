@@ -4,6 +4,7 @@
 // so the output never freezes, drops frames or stretches, and a background tab only makes it slower.
 // Ported from AsanaReel (theyoginim/video/js/encode.js) and extended for several clips per ride.
 import { drawCamera, sourceCrop, loadFonts } from './overlay.js';
+import { drawStamp } from './brand.js';
 
 const MUXER_URL = 'https://cdn.jsdelivr.net/npm/mp4-muxer@5.1.3/build/mp4-muxer.mjs';
 const MP4BOX_URL = 'https://cdn.jsdelivr.net/npm/mp4box@0.5.2/dist/mp4box.all.min.js';
@@ -334,6 +335,7 @@ export async function encodeVideo(job) {
           if (f) { putFrame(f, vt.rotation); if (!crop) crop = sourceCrop(frameCanvas.width, frameCanvas.height, job.stampMode, job.stampBox); }
           if (crop) drawCamera(ctx, frameCanvas, L, crop);
           job.overlay.draw(ctx, clip.startUtc + want, seg.label);
+          if (job.brand) drawStamp(ctx, W, H);
           if (job.showTitle && outT < TITLE_LEN + TITLE_FADE) job.overlay.drawTitle(ctx, job.summary, outT < TITLE_LEN ? 1 : 1 - (outT - TITLE_LEN) / TITLE_FADE);
           if (job.highlights) {
             const t = k / FPS, a = Math.max(0, 1 - t / FADE, 1 - (seg.dur - t) / FADE);

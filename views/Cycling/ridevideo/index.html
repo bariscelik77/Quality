@@ -11,12 +11,13 @@
   </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RideVideo | Baris Celik</title>
+<title>Reelmetry | Baris Celik</title>
 <meta name="description" content="Turn action-camera footage and a GPX, TCX or FIT activity file (cycling, running, walking, skiing) into a video with a live data overlay: heart rate, speed or pace, elevation, route map. Runs in your browser; videos never leave your device.">
-  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="img/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="img/icon-180.png">
   <link rel="canonical" href="https://bariscelik77.github.io/Quality/views/Cycling/ridevideo/index.html">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="RideVideo | Baris Celik">
+  <meta property="og:title" content="Reelmetry | Baris Celik">
   <meta property="og:description" content="Turn action-camera footage and a GPX, TCX or FIT activity file (cycling, running, walking, skiing) into a video with a live data overlay: heart rate, speed or pace, elevation, route map. Runs in your browser; videos never leave your device.">
   <meta property="og:url" content="https://bariscelik77.github.io/Quality/views/Cycling/ridevideo/index.html">
   <meta property="og:image" content="https://bariscelik77.github.io/Quality/assets/images/og-preview.png">
@@ -36,7 +37,7 @@
       <a href="../../../index.html">Home</a>
       <a href="../../Knowledge/knowledge.html" class="hide-sm">Knowledge</a>
       <a href="../cycling.html">Cycling</a>
-      <a href="./" class="active" aria-current="page">RideVideo</a>
+      <a href="./" class="active" aria-current="page">Reelmetry</a>
     </nav>
   </div>
 </header>
@@ -47,7 +48,7 @@
   <section class="stage">
     <div class="drop" id="drop">
       <div class="drop-inner">
-        <div class="kicker" lang="en">RideVideo</div>
+        <div class="brand-lockup" lang="en"><img src="img/mark.svg" alt="" width="44" height="44"><span>Reel<em>metry</em></span></div>
         <h1 data-i18n="h1">Put your activity data <em>on the video</em></h1>
         <p data-i18n="lede">Add your action-camera clips and the activity file from your watch or sports app. The app syncs them, draws heart rate, speed or pace, elevation and the route on top, and makes a highlight reel or the full video. Cycling, running, walking, skiing.</p>
         <div class="btns">
@@ -135,6 +136,7 @@
       <label class="full"><span data-i18n="title">Title</span> <input type="text" id="titleIn"></label>
       <div class="checks">
         <label class="chk"><input type="checkbox" id="showTitle" checked> <span data-i18n="showT">Title card at the start</span></label>
+        <label class="chk"><input type="checkbox" id="brandChk" checked> <span data-i18n="brand">Reelmetry logo in the corner</span></label>
       </div>
       <div class="row">
         <label><span data-i18n="maxhr">Max heart rate</span> <input type="number" id="maxHr" min="120" max="230" style="width:80px"></label>
@@ -162,7 +164,7 @@
         <a class="btn btn-ride" id="downloadLink" download>Download</a>
       </div>
     </div>
-    <p class="fine about"><span data-i18n="about">Built with Claude. The desktop version and how it was made:</span> <a href="../cycling.html#build" data-i18n="aboutL">How I built RideVideo</a></p>
+    <p class="fine about"><span data-i18n="about">Built with Claude. The desktop version and how it was made:</span> <a href="../cycling.html#build" data-i18n="aboutL">How I built Reelmetry</a></p>
   </aside>
 </main>
 
@@ -171,7 +173,7 @@
 
 <script>
 window.I18N_TR = {
-  __title: 'RideVideo | Baris Celik',
+  __title: 'Reelmetry | Baris Celik', brand: 'Köşede Reelmetry logosu',
   note: 'Video oluşturmak için <b>Chrome</b> veya <b>Edge</b> yüklü bir dizüstü ya da masaüstü bilgisayar gerekir. Bu cihazda göz atabilirsiniz ama video yapamazsınız.',
   h1: 'Etkinlik verilerinizi <em>videoya ekleyin</em>',
   lede: 'Aksiyon kamerası kayıtlarınızı ve saatinizden ya da spor uygulamanızdan aldığınız etkinlik dosyasını ekleyin. Uygulama ikisini senkronize eder; nabız, hız veya tempo, rakım ve rotayı görüntünün üzerine çizer, öne çıkanlar videosu ya da videonun tamamını hazırlar. Bisiklet, koşu, yürüyüş, kayak.',
@@ -189,7 +191,7 @@ window.I18N_TR = {
   stZ: 'Yakınlaştırıp gizle', stO: 'Olduğu gibi bırak', sound: 'Ses', music: 'Arka plan müziği…', remove: 'kaldır',
   mvol: 'Müzik sesi', cvol: 'Kamera sesi (rüzgâr, yol)', render: 'Videoyu oluştur', cancel: 'İptal',
   rt: 'Her kare tam olarak işlenir, video takılmaz. İşlem bitene kadar bu sekmeyi açık tutun.',
-  about: 'Claude ile yapıldı. Masaüstü sürümü ve nasıl yapıldığı:', aboutL: 'RideVideo’yu nasıl yaptım'
+  about: 'Claude ile yapıldı. Masaüstü sürümü ve nasıl yapıldığı:', aboutL: 'Reelmetry’yi nasıl yaptım'
 };
 </script>
 <script src="../../../assets/js/lang.js"></script>
