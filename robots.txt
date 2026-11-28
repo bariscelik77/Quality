@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bariscelik77.github.io/Quality/sitemap.xml
