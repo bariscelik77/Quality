@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Websites | Baris Celik</title>
+  <meta name="description" content="Two sites in one place: Baris Celik's quality portfolio and TheyoginiM, Merve Şeneren's yoga and MerBakery site.">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://bariscelik77.github.io/Quality/links/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Websites | Baris Celik">
+  <meta property="og:description" content="Quality portfolio · TheyoginiM yoga &amp; MerBakery">
+  <meta property="og:url" content="https://bariscelik77.github.io/Quality/links/">
+  <meta property="og:image" content="https://bariscelik77.github.io/Quality/links/quality.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#f7f6f3; --ink:#1b1d1c; --muted:#6b6f6c; --card:#ffffff; --line:#e4e2dc;
+            --green:#0f5c4d; --sage:#5f6f52; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg:#141615; --ink:#eceeed; --muted:#a3a8a5; --card:#1d201f; --line:#2c302e; }
+    }
+    * { box-sizing:border-box; margin:0; }
+    body { min-height:100vh; display:flex; flex-direction:column; background:var(--bg); color:var(--ink);
+           font-family:Inter, system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing:antialiased; }
+    header { text-align:center; padding:56px 16px 32px; }
+    header p { font-size:13px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+    header h1 { font-size:clamp(26px,4vw,36px); font-weight:600; margin-top:10px; }
+    main { flex:1; width:100%; max-width:1180px; margin:0 auto; padding:0 16px 48px;
+           display:grid; grid-template-columns:1fr 1fr; gap:28px; align-content:start; }
+    a.site { display:flex; flex-direction:column; text-decoration:none; color:inherit; background:var(--card);
+             border:1px solid var(--line); border-radius:18px; overflow:hidden;
+             transition:transform .2s ease, box-shadow .2s ease; }
+    a.site:hover, a.site:focus-visible { transform:translateY(-4px); box-shadow:0 18px 40px rgba(0,0,0,.12); }
+    a.site:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
+    a.site img { display:block; width:100%; height:auto; aspect-ratio:1200/630; object-fit:cover; }
+    .body { padding:22px 24px 26px; display:flex; flex-direction:column; gap:8px; flex:1; }
+    .tag { font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+    .body h2 { font-size:22px; font-weight:600; }
+    .body p { color:var(--muted); line-height:1.55; font-size:15px; }
+    .go { margin-top:auto; padding-top:12px; font-weight:600; color:var(--accent); font-size:15px; }
+    .q { --accent:var(--green); }
+    .y { --accent:var(--sage); }
+    @media (prefers-color-scheme: dark) { .q { --accent:#4fbf9f; } .y { --accent:#a9b98f; } }
+    footer { text-align:center; color:var(--muted); font-size:13px; padding:0 16px 32px; }
+    @media (max-width:760px) {
+      header { padding:40px 16px 24px; }
+      main { grid-template-columns:1fr; gap:20px; }
+    }
+    @media (prefers-reduced-motion: reduce) { a.site { transition:none; } a.site:hover { transform:none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <p>Two sites, one place</p>
+    <h1>Pick where you'd like to go</h1>
+  </header>
+  <main>
+    <a class="site q" href="https://bariscelik77.github.io/Quality/">
+      <img src="quality.png" alt="Baris Celik, Senior Quality Manager at NEOM Green Hydrogen" width="1200" height="630">
+      <div class="body">
+        <span class="tag">Quality · Completions · Commissioning</span>
+        <h2>Baris Celik</h2>
+        <p>Portfolio of a Senior Quality Manager on the world's largest green hydrogen and ammonia project: career, projects, quality calculators and dashboards.</p>
+        <span class="go">Visit the portfolio →</span>
+      </div>
+    </a>
+    <a class="site y" href="https://bariscelik77.github.io/theyoginim/">
+      <img src="theyoginim.jpg" alt="TheyoginiM, Merve Şeneren, E-RYT 500 yoga instructor" width="1200" height="630">
+      <div class="body">
+        <span class="tag">Yoga · Yoga therapy · Ayurveda</span>
+        <h2>TheyoginiM</h2>
+        <p>Merve Şeneren's yoga site: classes, a bilingual pose guide and more than a hundred MerBakery recipes.</p>
+        <span class="go">Visit TheyoginiM →</span>
+      </div>
+    </a>
+  </main>
+  <footer>© <span id="yr">2026</span></footer>
+  <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>
