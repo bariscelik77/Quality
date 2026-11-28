@@ -1,5 +1,6 @@
 // RideVideo (web) — main UI.
-import { loadRideFile } from './telemetry.js';
+import { loadRideFile, ACTIVITY_EXT } from './telemetry.js';
+import { SPORTS, detectSport, presetStyle } from './fields.js';
 import { probe, detectStart, guessTz, applySync, STAMP_BOX, fmtNaive, parseNaive } from './sync.js';
 import { Overlay, makeLayout, sourceCrop, drawCamera, loadFonts, fmtTime } from './overlay.js';
 import { findHighlights, fullSegments } from './highlights.js';
@@ -16,21 +17,24 @@ let toastT;
 const toast = (m, ms = 3500) => { const el = $('#toast'); el.textContent = m; el.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), ms); };
 
 // ---------- settings ----------
-const DEF = { kind: 'landscape', mode: 'highlights', hlLen: 60, hlClip: 5, tz: 3, maxHr: 185, stamp: 'zoom', musicVol: 0.7, camVol: 0.4, showTitle: true };
+const DEF = { kind: 'landscape', mode: 'highlights', hlLen: 60, hlClip: 5, tz: -new Date().getTimezoneOffset() / 60, maxHr: 185, stamp: 'zoom', musicVol: 0.7, camVol: 0.4, showTitle: true };
 let S = { ...DEF };
 try { S = { ...DEF, ...JSON.parse(localStorage.getItem('ridevideo') || '{}') }; } catch {}
 const save = () => { try { localStorage.setItem('ridevideo', JSON.stringify(S)); } catch {} };
 
 // ---------- state ----------
-const st = { clips: [], ride: null, rideFile: '', tz: S.tz, offset: 0, cur: 0, overlay: null, layout: null, segs: [], music: null, rendering: null, busy: false };
+const st = { clips: [], ride: null, rideFile: '', sport: 'cycling', tz: S.tz, offset: 0, cur: 0, overlay: null, layout: null, segs: [], music: null, rendering: null, busy: false };
 const v = $('#srcVideo'), canvas = $('#preview'), ctx = canvas.getContext('2d');
 
 // ---------- files ----------
 async function addFiles(files) {
   const vids = [...files].filter(f => f.type.startsWith('video/') || /\.(mp4|mov|mkv|avi)$/i.test(f.name));
-  const gpx = [...files].find(f => /\.gpx$/i.test(f.name));
+  const gpx = [...files].find(f => ACTIVITY_EXT.test(f.name));
   if (gpx) {
-    try { st.ride = await loadRideFile(gpx); st.rideFile = gpx.name; if (!$('#titleIn').value) $('#titleIn').value = st.ride.name; }
+    try {
+      st.ride = await loadRideFile(gpx); st.rideFile = gpx.name; st.sport = detectSport(st.ride.type); $('#sportSel').value = st.sport;
+      if (!$('#titleIn').value) $('#titleIn').value = st.ride.name;
+    }
     catch (e) { toast(e.message, 6000); }
   }
   for (const f of vids) {
@@ -76,10 +80,11 @@ function resync() {
 
 function refreshFiles() {
   const rows = st.clips.map(c => `<li><span class="k">${L('VIDEO', 'VİDEO')}</span><span class="nm" title="${esc(c.name)}">${esc(c.name)}</span><span class="meta">${fmt(c.duration)} · ${c.width}×${c.height}</span></li>`);
-  if (st.ride) rows.unshift(`<li><span class="k gpx">GPX</span><span class="nm">${esc(st.rideFile)}</span><span class="meta">${st.ride.has.hr ? L('with heart rate', 'nabız var') : L('no heart rate', 'nabız yok')}</span></li>`);
+  if (st.ride) rows.unshift(`<li><span class="k gpx">${esc(st.rideFile.split('.').pop().toUpperCase())}</span><span class="nm">${esc(st.rideFile)}</span><span class="meta">${st.ride.has.hr ? L('with heart rate', 'nabız var') : L('no heart rate', 'nabız yok')}</span></li>`);
   $('#fileList').innerHTML = rows.join('');
   const s = st.ride?.summary();
   $('#stats').hidden = !s;
+  $('#sportRow').hidden = !s;
   if (s) $('#stats').innerHTML = [
     [L('Distance', 'Mesafe'), `${s.km.toFixed(1)} km`], [L('Moving', 'Hareket'), fmtTime(s.moving)], [L('Climb', 'Tırmanış'), `${s.gain.toFixed(0)} m`],
     [L('Avg speed', 'Ort. hız'), `${s.avgSpeed.toFixed(1)} km/h`], [L('Avg HR', 'Ort. nabız'), s.avgHr ? `${s.avgHr.toFixed(0)} bpm` : '–'], [L('Max HR', 'Maks. nabız'), s.maxHr ? `${s.maxHr.toFixed(0)} bpm` : '–'],
@@ -116,7 +121,7 @@ function rebuildOverlay() {
   const [, , cw, ch] = sourceCrop(c.width, c.height, S.stamp, STAMP_BOX);
   st.layout = makeLayout(S.kind, cw, ch);
   canvas.width = st.layout.W; canvas.height = st.layout.H;
-  st.overlay = st.ride ? new Overlay(st.ride, st.layout, { maxHr: +S.maxHr, title: $('#titleIn').value, tzHours: st.tz }) : null;
+  st.overlay = st.ride ? new Overlay(st.ride, st.layout, { maxHr: +S.maxHr, title: $('#titleIn').value, tzHours: st.tz, style: presetStyle(st.sport, st.ride.has) }) : null;
 }
 
 function showViewer() {
@@ -144,7 +149,7 @@ function loop() {
       const inRide = t >= st.ride.t0 && t <= st.ride.t1;
       $('#nowLbl').innerHTML = inRide ? L(`Ride time <b>${fmtTime(t - st.ride.t0)}</b> · check that speed and heart rate match the picture`, `Sürüş zamanı <b>${fmtTime(t - st.ride.t0)}</b> · hız ve nabzın görüntüyle uyuştuğunu kontrol edin`)
         : L('This moment is outside the ride data.', 'Bu an sürüş verisinin dışında.');
-    } else $('#nowLbl').textContent = st.ride ? L('Waiting for the clock stamp…', 'Saat damgası bekleniyor…') : L('Add the GPX file of this ride.', 'Bu sürüşün GPX dosyasını ekleyin.');
+    } else $('#nowLbl').textContent = st.ride ? L('Waiting for the clock stamp…', 'Saat damgası bekleniyor…') : L('Add the activity file (GPX, TCX or FIT).', 'Etkinlik dosyasını ekleyin (GPX, TCX veya FIT).');
     $('#timeLbl').textContent = `${fmt(v.currentTime)} / ${fmt(c.duration)}`;
     if (!scrubbing) $('#scrub').value = String(Math.round((v.currentTime / c.duration) * 1000));
   }
@@ -158,12 +163,13 @@ function refreshHighlights() {
   st.segs = [];
   if (!st.ride || !st.clips.some(c => c.startUtc != null)) { list.innerHTML = ''; return; }
   try {
-    st.segs = findHighlights(st.ride, st.clips, +S.hlLen, +S.hlClip);
+    st.segs = findHighlights(st.ride, st.clips, +S.hlLen, +S.hlClip, st.sport);
     list.innerHTML = st.segs.map((s, i) => `<li data-i="${i}"><span class="at">${fmtTime(s.utc - st.ride.t0)}</span>${esc(trLabel(s.label))}</li>`).join('');
   } catch (e) { list.innerHTML = `<li class="warn">${esc(e.message)}</li>`; }
 }
 const trLabel = s => (window.I18N?.lang === 'tr' ? s.replace('Rolling out', 'Yola çıkış').replace('Top speed', 'En yüksek hız').replace('Max heart rate', 'En yüksek nabız')
-  .replace('Heart rate', 'Nabız').replace('Climbing', 'Tırmanış').replace('Descent', 'İniş').replace('Sprint', 'Sprint').replace('Cruising', 'Seyir') : s);
+  .replace('Heart rate', 'Nabız').replace('Climbing', 'Tırmanış').replace('Descent', 'İniş').replace('Sprint', 'Sprint').replace('Cruising', 'Seyir')
+  .replace('Fastest pace', 'En hızlı tempo').replace('Steady', 'Sabit tempo') : s);
 
 function orderedClips() { return st.clips.map((c, i) => i).filter(i => st.clips[i].startUtc != null).sort((a, b) => st.clips[a].startUtc - st.clips[b].startUtc); }
 function joinedNow() {
@@ -278,6 +284,7 @@ function bind() {
   $('#trimANow').onclick = () => ($('#trimA').value = fmt(joinedNow()));
   $('#trimBNow').onclick = () => ($('#trimB').value = fmt(joinedNow()));
   $('#titleIn').onchange = () => rebuildOverlay();
+  $('#sportSel').onchange = e => { st.sport = e.target.value; rebuildOverlay(); refreshHighlights(); };
   $('#showTitle').onchange = e => { S.showTitle = e.target.checked; save(); };
   $('#maxHr').onchange = e => { S.maxHr = +e.target.value || 185; save(); rebuildOverlay(); };
   $('#stampSel').onchange = e => { S.stamp = e.target.value; save(); rebuildOverlay(); };
@@ -299,13 +306,20 @@ function bind() {
     if (e.code === 'ArrowLeft') v.currentTime -= 5;
     if (e.code === 'ArrowRight') v.currentTime += 5;
   });
-  window.I18N?.on(() => { refreshFiles(); refreshSync(); refreshHighlights(); });
+  window.I18N?.on(() => { fillSports(); refreshFiles(); refreshSync(); refreshHighlights(); });
+}
+
+function fillSports() {
+  const sel = $('#sportSel'), v = sel.value || st.sport;
+  sel.innerHTML = Object.entries(SPORTS).map(([k, [en, tr]]) => `<option value="${k}">${L(en, tr)}</option>`).join('');
+  sel.value = v;
 }
 
 function init() {
   const mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || !window.MediaRecorder || !('requestVideoFrameCallback' in HTMLVideoElement.prototype);
   $('#deviceNote').hidden = !mobile;
   $('#tzIn').value = st.tz;
+  fillSports();
   applyUI(); bind(); loadFonts().then(() => rebuildOverlay());
   requestAnimationFrame(loop);
 }

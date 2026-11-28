@@ -97,7 +97,9 @@ export async function detectStart(clip, box = STAMP_BOX, onStep = () => {}) {
 export function guessTz(clips, t0, t1, preferred) {
   const dated = clips.filter(c => c.startLocal != null);
   if (!dated.length) return preferred;
-  const cands = Array.from({ length: 53 }, (_, k) => (k - 24) / 2).sort((a, b) => Math.abs(a - preferred) - Math.abs(b - preferred));
+  // only within ±3 h of the usual zone: a wider search 'finds' a match even for files from different days
+  const cands = Array.from({ length: 53 }, (_, k) => (k - 24) / 2).filter(z => Math.abs(z - preferred) <= 3)
+    .sort((a, b) => Math.abs(a - preferred) - Math.abs(b - preferred));
   let best = preferred, bestScore = -1;
   for (const tz of cands) {
     let score = 0;

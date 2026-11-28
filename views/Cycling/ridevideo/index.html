@@ -12,12 +12,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RideVideo | Baris Celik</title>
-<meta name="description" content="Turn action-camera ride footage and a Strava GPX file into a video with a live data overlay: heart rate, speed, elevation, route map. Runs in your browser; videos never leave your device.">
+<meta name="description" content="Turn action-camera footage and a GPX, TCX or FIT activity file (cycling, running, walking, skiing) into a video with a live data overlay: heart rate, speed or pace, elevation, route map. Runs in your browser; videos never leave your device.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="canonical" href="https://bariscelik77.github.io/Quality/views/Cycling/ridevideo/index.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="RideVideo | Baris Celik">
-  <meta property="og:description" content="Turn action-camera ride footage and a Strava GPX file into a video with a live data overlay: heart rate, speed, elevation, route map. Runs in your browser; videos never leave your device.">
+  <meta property="og:description" content="Turn action-camera footage and a GPX, TCX or FIT activity file (cycling, running, walking, skiing) into a video with a live data overlay: heart rate, speed or pace, elevation, route map. Runs in your browser; videos never leave your device.">
   <meta property="og:url" content="https://bariscelik77.github.io/Quality/views/Cycling/ridevideo/index.html">
   <meta property="og:image" content="https://bariscelik77.github.io/Quality/assets/images/og-preview.png">
   <meta property="og:image:width" content="1200">
@@ -48,17 +48,17 @@
     <div class="drop" id="drop">
       <div class="drop-inner">
         <div class="kicker" lang="en">RideVideo</div>
-        <h1 data-i18n="h1">Put your ride data <em>on the video</em></h1>
-        <p data-i18n="lede">Add your action-camera clips and the Strava GPX of the same ride. The app syncs them, draws heart rate, speed, elevation and the route on top, and makes a highlight reel or the full ride.</p>
+        <h1 data-i18n="h1">Put your activity data <em>on the video</em></h1>
+        <p data-i18n="lede">Add your action-camera clips and the activity file from your watch or sports app. The app syncs them, draws heart rate, speed or pace, elevation and the route on top, and makes a highlight reel or the full video. Cycling, running, walking, skiing.</p>
         <div class="btns">
           <button class="btn btn-ride" id="dropVid" type="button" data-i18n="pickV">Choose videos</button>
-          <button class="btn btn-line" id="dropGpx" type="button" data-i18n="pickG">Choose GPX</button>
+          <button class="btn btn-line" id="dropGpx" type="button" data-i18n="pickG">Choose activity file</button>
         </div>
         <p class="fine" data-i18n="drop">Or drop the files here. Everything stays on this device; nothing is uploaded.</p>
         <ul class="tips">
-          <li data-i18n="t1">Strava: open the activity → ⋯ → <b>Export GPX</b></li>
+          <li data-i18n="t1">Activity file: <b>GPX, TCX or FIT</b> exported from Garmin Connect, Strava, Wahoo, Coros, Suunto, Polar or your watch app</li>
           <li data-i18n="t2">Keep the camera's date/time stamp on: the app reads it to sync</li>
-          <li data-i18n="t3">Several clips from one ride are fine; select them all</li>
+          <li data-i18n="t3">Several clips from one activity are fine; select them all</li>
         </ul>
       </div>
     </div>
@@ -87,13 +87,15 @@
       <h3><span class="n">1</span><span data-i18n="s1">Files</span></h3>
       <div class="row">
         <button class="btn small" id="vidBtn" type="button" data-i18n="pickV">Choose videos</button>
-        <button class="btn small" id="gpxBtn" type="button" data-i18n="pickG">Choose GPX</button>
+        <button class="btn small" id="gpxBtn" type="button" data-i18n="pickG">Choose activity file</button>
       </div>
       <input type="file" id="vidIn" accept="video/*" multiple hidden>
-      <input type="file" id="gpxIn" accept=".gpx,application/gpx+xml,application/xml,text/xml" hidden>
+      <input type="file" id="gpxIn" accept=".gpx,.tcx,.fit,application/gpx+xml,application/xml,text/xml" hidden>
       <ul class="files" id="fileList"></ul>
       <div class="progress" id="syncProg" hidden><div class="bar"></div><span class="lbl"></span></div>
       <div class="stats" id="stats" hidden></div>
+      <label class="full" id="sportRow" hidden><span data-i18n="sport">Sport (sets which numbers are shown)</span>
+        <select id="sportSel" style="display:block;width:100%;margin-top:4px"></select></label>
     </div>
 
     <div class="card" id="syncCard" hidden>
@@ -110,7 +112,7 @@
       <h3><span class="n">3</span><span data-i18n="s3">Make the video</span></h3>
       <div class="seg wide" role="group">
         <button type="button" data-mode="highlights" data-i18n="mH">Highlights</button>
-        <button type="button" data-mode="full" data-i18n="mF">Full ride</button>
+        <button type="button" data-mode="full" data-i18n="mF">Full video</button>
       </div>
       <div id="hlOpts">
         <div class="row">
@@ -171,17 +173,17 @@
 window.I18N_TR = {
   __title: 'RideVideo | Baris Celik',
   note: 'Video oluşturmak için <b>Chrome</b> veya <b>Edge</b> yüklü bir dizüstü ya da masaüstü bilgisayar gerekir. Bu cihazda göz atabilirsiniz ama video yapamazsınız.',
-  h1: 'Sürüş verilerinizi <em>videoya ekleyin</em>',
-  lede: 'Aksiyon kamerası kayıtlarınızı ve aynı sürüşün Strava GPX dosyasını ekleyin. Uygulama ikisini senkronize eder; nabız, hız, rakım ve rotayı görüntünün üzerine çizer, öne çıkanlar videosu ya da sürüşün tamamını hazırlar.',
-  pickV: 'Videoları seç', pickG: 'GPX seç',
+  h1: 'Etkinlik verilerinizi <em>videoya ekleyin</em>',
+  lede: 'Aksiyon kamerası kayıtlarınızı ve saatinizden ya da spor uygulamanızdan aldığınız etkinlik dosyasını ekleyin. Uygulama ikisini senkronize eder; nabız, hız veya tempo, rakım ve rotayı görüntünün üzerine çizer, öne çıkanlar videosu ya da videonun tamamını hazırlar. Bisiklet, koşu, yürüyüş, kayak.',
+  pickV: 'Videoları seç', pickG: 'Etkinlik dosyası seç', sport: 'Spor (videoda gösterilecek değerleri belirler)',
   drop: 'Ya da dosyaları buraya bırakın. Her şey bu cihazda kalır; hiçbir şey yüklenmez.',
-  t1: 'Strava: etkinliği açın → ⋯ → <b>Export GPX</b>',
+  t1: 'Etkinlik dosyası: Garmin Connect, Strava, Wahoo, Coros, Suunto, Polar veya saat uygulamanızdan dışa aktarılan <b>GPX, TCX veya FIT</b>',
   t2: 'Kameranın tarih/saat damgasını açık tutun: uygulama senkronizasyon için onu okur',
-  t3: 'Bir sürüşe ait birden fazla klip olabilir; hepsini seçin',
+  t3: 'Bir etkinliğe ait birden fazla klip olabilir; hepsini seçin',
   kFit: 'Reel 9:16 · tam görüntü', kCrop: 'Reel 9:16 · doldur',
   s1: 'Dosyalar', s2: 'Senkronizasyon', s3: 'Videoyu oluştur',
   tz: 'Kamera saat dilimi (UTC ±s)', fine: 'İnce ayar: rakamlar görüntüyle eşleşene kadar kaydırın',
-  mH: 'Öne çıkanlar', mF: 'Tüm sürüş', len: 'Uzunluk', each: 'Her klip', from: 'Başlangıç', to: 'bitiş', ph: 'oynatma noktası',
+  mH: 'Öne çıkanlar', mF: 'Tüm video', len: 'Uzunluk', each: 'Her klip', from: 'Başlangıç', to: 'bitiş', ph: 'oynatma noktası',
   fullNote: 'Tüm sürüşler biraz zaman alır; ilerleme çubuğu kalan süreyi gösterir. Önce dosyanın nereye kaydedileceğini seçersiniz.',
   title: 'Başlık', showT: 'Başta başlık kartı', maxhr: 'Maksimum nabız', stamp: 'Kamera tarih damgası',
   stZ: 'Yakınlaştırıp gizle', stO: 'Olduğu gibi bırak', sound: 'Ses', music: 'Arka plan müziği…', remove: 'kaldır',

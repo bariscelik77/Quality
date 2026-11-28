@@ -1,5 +1,6 @@
 // Layouts, camera framing and the data overlay, drawn on a 2D canvas.
 // Port of the desktop app's overlay.py / preview.py.
+import { FIELDS, detectSport, presetStyle, fieldValue, cadenceMultiplier, fmtPace } from './fields.js';
 
 export const FONT = 'Barlow';
 const WHITE = '#fff', SOFT = 'rgba(255,255,255,.67)', ACCENT = '#ff7a3d';
@@ -104,13 +105,15 @@ export function drawCamera(g, v, L, crop) {
 
 // ---------------------------------------------------------------- data overlay
 export class Overlay {
-  constructor(ride, L, { maxHr = 185, title = '', tzHours = 0 } = {}) {
+  constructor(ride, L, { maxHr = 185, title = '', tzHours = 0, style = null } = {}) {
     Object.assign(this, { ride, L, maxHr, title: title || ride.name, tzHours });
+    this.style = { ...presetStyle(detectSport(ride.type), ride.has), ...(style || {}) };
+    this.sport = this.style.sport;
+    this.cadMul = ride.has.cad ? cadenceMultiplier(this.sport, ride.d.cad) : 1;
     const [, , bw, bh] = L.band;
     this.bw = bw; this.bh = bh;
     this.u = L.kind === 'landscape' ? Math.min(L.W, L.H) / 1080 : 1;
     this.total = Math.max(ride.d.dist[ride.n - 1], 1);
-    this.extra = ['power', 'cad'].filter(k => ride.has[k]);
     this.buildBase();
   }
 
@@ -207,12 +210,16 @@ export class Overlay {
   }
 
   smallStats(v) {
-    const gr = v.grade;
-    const s = [['DIST', (v.dist / 1000).toFixed(2), 'km'], ['ELEV', v.ele.toFixed(0), 'm'],
-      ['GRADE', Math.abs(gr) >= 0.5 ? (gr > 0 ? '+' : '') + gr.toFixed(0) : '0', '%'], ['TIME', fmtTime(v.t - this.ride.t0), '']];
-    if (this.extra.includes('power') && Number.isFinite(v.power)) s.push(['POWER', v.power.toFixed(0), 'W']);
-    if (this.extra.includes('cad') && Number.isFinite(v.cad)) s.push(['CAD', v.cad.toFixed(0), 'rpm']);
-    return s;
+    return this.style.small.map(k => {
+      const [val, unit] = fieldValue(k, v, this.ride.t0, this.cadMul);
+      return [FIELDS[k][0], val, ['', '%', '°C', 'W'].includes(unit) ? unit : unit.toLowerCase()];
+    });
+  }
+
+  bigField(g, key, x, y, size, v) {
+    if (key === 'hr') return this.hr(g, x, y, size, v);
+    const [val, unit] = fieldValue(key, v, this.ride.t0, this.cadMul);
+    return this.big(g, x, y, val, unit, size);
   }
 
   big(g, x, y, value, unit, size) {
@@ -247,8 +254,8 @@ export class Overlay {
 
   numbersLandscape(g, v, label) {
     const { u, bh } = this, pad = 40 * u, big = 112 * u, yb = bh - 66 * u;
-    let x = this.hr(g, pad, yb, big, v);
-    x = this.big(g, Math.max(x + 48 * u, pad + 400 * u), yb, v.speed.toFixed(0), 'KM/H', big);
+    let x = pad;
+    this.style.big.slice(0, 2).forEach((k, i) => { x = this.bigField(g, k, i ? Math.max(x + 48 * u, pad + 400 * u) : x, yb, big, v); });
     const gx = Math.max(x + 48 * u, pad + 740 * u), colW = 190 * u;
     this.smallStats(v).slice(0, 6).forEach(([lab, val, unit], k) => {
       const cx = gx + Math.floor(k / 2) * colW, cy = bh - 132 * u + (k % 2) * 88 * u;
@@ -262,8 +269,7 @@ export class Overlay {
   numbersVertical(g, v, label) {
     const bw = this.bw, pad = 56, big = 140, yb = 228;
     if (label) this.chip(g, bw / 2, 30, label, 28, true);
-    this.hr(g, pad, yb, big, v);
-    this.big(g, bw / 2 + 40, yb, v.speed.toFixed(0), 'KM/H', big);
+    this.style.big.slice(0, 2).forEach((k, i) => this.bigField(g, k, i ? bw / 2 + 40 : pad, yb, big, v));
     const st = this.smallStats(v).slice(0, 4), colw = (bw - 2 * pad) / st.length, yl = yb + 96;
     st.forEach(([lab, val, unit], k) => {
       text(g, pad + k * colw, yl, lab, 24, { weight: 600, fill: SOFT });
@@ -278,7 +284,8 @@ export class Overlay {
     const local = new Date((s.start.getTime() / 1000 + this.tzHours * 3600) * 1000);
     const mon = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][local.getUTCMonth()];
     const date = `${local.getUTCDate()} ${mon} ${local.getUTCFullYear()}  ·  ${String(local.getUTCHours()).padStart(2, '0')}:${String(local.getUTCMinutes()).padStart(2, '0')}`;
-    const bits = [`${s.km.toFixed(1)} km`, `${s.gain.toFixed(0)} m climb`, fmtTime(s.moving), `${s.avgSpeed.toFixed(1)} km/h avg`];
+    const bits = [`${s.km.toFixed(1)} km`, `${s.gain.toFixed(0)} m climb`, fmtTime(s.moving),
+      this.sport === 'running' || this.sport === 'walking' ? `${fmtPace(s.avgSpeed)} /km avg` : `${s.avgSpeed.toFixed(1)} km/h avg`];
     if (s.avgHr) bits.push(`${s.avgHr.toFixed(0)} bpm avg`);
     g.save(); g.globalAlpha = alpha;
     const title = String(this.title || '').replace(/_+/g, ' ').replace(/\s+/g, ' ').trim();

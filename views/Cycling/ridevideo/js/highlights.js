@@ -1,5 +1,6 @@
 // Picks the most interesting moments from the ride data. Port of highlights.py.
 // A segment = { clip (index), start (s into clip), dur, utc, label }
+import { detectSport, fmtPace } from './fields.js';
 
 function rank(x, mask) {
   const idx = []; for (let i = 0; i < x.length; i++) if (mask[i]) idx.push(i);
@@ -26,7 +27,7 @@ function score(ride) {
 
 const mean = (a, i, j) => { let s = 0; for (let k = i; k < j; k++) s += a[k]; return s / Math.max(1, j - i); };
 
-function label(ride, a, b, p, cmax) {
+function label(ride, a, b, p, cmax, sp) {
   // the top-speed and max-HR clips are picked (and named) separately, so no "Top"/"Max" claims here
   const d = ride.d;
   const gm = mean(d.grade, a, b);
@@ -36,10 +37,12 @@ function label(ride, a, b, p, cmax) {
   const best = Object.keys(c).reduce((x, y) => (c[y] > c[x] ? y : x));
   if (best === 'hr' && ride.has.hr) return `Heart rate ${mean(d.hr, a, b).toFixed(0)} bpm`;
   if (best === 'accel' && d.speed[b - 1] - d.speed[a] > 3) return 'Sprint';
-  return `Cruising ${mean(d.speed, a, b).toFixed(0)} km/h`;
+  return `${sp.pace ? 'Steady' : 'Cruising'} ${sp(mean(d.speed, a, b))}`;
 }
 
-export function findHighlights(ride, clips, total = 60, clipLen = 6) {
+export function findHighlights(ride, clips, total = 60, clipLen = 6, sport = null) {
+  sport = sport || detectSport(ride.type);
+  const sp = ['running', 'walking'].includes(sport) ? Object.assign(x => `${fmtPace(x)} /km`, { pace: true }) : x => `${x.toFixed(0)} km/h`;
   const p = score(ride), s = p.total, n = ride.n, L = Math.max(2, Math.round(clipLen));
   const cover = new Int32Array(n).fill(-1);
   clips.forEach((c, ci) => {
@@ -71,14 +74,14 @@ export function findHighlights(ride, clips, total = 60, clipLen = 6) {
   };
 
   for (let i = 0; i < n; i++) if (cover[i] >= 0 && ride.d.moving[i] && valid[i]) { take(i, 'Rolling out'); break; }
-  const must = [['speed', () => `Top speed ${cmax.speed.toFixed(0)} km/h`]];
+  const must = cmax.speed >= 4 ? [['speed', () => `${sp.pace ? 'Fastest pace' : 'Top speed'} ${sp(cmax.speed)}`]] : [];
   if (ride.has.hr) must.push(['hr', () => `Max heart rate ${cmax.hr.toFixed(0)} bpm`]);
   for (const [k, lab] of must) if (picks.length < nClips) { const i = peak(k); if (i != null) take(i, lab()); }
   while (picks.length < nClips) {
     let bi = -1, bv = 0;
     for (let i = 0; i < n; i++) if (!taken[i] && win[i] > bv) { bv = win[i]; bi = i; }
     if (bi < 0) break;
-    take(bi, label(ride, bi, bi + L, p, cmax));
+    take(bi, label(ride, bi, bi + L, p, cmax, sp));
   }
   return picks.sort((a, b) => a[0] - b[0]).map(([i, lab]) => {
     const ci = cover[i], utc = ride.t0 + i;
